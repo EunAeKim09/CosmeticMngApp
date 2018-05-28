@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/app_menu1"
+        android:title="화장품 관리" />
+
+    <item
+        android:id="@+id/app_menu2"
+        android:title="화장도구 관리" />
+
+    <item
+        android:id="@+id/app_menu3"
+        android:title="렌즈관련 관리" />
+
+    <item
+        android:id="@+id/app_menu4"
+        android:title="기타" />
+
+</menu>

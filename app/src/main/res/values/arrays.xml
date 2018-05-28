@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="CosCategory">
+        <item>카테고리</item>
+        <item>스킨.로션.크림</item>
+        <item>아이쉐도우</item>
+        <item>마스카라</item>
+        <item>아이라이너</item>
+    </string-array>
+</resources>
