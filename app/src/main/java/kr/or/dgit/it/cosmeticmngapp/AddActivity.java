@@ -11,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -27,6 +28,10 @@ public class AddActivity extends AppCompatActivity {
     private Uri photoUri = null;
     private Uri albumUri = null;
     private boolean album;
+    EditText openEditdate;
+    EditText endEditdate;
+
+
 
     private CharSequence[] info;
 

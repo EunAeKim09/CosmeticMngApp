@@ -74,6 +74,7 @@
         android:layout_alignStart="@+id/closeBtn"
         android:layout_below="@+id/category"/>
     <EditText
+        android:id="@+id/regi_cosmetic_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="@dimen/textBtnTextSize"
@@ -92,6 +93,7 @@
         android:layout_alignStart="@+id/closeBtn"
         android:layout_below="@+id/tvName"/>
     <EditText
+        android:id="@+id/regi_cosmetic_open_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="@dimen/textBtnTextSize"
@@ -110,6 +112,7 @@
         android:layout_alignStart="@+id/closeBtn"
         android:layout_below="@+id/openDay"/>
     <EditText
+        android:id="@+id/regi_cosmetic_end_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="@dimen/textBtnTextSize"
@@ -128,6 +131,7 @@
         android:layout_alignStart="@+id/closeBtn"
         android:layout_below="@+id/endDay"/>
     <EditText
+        android:id="@+id/regi_cosmetic_memo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="@dimen/textBtnTextSize"
