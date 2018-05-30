@@ -3,83 +3,59 @@ package kr.or.dgit.it.cosmeticmngapp.db;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.text.TextUtils;
+import android.util.Log;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class DBhelper extends SQLiteOpenHelper{
+    private static final  String TAG = DBhelper.class.getSimpleName();
     public static final int DATABASE_VERSION=1;
+    private static final String DB_NAME = "datadb.db";
+    private final  Context context;
+    private static DBhelper instance;
+
+    public synchronized  static DBhelper getInstance(Context context){
+        if(instance == null){
+            instance = new DBhelper(context);
+        }
+        return instance;
+    }
 
     public DBhelper(Context context){
-        super(context, "datadb", null, DATABASE_VERSION);
+        super(context, DB_NAME, null, DATABASE_VERSION);
+        this.context = context;
     }
+
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String cosCate="create table cosmeticCategory ("+
-                "_id integer primary key autoincrement," +
-                "name not null," +
-                "duration)";
+        applySqlFile(db,DATABASE_VERSION,"cosmetic.sql");
+    }
 
-        db.execSQL(cosCate);
+    private void applySqlFile(SQLiteDatabase db, int databaseVersion, String fileName) {
+        String filename = fileName;
 
-        db.execSQL("insert into cosmeticCategory (name,duration) values ('스킨/토너/로션','1년')");
-        db.execSQL("insert into cosmeticCategory (name,duration) values ('에센스/세럼/아이크림','6개월')");
-        db.execSQL("insert into cosmeticCategory (name,duration) values ('크림','1년')");
-        db.execSQL("insert into cosmeticCategory (name,duration) values ('메이크업베이스','6개월')");
-        db.execSQL("insert into cosmeticCategory (name,duration) values ('파운데이션','1년')");
-        db.execSQL("insert into cosmeticCategory (name,duration) values ('스틱커버/컨실러','1년')");
-        db.execSQL("insert into cosmeticCategory (name,duration) values ('파우더/팩트','1년')");
-        db.execSQL("insert into cosmeticCategory (name,duration) values ('아이섀도/블러셔','6개월')");
-        db.execSQL("insert into cosmeticCategory (name,duration) values ('립스틱/립글로스/틴트','1년')");
-        db.execSQL("insert into cosmeticCategory (name,duration) values ('아이라이너','1년')");
-        db.execSQL("insert into cosmeticCategory (name,duration) values ('마스카라','6개월')");
-        db.execSQL("insert into cosmeticCategory (name,duration) values ('클렌징','1년')");
-        db.execSQL("insert into cosmeticCategory (name,duration) values ('자외선 차단제','6개월')");
-        db.execSQL("insert into cosmeticCategory (name,duration) values ('네일/애나멜','2년')");
-        db.execSQL("insert into cosmeticCategory (name,duration) values ('향수','2017-06-28')");
-        db.execSQL("insert into cosmeticCategory (name,duration) values ('팩','1년')");
-        db.execSQL("insert into cosmeticCategory (name,duration) values ('염색약','1년')");
+        try(final InputStream inputStream = context.getAssets().open(fileName);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));) {
+            final StringBuilder statement = new StringBuilder();
 
-        String cosTools="create table cosmeticTools ("+
-                "_id integer primary key autoincrement," +
-                "name not null," +
-                "duration)";
-
-        db.execSQL(cosTools);
-
-        db.execSQL("insert into cosmeticTools (name,duration) values ('퍼프/스펀지','7일')");
-        db.execSQL("insert into cosmeticTools (name,duration) values ('립 브러쉬(립용)','7일')");
-        db.execSQL("insert into cosmeticTools (name,duration) values ('파운데이션 브러쉬','7일')");
-        db.execSQL("insert into cosmeticTools (name,duration) values ('컨실러 브러쉬','7일')");
-        db.execSQL("insert into cosmeticTools (name,duration) values ('파우더 브러쉬','21일')");
-        db.execSQL("insert into cosmeticTools (name,duration) values ('뷰러','3개월')");
-
-        String lens="create table lensCategory ("+
-                "_id integer primary key autoincrement," +
-                "name not null," +
-                "duration)";
-
-        db.execSQL(lens);
-
-        String userCosmetic="create table userCosmetic ("+
-                "_id integer primary key autoincrement," +
-                "cate_id," +
-                "name not null," +
-                "openDate," +
-                "endDate," +
-                "memo," +
-                "favorite," +
-                " FOREIGN KEY (cate_id) REFERENCES cosmeticCategory(_id))";
-        db.execSQL(userCosmetic);
-
-        String userCosmeticTools="create table userCosmeticTools ("+
-                "_id integer primary key autoincrement," +
-                "cate_id," +
-                "name not null," +
-                "openDate," +
-                "endDate," +
-                "memo," +
-                "favorite," +
-                " FOREIGN KEY (cate_id) REFERENCES cosmeticTools(_id))";
-        db.execSQL(userCosmeticTools);
+            for(String line; (line = reader.readLine()) != null;){
+                if(!TextUtils.isEmpty(line) && !line.startsWith("--")){
+                    statement.append(line.trim());
+                }
+                if(line.endsWith(";")){
+                    db.execSQL(statement.toString());
+                    statement.setLength(0);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e(TAG,"Could not apply SQL file - >"+e);
+        }
     }
 
     @Override
