@@ -1,5 +1,6 @@
 package kr.or.dgit.it.cosmeticmngapp;
 
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -11,6 +12,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -18,6 +20,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class AddActivity extends AppCompatActivity {
@@ -42,6 +45,11 @@ public class AddActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_add_cosmetic);
 
+        openEditdate = findViewById(R.id.regi_cosmetic_open_date);
+        openEditdate.setInputType(0);
+
+        endEditdate = findViewById(R.id.regi_cosmetic_end_date);
+        endEditdate.setInputType(0);
 
 
         imgview = (ImageView)findViewById(R.id.img);
@@ -122,5 +130,23 @@ public class AddActivity extends AppCompatActivity {
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             imgview.setImageBitmap(imageBitmap);
         }
+    }
+
+    public void opendateClick(View view) {
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                openEditdate.setText(year+"-"+(monthOfYear+1)+"-"+dayOfMonth);
+            }
+        },year,month,day);
+        datePickerDialog.show();
+    }
+
+    public void enddateClick(View view) {
     }
 }
