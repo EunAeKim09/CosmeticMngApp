@@ -121,7 +121,9 @@
         android:layout_marginTop="10dp"
         android:layout_toRightOf="@+id/endDay"
         android:layout_below="@+id/openDay"
-        android:inputType="date"/>
+        android:inputType="date"
+        android:focusableInTouchMode="false"
+        android:onClick="enddateClick"/>
     <TextView
         android:id="@+id/memo"
         android:layout_width="@dimen/inputWidth"
@@ -141,6 +143,6 @@
         android:layout_toRightOf="@+id/memo"
         android:layout_below="@+id/endDay"
         android:inputType="textMultiLine"
-        android:focusableInTouchMode="false"
-        android:onClick="enddateClick"/>
+
+       />
 </RelativeLayout>
