@@ -17,7 +17,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle("화장품 관리");
+        actionBar.setTitle("화장품 관리");    
         actionBar.setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.menu);
 
