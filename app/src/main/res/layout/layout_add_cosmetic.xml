@@ -12,7 +12,8 @@
         android:gravity="center"
         android:text="닫기"
         android:textSize="@dimen/textBtnTextSize"
-        android:id="@+id/closeBtn"/>
+        android:id="@+id/closeBtn"
+        android:onClick="closeBtnClick"/>
 
     <TextView
         android:layout_width="@dimen/textBtnWidth"
@@ -26,16 +27,17 @@
         android:textSize="@dimen/textBtnTextSize"/>
     
    <ImageView
+       android:layout_centerHorizontal="true"
+       android:layout_centerVertical="true"
        android:layout_width="match_parent"
        android:layout_height="200dp"
        android:layout_marginTop="10dp"
-       android:src="@drawable/image"
        android:layout_below="@+id/closeBtn"
        android:id="@+id/img"
        />
     <TextView
         android:id="@+id/category"
-        android:layout_width="100dp"
+        android:layout_width="150dp"
         android:layout_height="@dimen/textBtnheight"
         android:layout_marginTop="10dp"
         android:layout_below="@+id/img"
@@ -62,6 +64,7 @@
         android:layout_marginRight="20dp"
         android:src="@drawable/image"
         android:layout_alignParentRight="true"
+        android:onClick="albumBtnClick"
         android:layout_below="@id/img"/>
     <TextView
         android:id="@+id/tvName"

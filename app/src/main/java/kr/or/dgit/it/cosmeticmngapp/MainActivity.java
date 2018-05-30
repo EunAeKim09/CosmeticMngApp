@@ -1,11 +1,18 @@
 package kr.or.dgit.it.cosmeticmngapp;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 
 public class MainActivity extends android.support.v7.app.AppCompatActivity implements android.support.design.widget.NavigationView.OnNavigationItemSelectedListener{
-    android.support.v4.widget.DrawerLayout drawerLayout;
-    private static String[] PERMISSIONS = {android.Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE};
+    DrawerLayout drawerLayout;
+    boolean permission;
+    public static int fragNum = 1;
+    android.support.v7.app.ActionBar actionBar;
 
     @Override
     protected void onCreate(android.os.Bundle savedInstanceState) {
@@ -14,10 +21,11 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar = getSupportActionBar();
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle("화장품 관리");    
+        setTitleName();
+
         actionBar.setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.menu);
 
@@ -32,69 +40,43 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
         navigationView.setNavigationItemSelectedListener(this);
 
         //permission
-       /* if(!checkPermission(this, Manifest.permission.CAMERA)||!checkPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                ||!checkPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)){
-            requestExternalPermissions(this);
-        }*/
-    }
-
-    /*public static int checkSelfPermission(@NonNull android.content.Context context, @NonNull String permission){ //권한 체크
-        if(permission == null){
-            throw new IllegalArgumentException("permission is null");
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+            permission = true;
         }
-        return context.checkPermission(permission, android.os.Process.myPid(), Process.myUid());
-    }
 
-    public static boolean checkPermission(Activity activity, String permission){
-        int permissionResult = ActivityCompat.checkSelfPermission(activity, permission);
-
-        if(permissionResult == PackageManager.PERMISSION_GRANTED){
-            return true;
-        }else{
-            return false;
+        if(!permission){
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
+                    200);
         }
     }
 
-    public static void requestPermissions(final  @NonNull Activity activity, final @NonNull String[] permissions, final int requestCode){
-        if(Build.VERSION.SDK_INT >= 23){
-            ActivityCompat.requestPermissions(activity, permissions, requestCode);
-        }else if(activity instanceof ActivityCompat.OnRequestPermissionsResultCallback){
-            Handler handler = new Handler(Looper.getMainLooper());
-            handler.post(()->{
-                final int[] grantResults = new int[permissions.length];
-                PackageManager packageManager = activity.getPackageManager();
-                String packageName = activity.getPackageName();
-
-                final int permissionCount = permissions.length;
-                for(int i=0; i<permissionCount; i++){
-                    grantResults[i] = packageManager.checkPermission(permissions[i], packageName);
-                }
-                ((ActivityCompat.OnRequestPermissionsResultCallback)activity).onRequestPermissionsResult(requestCode, permissions, grantResults);
-            });
+    private void setTitleName() {
+        if(fragNum == 1){
+            actionBar.setTitle("화장품");
+        }else if(fragNum == 2){
+            actionBar.setTitle("화장도구");
+        }else if(fragNum == 3){
+            actionBar.setTitle("렌즈");
         }
     }
-
-    public static void requestExternalPermissions(Activity activity){
-        ActivityCompat.requestPermissions(activity, PERMISSIONS,1);
-    }
-*/
 
     @Override
     public boolean onNavigationItemSelected(@android.support.annotation.NonNull android.view.MenuItem item) {
         int id=item.getItemId();
         if(id==R.id.app_menu1){
-            android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.add(R.id.fragment_container, MyItemList.newInstance());
-            fragmentTransaction.commit();
+            fragNum = 1;
         }else if(id==R.id.app_menu2){
-            android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.add(R.id.fragment_container, MyItemList.newInstance());
-            fragmentTransaction.commit();
+            fragNum = 2;
         }else if(id==R.id.app_menu3){
-            android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.add(R.id.fragment_container, MyItemList.newInstance());
-            fragmentTransaction.commit();
+            fragNum = 3;
         }
+        setTitleName();
+        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.fragment_container, MyItemList.newInstance());
+        fragmentTransaction.commit();
         android.support.v4.widget.DrawerLayout drawer = (android.support.v4.widget.DrawerLayout) findViewById(R.id.drawerlayout);
         drawer.closeDrawer(android.support.v4.view.GravityCompat.START);
         return true;

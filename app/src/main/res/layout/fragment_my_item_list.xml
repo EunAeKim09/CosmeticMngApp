@@ -14,52 +14,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <RelativeLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/textBtnheight"
-        android:layout_marginTop="5dp">
-
-        <!--<ImageView
-            android:layout_below="@id/toolbar"
-            android:id="@+id/id_menu"
-            android:layout_width="@dimen/ImgBtnWidth"
-            android:layout_height="@dimen/ImgBtnheight"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="5dp"
-            android:src="@drawable/menu"/>
-
-        <TextView
-            android:id="@+id/id_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/id_menu"
-            android:text="My List"
-            android:textSize="@dimen/titleSize"/>
-
-        <ImageView
-            android:id="@+id/id_select"
-            android:layout_width="@dimen/ImgBtnWidth"
-            android:layout_height="@dimen/ImgBtnheight"
-            android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@id/btnAdd"
-            android:src="@drawable/search" />
-
-        <Button
-            android:id="@+id/btnAdd"
-            android:layout_width="@dimen/textBtnWidth"
-            android:layout_height="@dimen/textBtnheight"
-            android:layout_alignBaseline="@+id/id_menu"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="5dp"
-            android:background="@drawable/button_style"
-            android:text="등록"
-            android:textSize="@dimen/textBtnTextSize" />-->
-    </RelativeLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="Mission1" />
-
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 </FrameLayout>
