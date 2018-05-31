@@ -22,6 +22,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -80,11 +81,7 @@ public class AddActivity extends AppCompatActivity {
         endEditdate.setInputType(0);
 
 
-
-
-
-
-        imgview = (ImageView)findViewById(R.id.img);
+        imgview = (ImageView) findViewById(R.id.img);
     }
 
     public void categoryBtnClick(View view) {
@@ -347,7 +344,7 @@ public class AddActivity extends AppCompatActivity {
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openEditdate.setText(String.format("%d - %d -%d", pYear, pMonth, pDate));
+                openEditdate.setText(String.format("%d - %d - %d", pYear, pMonth, pDate));
                 datedialog.dismiss();
             }
         });
@@ -398,7 +395,7 @@ public class AddActivity extends AppCompatActivity {
         int day = c.get(Calendar.DAY_OF_MONTH);
 
         pYear = year;
-        pMonth = month+1;
+        pMonth = month + 1;
         pDate = day;
 
         datedialog = new Dialog(this);
@@ -412,33 +409,23 @@ public class AddActivity extends AppCompatActivity {
     public void enddateClick(View view) {
         CharSequence info[] = new CharSequence[]{"직접 날짜 입력", "자동 입력"};
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setItems(info, new DialogInterface.OnClickListener() {
+        AlertDialog.Builder builder1 = builder.setItems(info, new DialogInterface.OnClickListener() {
+
 
             @Override
             public void onClick(final DialogInterface dialog, int which) {
-                switch (which)
-                {
+                Calendar c = Calendar.getInstance();
+                int year = c.get(Calendar.YEAR);
+                int month = c.get(Calendar.MONTH);
+                int day = c.get(Calendar.DAY_OF_MONTH);
+
+                pYear = year;
+                pMonth = month + 1;
+                pDate = day;
+                CalendarValue();
+                switch (which) {
                     case 0:
-                        CalendarValue();
-                        datePicker.init(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(), new DatePicker.OnDateChangedListener() {
-                            @Override
-                            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                pYear = year;
-                                pMonth = monthOfYear+1;
-                                pDate = dayOfMonth;
-                                endEditdate.setText(String.format("%d - %d -%d", pYear, pMonth, pDate));
-                            }
-                        });
-
-
-                        confirmBtn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                endEditdate.setText(String.format("%d - %d -%d", pYear, pMonth, pDate));
-                                datedialog.dismiss();
-                            }
-                        });
-                        datedialog.show();
+                        EndtimeEditCalender(pYear, pMonth, pDate);
 
                        /* showDayDialog();
                         confirmBtn.setOnClickListener(new View.OnClickListener() {
@@ -458,12 +445,143 @@ public class AddActivity extends AppCompatActivity {
 */
                         break;
                     case 1:
-                        Toast.makeText(AddActivity.this, "자동 입력", Toast.LENGTH_SHORT).show();
+                        DBhelper helper = new DBhelper(AddActivity.this);
+                        SQLiteDatabase db = helper.getReadableDatabase();
+                        Cursor cursor = null;
+                        if (MainActivity.fragNum == 1) {
+                            cursor = db.rawQuery("select durationY,durationM,durationD from cosmeticCategory", null);
+
+                            ArrayList<String> endyear = new ArrayList<>();
+                            ArrayList<String> endmonth = new ArrayList<>();
+                            ArrayList<String> enddate = new ArrayList<>();
+                            while (cursor.moveToNext()) {
+                                endyear.add(cursor.getString(0));
+                                endmonth.add(cursor.getString(1));
+                                enddate.add(cursor.getString(2));
+                            }
+
+                            for (int a = 0; a < enddate.size(); a++) {
+                                for(int b=0; b <endmonth.size(); b++){
+                                    for(int n=0; n<endyear.size(); n++){
+                                        Toast.makeText(AddActivity.this,enddate.get(a).toString()+"일",Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(AddActivity.this,endmonth.get(b).toString()+"개월",Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(AddActivity.this,endyear.get(n).toString()+"년",Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+
+                            }
+
+
+                            /*if (categoryTV.getText().equals("스킨/토너/로션")) {
+                               String open = String.valueOf(openEditdate.getText());
+                               String dateArray[] = open.split(" - ");
+                               pYear = Integer.parseInt(dateArray[0])+1;
+                               pMonth = Integer.parseInt(dateArray[1]);
+                               pDate = Integer.parseInt(dateArray[2])-1;
+                                endEditdate.setText(String.format("%d - %d - %d", pYear, pMonth, pDate));
+                            }*/
+
+                        } else if (MainActivity.fragNum == 2) {
+                            cursor = db.rawQuery("select duration from cosmeticToolsCategory", null);
+                            Log.d("error", "onClick: " + cursor);
+                            ArrayList<String> enddate = new ArrayList<>();
+                            while (cursor.moveToNext()) {
+                                enddate.add(cursor.getString(0));
+                            }
+                            String arr = null;
+                            for (int i = 0; i < enddate.size(); i++) {
+                                enddate.get(i).charAt(0);
+                                if (enddate.get(i).substring(1).toString().equals("일")) {
+                                    if (enddate.get(i).substring(0, 1).toString().equals("7")) {
+                                        String open = String.valueOf(openEditdate.getText());
+                                        String dateArray[] = open.split(" - ");
+                                        pYear = Integer.parseInt(dateArray[0]);
+                                        pMonth = Integer.parseInt(dateArray[1]);
+                                        pDate = Integer.parseInt(dateArray[2]) + 7;
+                                        endEditdate.setText(String.format("%d - %d - %d", pYear, pMonth, pDate));
+                                    }
+                                    if (enddate.get(i).substring(0, 1).toString().equals("21")) {
+                                        String open = String.valueOf(openEditdate.getText());
+                                        String dateArray[] = open.split(" - ");
+                                        pYear = Integer.parseInt(dateArray[0]);
+                                        pMonth = Integer.parseInt(dateArray[1]);
+                                        pDate = Integer.parseInt(dateArray[2]) + 21;
+                                        endEditdate.setText(String.format("%d - %d - %d", pYear, pMonth, pDate));
+                                    }
+                                    if (enddate.get(i).substring(0, 1).toString().equals("3")) {
+                                        String open = String.valueOf(openEditdate.getText());
+                                        String dateArray[] = open.split(" - ");
+                                        pYear = Integer.parseInt(dateArray[0]) + 3;
+                                        pMonth = Integer.parseInt(dateArray[1]);
+                                        pDate = Integer.parseInt(dateArray[2]) - 3;
+                                        endEditdate.setText(String.format("%d - %d - %d", pYear, pMonth, pDate));
+                                    }
+                                }
+                                if (enddate.get(i).substring(1).toString().equals("개월")) {
+                                    if (enddate.get(i).substring(0, 1).toString().equals("1")) {
+                                        String open = String.valueOf(openEditdate.getText());
+                                        String dateArray[] = open.split(" - ");
+                                        pYear = Integer.parseInt(dateArray[0]);
+                                        pMonth = Integer.parseInt(dateArray[1]) + 1;
+                                        pDate = Integer.parseInt(dateArray[2]) - 2;
+                                        endEditdate.setText(String.format("%d - %d - %d", pYear, pMonth, pDate));
+                                    }
+                                    if (enddate.get(i).substring(0, 1).toString().equals("3")) {
+                                        String open = String.valueOf(openEditdate.getText());
+                                        String dateArray[] = open.split(" - ");
+                                        pYear = Integer.parseInt(dateArray[0]);
+                                        pMonth = Integer.parseInt(dateArray[1]) + 3;
+                                        pDate = Integer.parseInt(dateArray[2]) - 3;
+                                        endEditdate.setText(String.format("%d - %d - %d", pYear, pMonth, pDate));
+                                    }
+                                    if (enddate.get(i).substring(0, 1).toString().equals("6")) {
+                                        String open = String.valueOf(openEditdate.getText());
+                                        String dateArray[] = open.split(" - ");
+                                        pYear = Integer.parseInt(dateArray[0]);
+                                        pMonth = Integer.parseInt(dateArray[1]) + 6;
+                                        pDate = Integer.parseInt(dateArray[2]) - 5;
+                                        endEditdate.setText(String.format("%d - %d - %d", pYear, pMonth, pDate));
+                                    }
+                                }
+                            }
+                        } else if (MainActivity.fragNum == 3) {
+
+                        }
+                        cursor.close();
+                        db.close();
+                       // Toast.makeText(AddActivity.this, "자동 입력", Toast.LENGTH_SHORT).show();
                         break;
                 }
                 dialog.dismiss();
             }
         });
-        builder.show();
+        builder1.show();
+
     }
-}
+
+
+    private void EndtimeEditCalender(int year, int monthOfYear, int dayOfMonth) {
+        year = datePicker.getYear();
+        monthOfYear = datePicker.getMonth();
+        dayOfMonth = datePicker.getDayOfMonth();
+        datePicker.init(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(), new DatePicker.OnDateChangedListener() {
+            @Override
+            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                pYear = year;
+                pMonth = monthOfYear + 1;
+                pDate = dayOfMonth;
+                endEditdate.setText(String.format("%d - %d - %d", pYear, pMonth, pDate));
+            }
+        });
+
+
+        confirmBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                endEditdate.setText(String.format("%d - %d - %d", pYear, pMonth, pDate));
+                datedialog.dismiss();
+            }
+        });
+        datedialog.show();
+    }
