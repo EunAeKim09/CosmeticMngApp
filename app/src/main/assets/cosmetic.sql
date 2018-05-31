@@ -18,7 +18,7 @@
   insert into cosmeticCategory (name,duration) values ('클렌징','1년');
   insert into cosmeticCategory (name,duration) values ('자외선 차단제','6개월');
   insert into cosmeticCategory (name,duration) values ('네일/애나멜','2년');
-  insert into cosmeticCategory (name,duration) values ('향수','2017-06-28');
+  insert into cosmeticCategory (name,duration) values ('향수','3년');
   insert into cosmeticCategory (name,duration) values ('팩','1년');
   insert into cosmeticCategory (name,duration) values ('염색약','1년');
 
@@ -58,20 +58,11 @@
         openDate,
         endDate,
         memo,
-        favorite defalut 0,
+        favorite default 0,
         FOREIGN KEY (cate_id) REFERENCES cosmeticCategory(_id)
    );
 
-   insert into userCosmetic (cate_id,name,openDate,endDate,memo,favorite) values (10,'키스미 아이라이너'.'2018-05-29','2019-05-28','키스미13900원',0);
-   insert into userCosmetic (cate_id,name,openDate,endDate,memo,favorite) values (11,'키스미 마스카라'.'2018-05-29','2018-11-28','키스미13900원',0);
-   insert into userCosmetic (cate_id,name,openDate,endDate,memo,favorite) values (3,'이니스프리 크림'.'2018-05-29','2019-05-28','이니스프리 18900원',0);
-   insert into userCosmetic (cate_id,name,openDate,endDate,memo,favorite) values (1,'이니스프리 그린티 토너'.'2018-05-29','2019-05-28','그린티토너 17300원',1);
-   insert into userCosmetic (cate_id,name,openDate,endDate,memo,favorite) values (1,'이니스프리 그린티 로션'.'2018-05-29','2019-05-28','그린티 로션 18900원',1);
-   insert into userCosmetic (cate_id,name,openDate,endDate,memo,favorite) values (9,'토니모리 틴트'.'2018-05-29','2019-05-28','틴트 5900원',0);
-   insert into userCosmetic (cate_id,name,openDate,endDate,memo,favorite) values (9,'에뛰드 립스틱'.'2018-05-29','2019-05-28','에뛰드13900원',1);
-   insert into userCosmetic (cate_id,name,openDate,endDate,memo,favorite) values (12,'RMK클렌징'.'2018-05-29','2019-05-28','클렌징 오일13900원',0);
-   insert into userCosmetic (cate_id,name,openDate,endDate,memo,favorite) values (7,'메이크업 포에버 팩트'.'2018-05-29','2019-05-28','43000원',0);
-   insert into userCosmetic (cate_id,name,openDate,endDate,memo,favorite) values (13,'미샤 마일드 선크림'.'2018-05-29','2019-11-28','13900원',0);
+
 
 
 
@@ -84,7 +75,7 @@
         openDate,
         endDate,
         memo,
-        favorite defalut 0,
+        favorite default 0,
         FOREIGN KEY (cate_id) REFERENCES cosmeticTools(_id)
     );
 
@@ -96,7 +87,7 @@
             openDate,
             endDate,
             memo,
-            favorite defalut 0,
+            favorite default 0,
             FOREIGN KEY (cate_id) REFERENCES cosmeticTools(_id)
      );
 
