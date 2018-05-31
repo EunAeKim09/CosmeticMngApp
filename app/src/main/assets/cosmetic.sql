@@ -23,18 +23,18 @@
   insert into cosmeticCategory (name,duration) values ('염색약','1년');
 
 
-  create table cosmeticTools(
+  create table cosmeticToolsCategory(
     _id integer primary key autoincrement,
      name not null,
      duration
   );
 
-  insert into cosmeticTools (name,duration) values ('퍼프/스펀지','7일');
-  insert into cosmeticTools (name,duration) values ('립 브러쉬(립용)','7일');
-  insert into cosmeticTools (name,duration) values ('파운데이션 브러쉬','7일');
-  insert into cosmeticTools (name,duration) values ('컨실러 브러쉬','7일');
-  insert into cosmeticTools (name,duration) values ('파우더 브러쉬','21일');
-  insert into cosmeticTools (name,duration) values ('뷰러','3개월');
+  insert into cosmeticToolsCategory (name,duration) values ('퍼프/스펀지','7일');
+  insert into cosmeticToolsCategory (name,duration) values ('립 브러쉬(립용)','7일');
+  insert into cosmeticToolsCategory (name,duration) values ('파운데이션 브러쉬','7일');
+  insert into cosmeticToolsCategory (name,duration) values ('컨실러 브러쉬','7일');
+  insert into cosmeticToolsCategory (name,duration) values ('파우더 브러쉬','21일');
+  insert into cosmeticToolsCategory (name,duration) values ('뷰러','3개월');
 
 
    create table lensCategory(
@@ -76,7 +76,7 @@
         endDate,
         memo,
         favorite default 0,
-        FOREIGN KEY (cate_id) REFERENCES cosmeticTools(_id)
+        FOREIGN KEY (cate_id) REFERENCES cosmeticToolsCategory(_id)
     );
 
      create table userLens (
@@ -88,7 +88,7 @@
             endDate,
             memo,
             favorite default 0,
-            FOREIGN KEY (cate_id) REFERENCES cosmeticTools(_id)
+            FOREIGN KEY (cate_id) REFERENCES lensCategory(_id)
      );
 
 
