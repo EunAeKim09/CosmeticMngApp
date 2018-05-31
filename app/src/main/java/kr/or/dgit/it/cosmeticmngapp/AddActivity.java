@@ -94,7 +94,7 @@ public class AddActivity extends AppCompatActivity {
         if(MainActivity.fragNum == 1){
             cursor = db.rawQuery("select name from cosmeticCategory order by name", null);
         }else if(MainActivity.fragNum == 2){
-            cursor = db.rawQuery("select name from cosmeticToolsCategory order by name", null);
+            cursor = db.rawQuery("select name from cosmeticTools order by name", null);
         }else if(MainActivity.fragNum == 3){
             cursor = db.rawQuery("select name from lensCategory order by name", null);
         }
