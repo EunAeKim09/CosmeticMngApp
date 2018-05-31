@@ -6,8 +6,12 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import kr.or.dgit.it.cosmeticmngapp.db.DBhelper;
-import kr.or.dgit.it.cosmeticmngapp.dto.UserLensDTO;
+import kr.or.dgit.it.cosmeticmngapp.dto.UserCosmeticTools;
+import kr.or.dgit.it.cosmeticmngapp.dto.UserLens;
 
 public class UserLensDAO {
     //테이블 이름
@@ -44,7 +48,7 @@ public class UserLensDAO {
         }
     }
 
-    public void insertItem(UserLensDTO item) {
+    public void insertItem(UserLens item) {
         ContentValues row = new ContentValues();
         row.put(COL_NAME, item.getName());
         row.put(COL_IMG, item.getImg());
@@ -59,7 +63,7 @@ public class UserLensDAO {
         db.delete(TABLE_NAME, COL_ID + "=?", new String[]{String.valueOf(id)});
     }
 
-    public void updateItem(UserLensDTO item) {
+    public void updateItem(UserLens item) {
         ContentValues row = new ContentValues();
         row.put(COL_NAME, item.getName());
         row.put(COL_IMG, item.getImg());
@@ -70,7 +74,7 @@ public class UserLensDAO {
         db.update(TABLE_NAME, row, COL_ID + "=?", new String[]{String.valueOf(item.get_id())});
     }
 
-    public void updateFavoriteItem(UserLensDTO item) {
+    public void updateFavoriteItem(UserLens item) {
         ContentValues row = new ContentValues();
         row.put(COL_FAVORITE, item.getFavorite());
         db.update(TABLE_NAME, row, COL_ID + "=?", new String[]{String.valueOf(item.get_id())});
@@ -79,5 +83,28 @@ public class UserLensDAO {
     public Cursor selectItemAll(String selection, String[] selectionArgs) {
         Cursor mCursor = db.query(TABLE_NAME, COLUMNS, selection, selectionArgs, null, null, null);
         return mCursor;
+    }
+
+    public List<UserLens> selectAllUserLens(){
+        List<UserLens> list = new ArrayList<>();
+        Cursor cursor = db.rawQuery("select _id, name, img, openDate, endDate, memo, favorite, cate_id from userLens", null);
+
+        if(cursor.moveToFirst()){
+            do{
+                UserLens item = new UserLens();
+                item.set_id(Integer.parseInt(cursor.getString(0)));
+                item.setName(cursor.getColumnName(1));
+                item.setImg(cursor.getColumnName(2));
+                item.setOpenDate(cursor.getColumnName(3));
+                item.setEndDate(cursor.getColumnName(4));
+                item.setMemo(cursor.getColumnName(5));
+                item.setFavorite(cursor.getColumnName(6));
+                item.setCate_id(cursor.getColumnName(7));
+
+                list.add(item);
+            }while (cursor.moveToNext());
+        }
+
+        return list;
     }
 }

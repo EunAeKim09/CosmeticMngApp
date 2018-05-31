@@ -2,6 +2,7 @@ package kr.or.dgit.it.cosmeticmngapp;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -42,6 +43,15 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
         android.support.design.widget.NavigationView navigationView = findViewById(R.id.navigation);
         navigationView.setNavigationItemSelectedListener(this);
 
+        MyItemList fragment = MyItemList.newInstance();
+        Bundle bundle = new Bundle();
+        bundle.putInt("frag", 1);
+        fragment.setArguments(bundle);
+
+        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.fragment_container, fragment);
+        fragmentTransaction.commit();
+
         /*Button closeNavi = navigationView.findViewById(R.id.naviCloseBtn);
         closeNavi.setOnClickListener(this);*/
 
@@ -80,9 +90,17 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
             fragNum = 3;
         }
         setTitleName();
+
+        MyItemList fragment = MyItemList.newInstance();
+        Bundle bundle = new Bundle();
+        bundle.putInt("frag", fragNum);
+        fragment.setArguments(bundle);
+
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.fragment_container, MyItemList.newInstance());
+        fragmentTransaction.add(R.id.fragment_container, fragment);
+        fragmentTransaction.detach(fragment).attach(fragment);
         fragmentTransaction.commit();
+
         android.support.v4.widget.DrawerLayout drawer = (android.support.v4.widget.DrawerLayout) findViewById(R.id.drawerlayout);
         drawer.closeDrawer(android.support.v4.view.GravityCompat.START);
         return true;

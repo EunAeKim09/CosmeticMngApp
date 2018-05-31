@@ -13,7 +13,7 @@ import java.io.InputStreamReader;
 
 public class DBhelper extends SQLiteOpenHelper{
     private static final  String TAG = DBhelper.class.getSimpleName();
-    public static final int DATABASE_VERSION=1;
+    public static final int DATABASE_VERSION=5;
     private static final String DB_NAME = "datadb.db";
     private final  Context context;
     private static DBhelper instance;

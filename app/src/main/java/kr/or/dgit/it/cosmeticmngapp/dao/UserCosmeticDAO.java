@@ -6,8 +6,11 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import kr.or.dgit.it.cosmeticmngapp.db.DBhelper;
-import kr.or.dgit.it.cosmeticmngapp.dto.UserCosmeticDTO;
+import kr.or.dgit.it.cosmeticmngapp.dto.UserCosmetic;
 
 public class UserCosmeticDAO {
     //테이블 이름
@@ -44,7 +47,7 @@ public class UserCosmeticDAO {
         }
     }
 
-    public void insertItem(UserCosmeticDTO item){
+    public void insertItem(UserCosmetic item){
         ContentValues row = new ContentValues();
         row.put(COL_NAME, item.getName());
         row.put(COL_IMG, item.getImg());
@@ -59,7 +62,7 @@ public class UserCosmeticDAO {
         db.delete(TABLE_NAME, COL_ID + "=?", new String[]{String.valueOf(id)});
     }
 
-    public void updateItem(UserCosmeticDTO item){
+    public void updateItem(UserCosmetic item){
         ContentValues row = new ContentValues();
         row.put(COL_NAME, item.getName());
         row.put(COL_IMG, item.getImg());
@@ -70,7 +73,7 @@ public class UserCosmeticDAO {
         db.update(TABLE_NAME, row, COL_ID +"=?", new String[]{String.valueOf(item.get_id())});
     }
 
-    public void updateFavoriteItem(UserCosmeticDTO item){
+    public void updateFavoriteItem(UserCosmetic item){
         ContentValues row = new ContentValues();
         row.put(COL_FAVORITE, item.getFavorite());
         db.update(TABLE_NAME, row, COL_ID +"=?", new String[]{String.valueOf(item.get_id())});
@@ -79,5 +82,28 @@ public class UserCosmeticDAO {
     public Cursor selectItemAll(String selection, String[] selectionArgs){
         Cursor mCursor = db.query(TABLE_NAME, COLUMNS, selection, selectionArgs,null,null,null);
         return mCursor;
+    }
+
+    public List<UserCosmetic> selectAllUserCosmetic(){
+        List<UserCosmetic> list = new ArrayList<>();
+        Cursor cursor = db.rawQuery("select _id, name, img, openDate, endDate, memo, favorite, cate_id from userCosmetic", null);
+
+        if(cursor.moveToFirst()){
+            do{
+                UserCosmetic userCosmetic = new UserCosmetic();
+                userCosmetic.set_id(Integer.parseInt(cursor.getString(0)));
+                userCosmetic.setName(cursor.getColumnName(1));
+                userCosmetic.setImg(cursor.getColumnName(2));
+                userCosmetic.setOpenDate(cursor.getColumnName(3));
+                userCosmetic.setEndDate(cursor.getColumnName(4));
+                userCosmetic.setMemo(cursor.getColumnName(5));
+                userCosmetic.setFavorite(cursor.getColumnName(6));
+                userCosmetic.setCate_id(cursor.getColumnName(7));
+
+                list.add(userCosmetic);
+            }while (cursor.moveToNext());
+        }
+
+        return list;
     }
 }
