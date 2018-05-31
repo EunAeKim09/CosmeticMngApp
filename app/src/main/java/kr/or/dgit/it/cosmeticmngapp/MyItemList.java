@@ -1,5 +1,6 @@
 package kr.or.dgit.it.cosmeticmngapp;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Rect;
@@ -122,8 +123,31 @@ public class MyItemList extends Fragment {
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.registerlist_cardview_layout, parent, false);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getContext(), DetailViewActivity.class);
+
+                    ItemVO itemVO = list.get(recyclerView.getChildAdapterPosition(v));
+                    int num=0;
+                    if(fragNum == 1){
+                        UserCosmetic dataItem=(UserCosmetic)itemVO;
+                        num = dataItem.get_id();
+                        Log.d(TAG, "setOnClickListener: "+dataItem.get_id());
+                    }else if(fragNum == 2){
+                        UserCosmeticTools dataItem=(UserCosmeticTools)itemVO;
+                        num = dataItem.get_id();
+                    }else if(fragNum == 3){
+                        UserLens dataItem=(UserLens)itemVO;
+                        num = dataItem.get_id();
+                    }
+                    intent.putExtra("idNum", num);
+                    startActivity(intent);
+                }
+            });
             return new DataViewHolder(view);
         }
+
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
@@ -152,7 +176,7 @@ public class MyItemList extends Fragment {
             return list.size();
         }
 
-        private class DataViewHolder extends RecyclerView.ViewHolder {
+        private class DataViewHolder extends RecyclerView.ViewHolder{
             public TextView nameView;
             public TextView openDateView;
             public TextView endDateView;
