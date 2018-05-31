@@ -454,7 +454,8 @@ public class AddActivity extends AppCompatActivity {
                         SQLiteDatabase db = helper.getReadableDatabase();
                         Cursor cursor = null;
                         if (MainActivity.fragNum == 1) {
-                            cursor = db.rawQuery("select durationY,durationM,durationD from cosmeticCategory", null);
+
+                            cursor = db.rawQuery("select * from cosmeticCategory where durationY=1", null);
                             //where 문으로 다 들고와야함.. 이렇게 못함..집에가서 꼭 할것..
 
                             ArrayList<String> endyear = new ArrayList<>();
