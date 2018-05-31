@@ -46,20 +46,10 @@ import kr.or.dgit.it.cosmeticmngapp.db.DBhelper;
 public class AddActivity extends AppCompatActivity {
     private static final int PICK_FROM_CAMERA = 0;
     private static final int PICK_FROM_ALBUM = 1;
-    private static final int CROP_FROM_IMAGE = 2;
-    private String mCurrentPhotoPath;
     private Uri photoUri = null;
-    private Uri albumUri = null;
-    private boolean album;
     EditText openEditdate;
     EditText endEditdate;
     int i;
-
-
-
-    private CharSequence[] info;
-
-    private Uri photoUri;
     private String currentPhotoPath;    //실제 사진 파일 경로
     String mImageCaptureName;           //이미지 이름
     private boolean permission;
@@ -104,7 +94,7 @@ public class AddActivity extends AppCompatActivity {
         if(MainActivity.fragNum == 1){
             cursor = db.rawQuery("select name from cosmeticCategory order by name", null);
         }else if(MainActivity.fragNum == 2){
-            cursor = db.rawQuery("select name from cosmeticTools order by name", null);
+            cursor = db.rawQuery("select name from cosmeticToolsCategory order by name", null);
         }else if(MainActivity.fragNum == 3){
             cursor = db.rawQuery("select name from lensCategory order by name", null);
         }

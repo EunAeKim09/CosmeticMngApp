@@ -61,7 +61,12 @@ public class DBhelper extends SQLiteOpenHelper{
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if(newVersion == DATABASE_VERSION){
-            db.execSQL("drop table tb_data");
+            db.execSQL("drop table cosmeticCategory");
+            db.execSQL("drop table cosmeticToolsCategory");
+            db.execSQL("drop table lensCategory");
+            db.execSQL("drop table userCosmetic");
+            db.execSQL("drop table userCosmeticTools");
+            db.execSQL("drop table userLens");
             onCreate(db);
         }
     }
