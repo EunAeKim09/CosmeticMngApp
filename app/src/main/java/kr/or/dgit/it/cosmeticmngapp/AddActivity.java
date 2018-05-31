@@ -58,8 +58,9 @@ public class AddActivity extends AppCompatActivity {
 
 
     private CharSequence[] info;
+    private TextView categoryTV;
 
-    private Uri photoUri;
+
     private String currentPhotoPath;    //실제 사진 파일 경로
     String mImageCaptureName;           //이미지 이름
     private boolean permission;
