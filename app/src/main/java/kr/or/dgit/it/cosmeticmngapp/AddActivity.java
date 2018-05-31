@@ -455,6 +455,7 @@ public class AddActivity extends AppCompatActivity {
                         Cursor cursor = null;
                         if (MainActivity.fragNum == 1) {
                             cursor = db.rawQuery("select durationY,durationM,durationD from cosmeticCategory", null);
+                            //where 문으로 다 들고와야함.. 이렇게 못함..집에가서 꼭 할것..
 
                             ArrayList<String> endyear = new ArrayList<>();
                             ArrayList<String> endmonth = new ArrayList<>();
