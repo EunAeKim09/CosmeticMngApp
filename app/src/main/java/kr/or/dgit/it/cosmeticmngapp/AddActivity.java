@@ -54,12 +54,7 @@ public class AddActivity extends AppCompatActivity {
     EditText openEditdate;
     EditText endEditdate;
     int i;
-
-
-
     private CharSequence[] info;
-
-    private Uri photoUri;
     private String currentPhotoPath;    //실제 사진 파일 경로
     String mImageCaptureName;           //이미지 이름
     private boolean permission;
@@ -74,6 +69,7 @@ public class AddActivity extends AppCompatActivity {
     private int pYear;
     private int pMonth;
     private int pDate;
+    private TextView categoryTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

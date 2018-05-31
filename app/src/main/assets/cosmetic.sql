@@ -58,7 +58,7 @@
         openDate,
         endDate,
         memo,
-        favorite,
+        favorite defalut 0,
         FOREIGN KEY (cate_id) REFERENCES cosmeticCategory(_id)
    );
 
@@ -84,7 +84,7 @@
         openDate,
         endDate,
         memo,
-        favorite,
+        favorite defalut 0,
         FOREIGN KEY (cate_id) REFERENCES cosmeticTools(_id)
     );
 
@@ -96,7 +96,7 @@
             openDate,
             endDate,
             memo,
-            favorite,
+            favorite defalut 0,
             FOREIGN KEY (cate_id) REFERENCES cosmeticTools(_id)
      );
 

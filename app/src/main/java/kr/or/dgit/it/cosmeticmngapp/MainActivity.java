@@ -2,13 +2,16 @@ package kr.or.dgit.it.cosmeticmngapp;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.Button;
 
-public class MainActivity extends android.support.v7.app.AppCompatActivity implements android.support.design.widget.NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends android.support.v7.app.AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     DrawerLayout drawerLayout;
     boolean permission;
     public static int fragNum = 1;
@@ -38,6 +41,9 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
 
         android.support.design.widget.NavigationView navigationView = findViewById(R.id.navigation);
         navigationView.setNavigationItemSelectedListener(this);
+
+        /*Button closeNavi = navigationView.findViewById(R.id.naviCloseBtn);
+        closeNavi.setOnClickListener(this);*/
 
         //permission
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
@@ -110,4 +116,11 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
         }
         return super.onOptionsItemSelected(item);
     }
+
+    /*@Override
+    public void onClick(View v) {
+        if(v.getId()==R.id.naviCloseBtn){
+            onBackPressed();
+        }
+    }*/
 }

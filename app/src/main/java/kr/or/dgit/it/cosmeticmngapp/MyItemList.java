@@ -25,6 +25,7 @@ import java.util.Map;
 import kr.or.dgit.it.cosmeticmngapp.db.DBhelper;
 
 public class MyItemList extends Fragment {
+    View view;
     public static  MyItemList newInstance(){
         return new MyItemList();
     }
@@ -32,8 +33,8 @@ public class MyItemList extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_my_item_list, container, false);
-        DBhelper helper = new DBhelper(getActivity());
+        view = inflater.inflate(R.layout.fragment_my_item_list, container, false);
+        /*DBhelper helper = new DBhelper(getActivity());
         SQLiteDatabase db = helper.getReadableDatabase();
         Cursor cursor = null;
         if(MainActivity.fragNum == 1){
@@ -55,11 +56,11 @@ public class MyItemList extends Fragment {
         recyclerView.setAdapter(new RecyclerAdapter(items));
 
         cursor.close();
-        db.close();
+        db.close();*/
         return view;
     }
 
-    private class RecyclerAdapter extends RecyclerView.Adapter {
+    /*private class RecyclerAdapter extends RecyclerView.Adapter {
         Item[] items;
 
         public RecyclerAdapter(Item[] items) {
@@ -99,7 +100,7 @@ public class MyItemList extends Fragment {
 
             public ViewHolder(View itemView) {
                 super(itemView);
-                itemimg = itemView.findViewById(R.id.item_product);
+                itemimg = view.findViewById(R.id.item_product);
                 itemName = itemView.findViewById(R.id.item_product_name);
                 itemOpenD = itemView.findViewById(R.id.item_opendate);
                 itemEndD = itemView.findViewById(R.id.item_deaddate);
@@ -115,5 +116,5 @@ public class MyItemList extends Fragment {
                 });
             }
         }
-    }
+    }*/
 }
