@@ -13,7 +13,7 @@ import java.io.InputStreamReader;
 
 public class DBhelper extends SQLiteOpenHelper{
     private static final  String TAG = DBhelper.class.getSimpleName();
-    public static final int DATABASE_VERSION=1;
+    public static final int DATABASE_VERSION=2;
     private static final String DB_NAME = "datadb.db";
     private final  Context context;
     private static DBhelper instance;
@@ -60,6 +60,7 @@ public class DBhelper extends SQLiteOpenHelper{
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        Log.d("error1","errorerror"+newVersion);
         if(newVersion == DATABASE_VERSION){
             db.execSQL("drop table cosmeticCategory");
             db.execSQL("drop table cosmeticToolsCategory");

@@ -25,6 +25,7 @@
   insert into cosmeticCategory (name,durationY) values ('염색약',1);
 
 
+
   create table cosmeticToolsCategory(
     _id integer primary key autoincrement,
      name not null,
@@ -33,7 +34,7 @@
      durationD default 0
   );
 
-  insert into cosmeticToolsCategory (name,durationD) values ('퍼프/스펀지',7');
+  insert into cosmeticToolsCategory (name,durationD) values ('퍼프/스펀지',7);
   insert into cosmeticToolsCategory (name,durationD) values ('립 브러쉬(립용)',7);
   insert into cosmeticToolsCategory (name,durationD) values ('파운데이션 브러쉬',7);
   insert into cosmeticToolsCategory (name,durationD) values ('컨실러 브러쉬',7);

@@ -454,18 +454,25 @@ public class AddActivity extends AppCompatActivity {
                         if (MainActivity.fragNum == 1) {
                             cursor = db.rawQuery("select durationY,durationM,durationD from cosmeticCategory", null);
 
-                            ArrayList<Integer> endyear = new ArrayList<>();
-                            ArrayList<Integer> endmonth = new ArrayList<>();
-                            ArrayList<Integer> enddate = new ArrayList<>();
+                            ArrayList<String> endyear = new ArrayList<>();
+                            ArrayList<String> endmonth = new ArrayList<>();
+                            ArrayList<String> enddate = new ArrayList<>();
                             while (cursor.moveToNext()) {
-                                endyear.add(Integer.valueOf(cursor.getString(0)));
-                                endmonth.add(Integer.valueOf(cursor.getString(1)));
-                                enddate.add(Integer.valueOf(cursor.getString(2)));
+                                endyear.add(cursor.getString(0));
+                                endmonth.add(cursor.getString(1));
+                                enddate.add(cursor.getString(2));
                             }
 
-                            for (int i = 0; i < enddate.size(); i++) {
+                            for (int a = 0; a < enddate.size(); a++) {
+                                for(int b=0; b <endmonth.size(); b++){
+                                    for(int n=0; n<endyear.size(); n++){
+                                        Toast.makeText(AddActivity.this,enddate.get(a).toString()+"일",Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(AddActivity.this,endmonth.get(b).toString()+"개월",Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(AddActivity.this,endyear.get(n).toString()+"년",Toast.LENGTH_SHORT).show();
+                                    }
+                                }
 
-                                Toast.makeText(AddActivity.this,enddate.get(i).toString(),Toast.LENGTH_SHORT).show();
+
                             }
 
 
