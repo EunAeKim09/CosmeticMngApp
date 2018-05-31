@@ -41,13 +41,19 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import kr.or.dgit.it.cosmeticmngapp.db.DBhelper;
 
 public class AddActivity extends AppCompatActivity {
     private static final int PICK_FROM_CAMERA = 0;
     private static final int PICK_FROM_ALBUM = 1;
+    private static final int CROP_FROM_IMAGE = 2;
+    private String mCurrentPhotoPath;
     private Uri photoUri = null;
+    private Uri albumUri = null;
+    private boolean album;
     EditText openEditdate;
     EditText endEditdate;
     int i;
@@ -449,7 +455,9 @@ public class AddActivity extends AppCompatActivity {
                         SQLiteDatabase db = helper.getReadableDatabase();
                         Cursor cursor = null;
                         if (MainActivity.fragNum == 1) {
-                            cursor = db.rawQuery("select durationY,durationM,durationD from cosmeticCategory", null);
+
+                            cursor = db.rawQuery("select * from cosmeticCategory where durationY=1", null);
+                            //where 문으로 다 들고와야함.. 이렇게 못함..집에가서 꼭 할것..
 
                             ArrayList<String> endyear = new ArrayList<>();
                             ArrayList<String> endmonth = new ArrayList<>();
@@ -460,15 +468,71 @@ public class AddActivity extends AppCompatActivity {
                                 enddate.add(cursor.getString(2));
                             }
 
-                            for (int a = 0; a < enddate.size(); a++) {
-                                for(int b=0; b <endmonth.size(); b++){
-                                    for(int n=0; n<endyear.size(); n++){
-                                        Toast.makeText(AddActivity.this,enddate.get(a).toString()+"일",Toast.LENGTH_SHORT).show();
-                                        Toast.makeText(AddActivity.this,endmonth.get(b).toString()+"개월",Toast.LENGTH_SHORT).show();
-                                        Toast.makeText(AddActivity.this,endyear.get(n).toString()+"년",Toast.LENGTH_SHORT).show();
-                                    }
-                                }
+                            Toast.makeText(AddActivity.this,endmonth.toString(),Toast.LENGTH_SHORT).show();
 
+                            for (int b = 0; b < endmonth.size(); b++) {
+                                if (endmonth.get(b).toString().equals("6")) {
+                                    String open = String.valueOf(openEditdate.getText());
+                                    String dateArray[] = open.split(" - ");
+                                    c.set(Calendar.YEAR,Integer.parseInt(dateArray[0]));
+                                    c.set(Calendar.MONTH,Integer.parseInt(dateArray[1])-1);
+                                    c.set(Calendar.DAY_OF_MONTH,Integer.parseInt(dateArray[2]));
+
+                                    c.add(Calendar.YEAR,0);
+                                    c.add(Calendar.MONTH,1);
+                                    c.add(Calendar.DAY_OF_MONTH,180);
+
+                                    pYear=c.get(Calendar.YEAR);
+                                    pMonth=c.get(Calendar.MONTH);
+                                    pDate = c.get(Calendar.DAY_OF_MONTH);
+                                    endEditdate.setText(String.format("%d - %d - %d",pYear,pMonth,pDate));
+                                }
+                            }
+
+                           for(int a = 0; a<endyear.size(); a++){
+                                if(endyear.get(a).toString().equals("1")){
+                                    String open = String.valueOf(openEditdate.getText());
+                                    String dateArray[] = open.split(" - ");
+                                    c.set(Calendar.YEAR,Integer.parseInt(dateArray[0]));
+                                    c.set(Calendar.MONTH,Integer.parseInt(dateArray[1])-1);
+                                    c.set(Calendar.DAY_OF_MONTH,Integer.parseInt(dateArray[2])-1);
+
+                                    c.add(Calendar.YEAR,0);
+                                    c.add(Calendar.MONTH,1);
+                                    c.add(Calendar.DAY_OF_MONTH,365);
+
+
+                                    pYear=c.get(Calendar.YEAR);
+                                    pMonth = c.get(Calendar.MONTH);
+                                    pDate = c.get(Calendar.DAY_OF_MONTH);
+                                    endEditdate.setText(String.format("%d - %d - %d",pYear,pMonth,pDate));
+                                }
+                                if(endyear.get(a).toString().equals("2")){
+                                    String open = String.valueOf(openEditdate.getText());
+                                    String dateArray[] = open.split(" - ");
+                                    c.set(Calendar.YEAR,Integer.parseInt(dateArray[0]));
+                                    c.set(Calendar.MONTH,Integer.parseInt(dateArray[1])-1);
+                                    c.set(Calendar.DAY_OF_MONTH,Integer.parseInt(dateArray[2])-2);
+
+
+                                    pYear=c.get(Calendar.YEAR);
+                                    pMonth = c.get(Calendar.MONTH);
+                                    pDate = c.get(Calendar.DAY_OF_MONTH);
+                                    endEditdate.setText(String.format("%d - %d - %d",pYear+2,pMonth+1,pDate));
+                                }
+                                if(endyear.get(a).toString().equals("3")){
+                                    String open = String.valueOf(openEditdate.getText());
+                                    String dateArray[] = open.split(" - ");
+                                    c.set(Calendar.YEAR,Integer.parseInt(dateArray[0]));
+                                    c.set(Calendar.MONTH,Integer.parseInt(dateArray[1])-1);
+                                    c.set(Calendar.DAY_OF_MONTH,Integer.parseInt(dateArray[2])-3);
+
+
+                                    pYear=c.get(Calendar.YEAR);
+                                    pMonth = c.get(Calendar.MONTH);
+                                    pDate = c.get(Calendar.DAY_OF_MONTH);
+                                    endEditdate.setText(String.format("%d - %d - %d",pYear+3,pMonth+1,pDate));
+                                }
 
                             }
 
@@ -481,9 +545,8 @@ public class AddActivity extends AppCompatActivity {
                                pDate = Integer.parseInt(dateArray[2])-1;
                                 endEditdate.setText(String.format("%d - %d - %d", pYear, pMonth, pDate));
                             }*/
-
                         } else if (MainActivity.fragNum == 2) {
-                            cursor = db.rawQuery("select duration from cosmeticToolsCategory", null);
+                           /* cursor = db.rawQuery("select duration from cosmeticToolsCategory", null);
                             Log.d("error", "onClick: " + cursor);
                             ArrayList<String> enddate = new ArrayList<>();
                             while (cursor.moveToNext()) {
@@ -544,13 +607,13 @@ public class AddActivity extends AppCompatActivity {
                                         endEditdate.setText(String.format("%d - %d - %d", pYear, pMonth, pDate));
                                     }
                                 }
-                            }
+                            }*/
                         } else if (MainActivity.fragNum == 3) {
 
                         }
                         cursor.close();
                         db.close();
-                       // Toast.makeText(AddActivity.this, "자동 입력", Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(AddActivity.this, "자동 입력", Toast.LENGTH_SHORT).show();
                         break;
                 }
                 dialog.dismiss();
@@ -585,3 +648,5 @@ public class AddActivity extends AppCompatActivity {
         });
         datedialog.show();
     }
+
+}
