@@ -85,6 +85,11 @@ public class UserCosmeticToolsDAO {
         return mCursor;
     }
 
+    public Cursor selectCateName(String selection, String[] selectionArgs){
+        Cursor mCursor = db.query("cosmeticToolsCategory", new String[]{"name"}, selection, selectionArgs,null,null,null);
+        return mCursor;
+    }
+
     public List<UserCosmeticTools> selectAllUserCosmeticTools(){
         List<UserCosmeticTools> list = new ArrayList<>();
         Cursor cursor = db.rawQuery("select _id, name, img, openDate, endDate, memo, favorite, cate_id from userCosmeticTools", null);

@@ -49,11 +49,7 @@ import kr.or.dgit.it.cosmeticmngapp.db.DBhelper;
 public class AddActivity extends AppCompatActivity {
     private static final int PICK_FROM_CAMERA = 0;
     private static final int PICK_FROM_ALBUM = 1;
-    private static final int CROP_FROM_IMAGE = 2;
-    private String mCurrentPhotoPath;
     private Uri photoUri = null;
-    private Uri albumUri = null;
-    private boolean album;
     EditText openEditdate;
     EditText endEditdate;
     int i;

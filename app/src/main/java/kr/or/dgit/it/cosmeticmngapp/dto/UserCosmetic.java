@@ -88,6 +88,20 @@ public class UserCosmetic extends ItemVO{
     }
 
     @Override
+    public String toString() {
+        return "UserCosmetic{" +
+                "_id=" + _id +
+                ", name='" + name + '\'' +
+                ", img='" + img + '\'' +
+                ", openDate='" + openDate + '\'' +
+                ", endDate='" + endDate + '\'' +
+                ", memo='" + memo + '\'' +
+                ", favorite='" + favorite + '\'' +
+                ", cate_id='" + cate_id + '\'' +
+                '}';
+    }
+
+    @Override
     public int getType() {
         return ItemVO.TYPE_DATA;
     }

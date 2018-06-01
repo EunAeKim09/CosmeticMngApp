@@ -85,6 +85,11 @@ public class UserLensDAO {
         return mCursor;
     }
 
+    public Cursor selectCateName(String selection, String[] selectionArgs){
+        Cursor mCursor = db.query("lensCategory", new String[]{"name"}, selection, selectionArgs,null,null,null);
+        return mCursor;
+    }
+
     public List<UserLens> selectAllUserLens(){
         List<UserLens> list = new ArrayList<>();
         Cursor cursor = db.rawQuery("select _id, name, img, openDate, endDate, memo, favorite, cate_id from userLens", null);

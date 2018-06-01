@@ -101,7 +101,6 @@ public class MyItemList extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView: ");
         recyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_my_item_list, container, false);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(new MyAdapter(list));
@@ -129,17 +128,16 @@ public class MyItemList extends Fragment {
                     Intent intent = new Intent(getContext(), DetailViewActivity.class);
 
                     ItemVO itemVO = list.get(recyclerView.getChildAdapterPosition(v));
-                    int num=0;
+                    String num="";
                     if(fragNum == 1){
                         UserCosmetic dataItem=(UserCosmetic)itemVO;
-                        num = dataItem.get_id();
-                        Log.d(TAG, "setOnClickListener: "+dataItem.get_id());
+                        num = Integer.toString(dataItem.get_id());
                     }else if(fragNum == 2){
                         UserCosmeticTools dataItem=(UserCosmeticTools)itemVO;
-                        num = dataItem.get_id();
+                        num = Integer.toString(dataItem.get_id());
                     }else if(fragNum == 3){
                         UserLens dataItem=(UserLens)itemVO;
-                        num = dataItem.get_id();
+                        num = Integer.toString(dataItem.get_id());
                     }
                     intent.putExtra("idNum", num);
                     startActivity(intent);
