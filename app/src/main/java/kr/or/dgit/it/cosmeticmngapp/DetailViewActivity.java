@@ -1,6 +1,7 @@
 package kr.or.dgit.it.cosmeticmngapp;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -21,7 +22,10 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,12 +34,17 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import kr.or.dgit.it.cosmeticmngapp.dao.UserCosmeticDAO;
 import kr.or.dgit.it.cosmeticmngapp.dao.UserCosmeticToolsDAO;
 import kr.or.dgit.it.cosmeticmngapp.dao.UserLensDAO;
 import kr.or.dgit.it.cosmeticmngapp.db.DBhelper;
+import kr.or.dgit.it.cosmeticmngapp.dto.CosmeticCategoryDTO;
+import kr.or.dgit.it.cosmeticmngapp.dto.UserCosmetic;
+import kr.or.dgit.it.cosmeticmngapp.dto.UserCosmeticTools;
+import kr.or.dgit.it.cosmeticmngapp.dto.UserLens;
 
 public class DetailViewActivity extends AppCompatActivity{
     private int fragNum = MainActivity.fragNum;
@@ -58,6 +67,16 @@ public class DetailViewActivity extends AppCompatActivity{
     private ImageView imgview;
     private String num;
     private MyItemList.MyAdapter sendAdapter;
+    private ArrayAdapter<CosmeticCategoryDTO> adapter;
+    private int cosId;
+    private String imagePath;
+    private Button confirmBtn;
+    private Button cancelBtn;
+    private Dialog datedialog;
+    private DatePicker datePicker;
+    private int pYear;
+    private int pMonth;
+    private int pDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,33 +152,35 @@ public class DetailViewActivity extends AppCompatActivity{
     public void categoryBtnClick(View view) {
         SQLiteDatabase db = DBhelper.getInstance(this).getDb();
         Cursor cursor = null;
-        if(fragNum == 1){
-            cursor = db.rawQuery("select name from cosmeticCategory order by name", null);
-        }else if(fragNum == 2){
-            cursor = db.rawQuery("select name from cosmeticToolsCategory order by name", null);
-        }else if(fragNum == 3){
-            cursor = db.rawQuery("select name from lensCategory order by name", null);
+        if (MainActivity.fragNum == 1) {
+            cursor = db.rawQuery("select * from cosmeticCategory order by name", null);
+        } else if (MainActivity.fragNum == 2) {
+            cursor = db.rawQuery("select * from cosmeticToolsCategory order by name", null);
+        } else if (MainActivity.fragNum == 3) {
+            cursor = db.rawQuery("select * from lensCategory order by name", null);
         }
 
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
         // List Adapter 생성
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item);
+        adapter = new ArrayAdapter<CosmeticCategoryDTO>(this, android.R.layout.select_dialog_item);
 
-        while(cursor.moveToNext()){
-            adapter.add(cursor.getString(0));
+
+        while (cursor.moveToNext()) {
+            adapter.add(new CosmeticCategoryDTO(cursor.getInt(0), cursor.getString(1), cursor.getInt(2), cursor.getInt(3), cursor.getInt(4)));
+
         }
 
         alertBuilder.setAdapter(adapter, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                categoryTV.setText(adapter.getItem(which));
+                categoryTV.setText(adapter.getItem(which).getName());
+                cosId = adapter.getItem(which).get_id();
                 dialog.dismiss();
             }
         });
         alertBuilder.show();
 
         cursor.close();
-        db.close();
     }
 
     public void cameraClick(View view) {
@@ -319,7 +340,8 @@ public class DetailViewActivity extends AppCompatActivity{
     }
 
     private void sendPicture(Uri imgUri) {
-        String imagePath = getRealPathFromURI(imgUri); // path 경로
+        // path 경로
+        imagePath = getRealPathFromURI(imgUri);
         ExifInterface exif = null;
         try {
             exif = new ExifInterface(imagePath);
@@ -353,5 +375,218 @@ public class DetailViewActivity extends AppCompatActivity{
             lensdao.deleteItemById(Integer.parseInt(num));
         }
         finish();
+    }
+
+    public void opendateClick(View view) {
+        CalendarValue();
+        datePicker.init(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(), new DatePicker.OnDateChangedListener() {
+            @Override
+            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                pYear = year;
+                pMonth = monthOfYear + 1;
+                pDate = dayOfMonth;
+                openDate.setText(String.format("%d - %d - %d", pYear, pMonth, pDate));
+            }
+        });
+
+
+        confirmBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDate.setText(String.format("%d - %d - %d", pYear, pMonth, pDate));
+                datedialog.dismiss();
+            }
+        });
+        datedialog.show();
+
+    }
+
+    private void CalendarValue() {
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+
+        pYear = year;
+        pMonth = month + 1;
+        pDate = day;
+
+        datedialog = new Dialog(this);
+        datedialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        datedialog.setContentView(R.layout.calendar_numberpicker_layout);
+        confirmBtn = datedialog.findViewById(R.id.btn_dialog_confirm);
+        cancelBtn = datedialog.findViewById(R.id.btn_dialog_cancel);
+        datePicker = datedialog.findViewById(R.id.datepicker_dialog);
+    }
+
+    public void enddateClick(View view) {
+        CharSequence info[] = new CharSequence[]{"직접 날짜 입력", "자동 입력"};
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder1 = builder.setItems(info, new DialogInterface.OnClickListener() {
+
+
+            @Override
+            public void onClick(final DialogInterface dialog, int which) {
+
+                CalendarValue();
+                switch (which) {
+                    case 0:
+                        EndtimeEditCalender(pYear, pMonth, pDate);
+                        break;
+                    case 1:
+                        SQLiteDatabase db = DBhelper.getInstance(getApplicationContext()).getDb();
+                        Cursor cursor = null;
+                        if (MainActivity.fragNum == 1) {
+                            addEndDate();
+                        } else if (MainActivity.fragNum == 2) {
+                            addEndDate();
+                        } else if (MainActivity.fragNum == 3) {
+                            addEndDate();
+                        }
+                        break;
+                }
+                dialog.dismiss();
+            }
+        });
+        builder1.show();
+
+    }
+    private void addEndDate(){
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+
+        pYear = year;
+        pMonth = month + 1;
+        pDate = day;
+
+        int dur = 0;
+
+        if(categoryTV.getText().equals("카테고리")||adapter.getCount()==0||adapter.isEmpty()){
+            Toast.makeText(DetailViewActivity.this,"카테고리를 선택해주세요.",Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        for (int i = 0; i < adapter.getCount(); i++) {
+
+            if (adapter.getItem(i).getName().equals(categoryTV.getText())) {
+                if (adapter.getItem(i).getDurationY() > 0) {
+                    dur = adapter.getItem(i).getDurationY()*365;
+                    break;
+                }
+                if (adapter.getItem(i).getDurationM() > 0) {
+                    dur = adapter.getItem(i).getDurationM()*30;
+                    break;
+                }
+                if (adapter.getItem(i).getDurationD() > 0) {
+                    dur = adapter.getItem(i).getDurationD();
+                    break;
+                }
+            }
+        }
+        Log.d("error", String.valueOf(dur)+"일수..?");
+
+        String open = String.valueOf(openDate.getText());
+        if(open.isEmpty()||open.equals("")){
+            Toast.makeText(DetailViewActivity.this,"개봉일을 선택해주세요.",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String dateArray[] = open.split(" - ");
+        c.set(Calendar.YEAR, Integer.parseInt(dateArray[0]));
+        c.set(Calendar.MONTH, Integer.parseInt(dateArray[1]) - 1);
+        c.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dateArray[2]) - 1);
+
+        c.add(Calendar.YEAR, 0);
+        c.add(Calendar.MONTH, 1);
+        c.add(Calendar.DAY_OF_MONTH, dur);
+
+
+        pYear = c.get(Calendar.YEAR);
+        pMonth = c.get(Calendar.MONTH);
+        pDate = c.get(Calendar.DAY_OF_MONTH);
+        endDate.setText(String.format("%d - %d - %d", pYear, pMonth, pDate));
+    }
+
+
+    private void EndtimeEditCalender(int year, int monthOfYear, int dayOfMonth) {
+        year = datePicker.getYear();
+        monthOfYear = datePicker.getMonth();
+        dayOfMonth = datePicker.getDayOfMonth();
+        datePicker.init(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(), new DatePicker.OnDateChangedListener() {
+            @Override
+            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                pYear = year;
+                pMonth = monthOfYear + 1;
+                pDate = dayOfMonth;
+                endDate.setText(String.format("%d - %d - %d", pYear, pMonth, pDate));
+            }
+        });
+
+
+        confirmBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                endDate.setText(String.format("%d - %d - %d", pYear, pMonth, pDate));
+                datedialog.dismiss();
+            }
+        });
+        datedialog.show();
+    }
+
+
+    public void updateCosmeticClick(View view) {
+        String cosName = name.getText().toString();
+        String cosOpenDate = openDate.getText().toString();
+        String cosEndDate = endDate.getText().toString();
+        String cosMemo = memo.getText().toString();
+        String cosImg = null;
+        if(currentPhotoPath != null){
+            cosImg = currentPhotoPath;
+        }else if (imagePath != null ){
+            cosImg = imagePath;
+        }
+
+        if(cosName.equals("")||cosName.isEmpty()||cosOpenDate.equals("")||cosOpenDate.isEmpty()||cosEndDate.equals("")||cosEndDate.isEmpty()||cosMemo.isEmpty()||cosMemo.equals("")){
+            Toast.makeText(DetailViewActivity.this,"이름,개봉일,교체권장일,메모를 입력해주세요.",Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (MainActivity.fragNum == 1) {
+
+            UserCosmetic dto = new UserCosmetic();
+            dto.setCate_id(cosId);
+            dto.setEndDate(cosEndDate);
+            dto.setOpenDate(cosOpenDate);
+            dto.setImg(cosImg);
+            dto.setMemo(cosMemo);
+            dto.setName(cosName);
+            dto.setFavorite(0);
+            dto.set_id(Integer.parseInt(num));
+            Log.d("usercosmetic",dto.toString());
+            cosmeticdao.updateItem(dto);
+        } else if (MainActivity.fragNum == 2) {
+            UserCosmeticTools dto = new UserCosmeticTools();
+            dto.setCate_id(String.valueOf(cosId));
+            dto.setEndDate(cosEndDate);
+            dto.setOpenDate(cosOpenDate);
+            dto.setImg(cosImg);
+            dto.setMemo(cosMemo);
+            dto.setName(cosName);
+            dto.setFavorite(String.valueOf(0));
+            cosmeticToolsdao.updateItem(dto);
+        } else if (MainActivity.fragNum == 3) {
+            UserLens dto = new UserLens();
+            dto.setCate_id(String.valueOf(cosId));
+            dto.setEndDate(cosEndDate);
+            dto.setOpenDate(cosOpenDate);
+            dto.setImg(cosImg);
+            dto.setMemo(cosMemo);
+            dto.setName(cosName);
+            dto.setFavorite(String.valueOf(0));
+            lensdao.updateItem(dto);
+        }
+        finish();
+
     }
 }

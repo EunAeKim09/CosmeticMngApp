@@ -1,164 +1,176 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusableInTouchMode="true">
 
     <TextView
+        android:id="@+id/closeBtn"
         android:layout_width="@dimen/textBtnWidth"
         android:layout_height="@dimen/textBtnheight"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/button_style"
         android:gravity="center"
+        android:onClick="closeBtnClick"
         android:text="닫기"
-        android:textSize="@dimen/textBtnTextSize"
-        android:id="@+id/closeBtn"
-        android:onClick="closeBtnClick"/>
+        android:textSize="@dimen/textBtnTextSize" />
 
     <TextView
         android:id="@+id/updateBtn"
         android:layout_width="@dimen/textBtnWidth"
-        android:layout_alignParentRight="true"
         android:layout_height="@dimen/textBtnheight"
+        android:layout_alignParentRight="true"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/button_style"
         android:gravity="center"
         android:text="수정"
-        android:textSize="@dimen/textBtnTextSize"/>
+        android:textSize="@dimen/textBtnTextSize"
+        android:onClick="updateCosmeticClick"/>
 
     <ImageView
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:id="@+id/img"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_marginTop="10dp"
         android:layout_below="@+id/closeBtn"
-        android:id="@+id/img"
-        />
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="10dp" />
+
     <TextView
         android:id="@+id/category"
         android:layout_width="150dp"
         android:layout_height="@dimen/textBtnheight"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/img"
         android:layout_alignStart="@+id/closeBtn"
+        android:layout_below="@+id/img"
+        android:layout_marginTop="10dp"
         android:background="@drawable/button_style"
         android:gravity="center"
+        android:onClick="categoryBtnClick"
         android:text="카테고리"
-        android:textSize="@dimen/textBtnTextSize"
-        android:onClick="categoryBtnClick"/>
+        android:textSize="@dimen/textBtnTextSize" />
+
     <ImageView
-        android:onClick="cameraClick"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="70dp"
-        android:src="@drawable/camera"
-        android:layout_alignParentRight="true"
         android:id="@+id/cameraBtn"
-        android:layout_below="@id/img"/>
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/img"
+        android:layout_marginRight="70dp"
+        android:layout_marginTop="10dp"
+        android:onClick="cameraClick"
+        android:src="@drawable/camera" />
+
     <ImageView
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="20dp"
-        android:src="@drawable/image"
         android:layout_alignParentRight="true"
+        android:layout_below="@id/img"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
         android:onClick="albumBtnClick"
-        android:layout_below="@id/img"/>
+        android:src="@drawable/image" />
+
     <TextView
         android:id="@+id/tvName"
         android:layout_width="@dimen/inputWidth"
         android:layout_height="@dimen/textBtnheight"
+        android:layout_alignStart="@+id/closeBtn"
+        android:layout_below="@+id/category"
+        android:layout_marginTop="10dp"
         android:gravity="center"
         android:text="이름"
-        android:textSize="@dimen/textBtnTextSize"
-        android:layout_marginTop="10dp"
-        android:layout_alignStart="@+id/closeBtn"
-        android:layout_below="@+id/category"/>
+        android:textSize="@dimen/textBtnTextSize" />
+
     <EditText
         android:id="@+id/item_product_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/textBtnTextSize"
-        android:inputType="text"
+        android:layout_below="@+id/category"
         android:layout_marginTop="10dp"
         android:layout_toRightOf="@+id/tvName"
-        android:layout_below="@+id/category"/>
+        android:inputType="text"
+        android:textSize="@dimen/textBtnTextSize" />
+
     <TextView
         android:id="@+id/openDay"
         android:layout_width="@dimen/inputWidth"
         android:layout_height="@dimen/textBtnheight"
+        android:layout_alignStart="@+id/closeBtn"
+        android:layout_below="@+id/tvName"
+        android:layout_marginTop="10dp"
         android:gravity="center"
         android:text="개봉일"
-        android:textSize="@dimen/textBtnTextSize"
-        android:layout_marginTop="10dp"
-        android:layout_alignStart="@+id/closeBtn"
-        android:layout_below="@+id/tvName"/>
+        android:textSize="@dimen/textBtnTextSize" />
+
     <EditText
         android:id="@+id/item_opendate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/textBtnTextSize"
+        android:layout_below="@+id/tvName"
         android:layout_marginTop="10dp"
         android:layout_toRightOf="@+id/openDay"
-        android:layout_below="@+id/tvName"
-        android:inputType="date"
         android:focusableInTouchMode="false"
-        android:onClick="opendateClick"/>
+        android:inputType="date"
+        android:onClick="opendateClick"
+        android:textSize="@dimen/textBtnTextSize" />
+
     <TextView
         android:id="@+id/endDay"
         android:layout_width="@dimen/inputWidth"
         android:layout_height="@dimen/textBtnheight"
+        android:layout_alignStart="@+id/closeBtn"
+        android:layout_below="@+id/openDay"
+        android:layout_marginTop="10dp"
         android:gravity="center"
         android:text="교체권장일"
-        android:textSize="@dimen/textBtnTextSize"
-        android:layout_marginTop="10dp"
-        android:layout_alignStart="@+id/closeBtn"
-        android:layout_below="@+id/openDay"/>
+        android:textSize="@dimen/textBtnTextSize" />
+
     <EditText
         android:id="@+id/item_endDay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/textBtnTextSize"
+        android:layout_below="@+id/openDay"
         android:layout_marginTop="10dp"
         android:layout_toRightOf="@+id/endDay"
-        android:layout_below="@+id/openDay"
-        android:inputType="date"
         android:focusableInTouchMode="false"
-        android:onClick="enddateClick"/>
+        android:inputType="date"
+        android:onClick="enddateClick"
+        android:textSize="@dimen/textBtnTextSize" />
+
     <TextView
         android:id="@+id/memo"
         android:layout_width="@dimen/inputWidth"
         android:layout_height="@dimen/textBtnheight"
+        android:layout_alignStart="@+id/closeBtn"
+        android:layout_below="@+id/item_endDay"
+        android:layout_marginTop="10dp"
         android:gravity="center"
         android:text="메모"
-        android:textSize="@dimen/textBtnTextSize"
-        android:layout_marginTop="10dp"
-        android:layout_alignStart="@+id/closeBtn"
-        android:layout_below="@+id/item_endDay"/>
+        android:textSize="@dimen/textBtnTextSize" />
+
     <EditText
         android:id="@+id/item_memo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/textBtnTextSize"
+        android:layout_below="@+id/item_endDay"
         android:layout_marginTop="10dp"
         android:layout_toRightOf="@+id/memo"
-        android:layout_below="@+id/item_endDay"
-        android:inputType="textMultiLine"/>
+        android:inputType="textMultiLine"
+        android:textSize="@dimen/textBtnTextSize" />
 
     <TextView
-        android:onClick="deleteBtnClick"
         android:layout_width="@dimen/textBtnWidth"
         android:layout_height="@dimen/textBtnheight"
-        android:layout_toLeftOf="@+id/updateBtn"
+        android:layout_marginBottom="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_toLeftOf="@+id/updateBtn"
         android:background="@drawable/button_style"
         android:gravity="center"
+        android:onClick="deleteBtnClick"
         android:text="삭제"
         android:textColor="#ff0000"
-        android:textSize="@dimen/textBtnTextSize"/>
+        android:textSize="@dimen/textBtnTextSize" />
 </RelativeLayout>

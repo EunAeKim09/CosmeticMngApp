@@ -44,10 +44,10 @@ public class UserLensDAO {
         ContentValues row = new ContentValues();
         row.put(COL_NAME, item.getName());
         row.put(COL_IMG, item.getImg());
-        row.put(COL_OPENDATE, item.getImg());
-        row.put(COL_ENDDATE, item.getImg());
-        row.put(COL_MEMO, item.getImg());
-        row.put(COL_CATE_ID, item.getImg());
+        row.put(COL_OPENDATE, item.getOpenDate());
+        row.put(COL_ENDDATE, item.getEndDate());
+        row.put(COL_MEMO, item.getMemo());
+        row.put(COL_CATE_ID, item.getCate_id());
         db.insert(TABLE_NAME, null, row);
     }
 
@@ -59,10 +59,10 @@ public class UserLensDAO {
         ContentValues row = new ContentValues();
         row.put(COL_NAME, item.getName());
         row.put(COL_IMG, item.getImg());
-        row.put(COL_OPENDATE, item.getImg());
-        row.put(COL_ENDDATE, item.getImg());
-        row.put(COL_MEMO, item.getImg());
-        row.put(COL_CATE_ID, item.getImg());
+        row.put(COL_OPENDATE, item.getOpenDate());
+        row.put(COL_ENDDATE, item.getEndDate());
+        row.put(COL_MEMO, item.getMemo());
+        row.put(COL_CATE_ID, item.getCate_id());
         db.update(TABLE_NAME, row, COL_ID + "=?", new String[]{String.valueOf(item.get_id())});
     }
 

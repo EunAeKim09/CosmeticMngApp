@@ -46,9 +46,13 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import kr.or.dgit.it.cosmeticmngapp.dao.UserCosmeticDAO;
+import kr.or.dgit.it.cosmeticmngapp.dao.UserCosmeticToolsDAO;
+import kr.or.dgit.it.cosmeticmngapp.dao.UserLensDAO;
 import kr.or.dgit.it.cosmeticmngapp.db.DBhelper;
 import kr.or.dgit.it.cosmeticmngapp.dto.CosmeticCategoryDTO;
 import kr.or.dgit.it.cosmeticmngapp.dto.UserCosmetic;
+import kr.or.dgit.it.cosmeticmngapp.dto.UserCosmeticTools;
+import kr.or.dgit.it.cosmeticmngapp.dto.UserLens;
 
 public class AddActivity extends AppCompatActivity {
     private static final int PICK_FROM_CAMERA = 0;
@@ -80,6 +84,8 @@ public class AddActivity extends AppCompatActivity {
     private String imagePath;
     UserCosmeticDAO userCosmeticDAO;
     private int cosId;
+    private UserCosmeticToolsDAO userCosmeticToolsDAO;
+    private UserLensDAO userLensDAO;
 
 
     @Override
@@ -101,7 +107,27 @@ public class AddActivity extends AppCompatActivity {
         userCosmeticDAO = new UserCosmeticDAO(this);
         userCosmeticDAO.open();
 
+        userCosmeticToolsDAO = new UserCosmeticToolsDAO(this);
+        userCosmeticToolsDAO.open();
+
+        userLensDAO = new UserLensDAO(this);
+        userLensDAO.open();
+
         imgview = (ImageView) findViewById(R.id.img);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        openEditdate.setFocusable(false);
+        openEditdate.setFocusableInTouchMode(true);
+        openEditdate.setFocusable(true);
+
+        cosmeticName.setFocusable(false);
+        cosmeticName.setFocusableInTouchMode(true);
+        cosmeticName.setFocusable(true);
+
+
     }
 
     public void categoryBtnClick(View view) {
@@ -301,6 +327,8 @@ public class AddActivity extends AppCompatActivity {
         return cursor.getString(column_index);
     }
 
+
+
     public void opendateClick(View view) {
         CalendarValue();
         datePicker.init(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(), new DatePicker.OnDateChangedListener() {
@@ -476,16 +504,39 @@ public class AddActivity extends AppCompatActivity {
             return;
         }
 
-        UserCosmetic dto = new UserCosmetic();
-        dto.setCate_id(cosId);
-        dto.setEndDate(cosEndDate);
-        dto.setOpenDate(cosOpenDate);
-        dto.setImg(cosImg);
-        dto.setMemo(cosMemo);
-        dto.setName(cosName);
-        dto.setFavorite(0);
-        userCosmeticDAO.insertItem(dto);
-
+        if (MainActivity.fragNum == 1) {
+            UserCosmetic dto = new UserCosmetic();
+            dto.setCate_id(cosId);
+            dto.setEndDate(cosEndDate);
+            dto.setOpenDate(cosOpenDate);
+            dto.setImg(cosImg);
+            dto.setMemo(cosMemo);
+            dto.setName(cosName);
+            dto.setFavorite(0);
+            userCosmeticDAO.insertItem(dto);
+        } else if (MainActivity.fragNum == 2) {
+            UserCosmeticTools dto = new UserCosmeticTools();
+            dto.setCate_id(String.valueOf(cosId));
+            dto.setEndDate(cosEndDate);
+            dto.setOpenDate(cosOpenDate);
+            dto.setImg(cosImg);
+            dto.setMemo(cosMemo);
+            dto.setName(cosName);
+            dto.setFavorite(String.valueOf(0));
+            userCosmeticToolsDAO.insertItem(dto);
+        } else if (MainActivity.fragNum == 3) {
+            UserLens dto = new UserLens();
+            dto.setCate_id(String.valueOf(cosId));
+            dto.setEndDate(cosEndDate);
+            dto.setOpenDate(cosOpenDate);
+            dto.setImg(cosImg);
+            dto.setMemo(cosMemo);
+            dto.setName(cosName);
+            dto.setFavorite(String.valueOf(0));
+            userLensDAO.insertItem(dto);
+        }
         finish();
     }
+
+
 }

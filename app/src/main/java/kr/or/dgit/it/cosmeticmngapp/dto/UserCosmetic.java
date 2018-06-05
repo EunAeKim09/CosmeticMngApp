@@ -23,6 +23,16 @@ public class UserCosmetic extends ItemVO{
         this.cate_id = cate_id;
     }
 
+    public UserCosmetic(String name, String img, String openDate, String endDate, String memo, int favorite, int cate_id) {
+        this.name = name;
+        this.img = img;
+        this.openDate = openDate;
+        this.endDate = endDate;
+        this.memo = memo;
+        this.favorite = favorite;
+        this.cate_id = cate_id;
+    }
+
     public int get_id() {
         return _id;
     }
@@ -96,8 +106,8 @@ public class UserCosmetic extends ItemVO{
                 ", openDate='" + openDate + '\'' +
                 ", endDate='" + endDate + '\'' +
                 ", memo='" + memo + '\'' +
-                ", favorite='" + favorite + '\'' +
-                ", cate_id='" + cate_id + '\'' +
+                ", favorite=" + favorite +
+                ", cate_id=" + cate_id +
                 '}';
     }
 

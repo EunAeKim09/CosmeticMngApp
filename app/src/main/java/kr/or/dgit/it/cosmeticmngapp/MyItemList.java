@@ -8,6 +8,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.media.ExifInterface;
 import android.os.Bundle;
@@ -52,6 +54,7 @@ public class MyItemList extends Fragment {
     private List<ItemVO> list;
     private int fragNum;
     public static MyAdapter adapter;
+    private UserCosmeticDAO userCosmeticDAO;
 
     public static MyItemList newInstance() {
         return new MyItemList();
@@ -70,6 +73,9 @@ public class MyItemList extends Fragment {
 
         lensdao = new UserLensDAO(getContext());
         lensdao.open();
+
+        userCosmeticDAO = new UserCosmeticDAO(getContext());
+        userCosmeticDAO.open();
 
         Bundle extra = getArguments();
         fragNum = extra.getInt("frag");
@@ -123,6 +129,7 @@ public class MyItemList extends Fragment {
 
     public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         private List<ItemVO> list;
+        private UserCosmetic dataItem;
 
         public void setList(List<ItemVO> list) {
             this.list = list;
@@ -137,11 +144,14 @@ public class MyItemList extends Fragment {
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.registerlist_cardview_layout, parent, false);
             view.setOnClickListener(new View.OnClickListener() {
+
+                private String num;
+
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getContext(), DetailViewActivity.class);
                     ItemVO itemVO = list.get(recyclerView.getChildAdapterPosition(v));
-                    String num="";
+                    num = "";
                     if(fragNum == 1){
                         UserCosmetic dataItem=(UserCosmetic)itemVO;
                         num = Integer.toString(dataItem.get_id());
@@ -164,7 +174,7 @@ public class MyItemList extends Fragment {
             ItemVO itemVO=list.get(position);
             DataViewHolder viewHolder=(DataViewHolder)holder;
             if(fragNum == 1){
-                UserCosmetic dataItem=(UserCosmetic)itemVO;
+                dataItem = (UserCosmetic)itemVO;
                 viewHolder.nameView.setText(dataItem.getName());
                 viewHolder.openDateView.setText(dataItem.getOpenDate());
                 viewHolder.endDateView.setText(dataItem.getEndDate());
@@ -226,7 +236,7 @@ public class MyItemList extends Fragment {
             return list.size();
         }
 
-        private class DataViewHolder extends RecyclerView.ViewHolder{
+        private class DataViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
             public TextView nameView;
             public TextView openDateView;
             public TextView endDateView;
@@ -240,6 +250,30 @@ public class MyItemList extends Fragment {
                 endDateView=itemView.findViewById(R.id.item_deaddate);
                 imgView=itemView.findViewById(R.id.item_product);
                 bookmarkView=itemView.findViewById(R.id.item_bookmark);
+
+                bookmarkView.setOnClickListener(this);
+            }
+
+            @Override
+            public void onClick(View v) {
+                Drawable temp = bookmarkView.getDrawable();
+                Drawable temp1 = getContext().getResources().getDrawable(R.drawable.book_mark_on_2);
+
+                Bitmap tmpBitmap = ((BitmapDrawable)temp).getBitmap();
+                Bitmap tmpBitmap1 = ((BitmapDrawable)temp1).getBitmap();
+                if(!tmpBitmap.equals(tmpBitmap1)){
+                    UserCosmetic dto = new UserCosmetic();
+                    dto.setFavorite(1);
+                    dto.set_id(dataItem.get_id());
+                    userCosmeticDAO.updateFavoriteItem(dto);
+                    bookmarkView.setImageResource(R.drawable.book_mark_on_2);
+                }else{
+                    UserCosmetic dto = new UserCosmetic();
+                    dto.setFavorite(0);
+                    dto.set_id(dataItem.get_id());
+                    userCosmeticDAO.updateFavoriteItem(dto);
+                    bookmarkView.setImageResource(R.drawable.book_mark_off);
+                }
             }
         }
     }
@@ -247,6 +281,7 @@ public class MyItemList extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+
     }
 
     private class MyDecoration extends RecyclerView.ItemDecoration {
