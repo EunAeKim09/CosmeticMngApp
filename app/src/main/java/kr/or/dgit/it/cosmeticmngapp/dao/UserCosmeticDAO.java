@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,12 +42,13 @@ public class UserCosmeticDAO {
 
     public void insertItem(UserCosmetic item){
         ContentValues row = new ContentValues();
+        Log.d("values",item.toString());
         row.put(COL_NAME, item.getName());
         row.put(COL_IMG, item.getImg());
-        row.put(COL_OPENDATE, item.getImg());
-        row.put(COL_ENDDATE, item.getImg());
-        row.put(COL_MEMO, item.getImg());
-        row.put(COL_CATE_ID, item.getImg());
+        row.put(COL_OPENDATE, item.getOpenDate());
+        row.put(COL_ENDDATE, item.getEndDate());
+        row.put(COL_MEMO, item.getMemo());
+        row.put(COL_CATE_ID, item.getCate_id());
         db.insert(TABLE_NAME, null, row);
     }
 
