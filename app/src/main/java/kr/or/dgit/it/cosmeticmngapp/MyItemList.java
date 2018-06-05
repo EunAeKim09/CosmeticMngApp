@@ -248,7 +248,6 @@ public class MyItemList extends Fragment {
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             super.getItemOffsets(outRect, view, parent, state);
             int index=parent.getChildAdapterPosition(view);
-            ItemVO itemVO=list.get(index);
             view.setBackgroundColor(0xFFFFFFFF);
             ViewCompat.setElevation(view, 10.0f);
             outRect.set(20, 10, 20, 10);
