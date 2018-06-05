@@ -87,8 +87,7 @@ public class AddActivity extends AppCompatActivity {
     }
 
     public void categoryBtnClick(View view) {
-        DBhelper helper = new DBhelper(this);
-        SQLiteDatabase db = helper.getReadableDatabase();
+        SQLiteDatabase db = DBhelper.getInstance(this).getDb();
         Cursor cursor = null;
         if(MainActivity.fragNum == 1){
             cursor = db.rawQuery("select name from cosmeticCategory order by name", null);
@@ -447,8 +446,7 @@ public class AddActivity extends AppCompatActivity {
 */
                         break;
                     case 1:
-                        DBhelper helper = new DBhelper(AddActivity.this);
-                        SQLiteDatabase db = helper.getReadableDatabase();
+                        SQLiteDatabase db = DBhelper.getInstance(getApplicationContext()).getDb();
                         Cursor cursor = null;
                         if (MainActivity.fragNum == 1) {
 

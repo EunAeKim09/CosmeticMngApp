@@ -28,7 +28,6 @@ public class UserCosmeticDAO {
     //selection
     static final String[] COLUMNS =  new String[]{COL_ID, COL_NAME, COL_IMG, COL_OPENDATE, COL_ENDDATE, COL_MEMO, COL_FAVORITE, COL_CATE_ID};
 
-    private DBhelper helper;
     private SQLiteDatabase db;
     private final Context mCtx;
 
@@ -37,14 +36,7 @@ public class UserCosmeticDAO {
     }
 
     public void open() throws SQLException {
-        helper = DBhelper.getInstance(mCtx);
-        db = helper.getWritableDatabase();
-    }
-
-    public void close(){
-        if (helper != null){
-            helper.close();
-        }
+        db = DBhelper.getInstance(mCtx).getDb();
     }
 
     public void insertItem(UserCosmetic item){

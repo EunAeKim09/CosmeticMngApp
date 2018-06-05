@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,7 @@ import kr.or.dgit.it.cosmeticmngapp.dto.UserCosmetic;
 import kr.or.dgit.it.cosmeticmngapp.dto.UserCosmeticTools;
 import kr.or.dgit.it.cosmeticmngapp.dto.UserLens;
 
+import static android.app.Activity.RESULT_OK;
 import static android.content.ContentValues.TAG;
 
 public class MyItemList extends Fragment {
@@ -67,10 +69,12 @@ public class MyItemList extends Fragment {
         Bundle extra = getArguments();
         fragNum = extra.getInt("frag");
 
-        list=new ArrayList<>();
+        getListDatas();
+    }
 
-        DBhelper dBhelper = new DBhelper(getContext());
-        SQLiteDatabase db = dBhelper.getReadableDatabase();
+    private void getListDatas() {
+        SQLiteDatabase db = DBhelper.getInstance(getContext()).getDb();
+        list=new ArrayList<>();
 
         if (fragNum == 1) {
             /*Cursor cursor = db.rawQuery("select _id, name, img, openDate, endDate, memo, favorite, cate_id  from userCosmetic order by name", null);*/
@@ -105,16 +109,18 @@ public class MyItemList extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         recyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_my_item_list, container, false);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new MyAdapter(list);
+        adapter = new MyAdapter();
+        adapter.setList(list);
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new MyDecoration());
         return recyclerView;
     }
 
     public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
-        private final List<ItemVO> list;
-        public MyAdapter(List<ItemVO> list){
-            this.list=list;
+        private List<ItemVO> list;
+
+        public void setList(List<ItemVO> list) {
+            this.list = list;
         }
 
         @Override
@@ -141,14 +147,12 @@ public class MyItemList extends Fragment {
                         UserLens dataItem=(UserLens)itemVO;
                         num = Integer.toString(dataItem.get_id());
                     }
-                    ((MainActivity)getActivity()).onSendAdapter(adapter);
                     intent.putExtra("idNum", num);
-                    startActivity(intent);
+                    startActivityForResult(intent, 100);
                 }
             });
             return new DataViewHolder(view);
         }
-
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
@@ -198,9 +202,6 @@ public class MyItemList extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        cosmeticToolsdao.close();
-        cosmeticdao.close();
-        lensdao.close();
     }
 
     private class MyDecoration extends RecyclerView.ItemDecoration {
@@ -208,10 +209,20 @@ public class MyItemList extends Fragment {
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             super.getItemOffsets(outRect, view, parent, state);
             int index=parent.getChildAdapterPosition(view);
-            ItemVO itemVO=list.get(index);
             view.setBackgroundColor(0xFFFFFFFF);
             ViewCompat.setElevation(view, 10.0f);
             outRect.set(20, 10, 20, 10);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode==RESULT_OK){
+            if (requestCode == 100){
+                getListDatas();
+                adapter.setList(list);
+                adapter.notifyDataSetChanged();
+            }
         }
     }
 }

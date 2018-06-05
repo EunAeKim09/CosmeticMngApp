@@ -16,6 +16,9 @@ public class DBhelper extends SQLiteOpenHelper{
     public static final int DATABASE_VERSION=6;
     private static final String DB_NAME = "datadb.db";
     private final  Context context;
+
+    private static SQLiteDatabase db;
+
     private static DBhelper instance;
 
     public synchronized  static DBhelper getInstance(Context context){
@@ -25,11 +28,19 @@ public class DBhelper extends SQLiteOpenHelper{
         return instance;
     }
 
-    public DBhelper(Context context){
+    private DBhelper(Context context){
         super(context, DB_NAME, null, DATABASE_VERSION);
         this.context = context;
+        db = getWritableDatabase();
     }
 
+    public SQLiteDatabase getDb() {
+        return db;
+    }
+
+    public static void dbClose(){
+        db.close();
+    }
 
     @Override
     public void onCreate(SQLiteDatabase db) {

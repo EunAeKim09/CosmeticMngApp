@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
@@ -18,10 +19,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -37,11 +36,6 @@ import kr.or.dgit.it.cosmeticmngapp.dao.UserCosmeticDAO;
 import kr.or.dgit.it.cosmeticmngapp.dao.UserCosmeticToolsDAO;
 import kr.or.dgit.it.cosmeticmngapp.dao.UserLensDAO;
 import kr.or.dgit.it.cosmeticmngapp.db.DBhelper;
-import kr.or.dgit.it.cosmeticmngapp.dto.UserCosmetic;
-import kr.or.dgit.it.cosmeticmngapp.dto.UserCosmeticTools;
-import kr.or.dgit.it.cosmeticmngapp.dto.UserLens;
-
-import static android.content.ContentValues.TAG;
 
 public class DetailViewActivity extends AppCompatActivity{
     private int fragNum = MainActivity.fragNum;
@@ -63,6 +57,7 @@ public class DetailViewActivity extends AppCompatActivity{
     private boolean permission;
     private ImageView imgview;
     private String num;
+    private MyItemList.MyAdapter sendAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,17 +126,9 @@ public class DetailViewActivity extends AppCompatActivity{
         finish();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        cosmeticToolsdao.close();
-        cosmeticdao.close();
-        lensdao.close();
-    }
 
     public void categoryBtnClick(View view) {
-        DBhelper helper = new DBhelper(this);
-        SQLiteDatabase db = helper.getReadableDatabase();
+        SQLiteDatabase db = DBhelper.getInstance(this).getDb();
         Cursor cursor = null;
         if(fragNum == 1){
             cursor = db.rawQuery("select name from cosmeticCategory order by name", null);
@@ -337,6 +324,7 @@ public class DetailViewActivity extends AppCompatActivity{
         }else if(fragNum==3) {
             lensdao.deleteItemById(Integer.parseInt(num));
         }
+        setResult(RESULT_OK);
         finish();
     }
 }

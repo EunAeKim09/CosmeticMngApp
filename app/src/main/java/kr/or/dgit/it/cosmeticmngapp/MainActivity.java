@@ -13,7 +13,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-public class MainActivity extends android.support.v7.app.AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, SendAdapter{
+import kr.or.dgit.it.cosmeticmngapp.db.DBhelper;
+
+public class MainActivity extends android.support.v7.app.AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private static final String TAG = "Main";
     DrawerLayout drawerLayout;
     boolean permission;
@@ -140,12 +142,6 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
     }
 
     @Override
-    public void onSendAdapter(MyItemList.MyAdapter adapter) {
-        sendAdapter = adapter;
-        sendAdapter.notifyDataSetChanged();
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume: ");
@@ -165,5 +161,11 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
             sendAdapter.notifyDataSetChanged();
             Log.d(TAG, "onSendAdapter: Main 후"+sendAdapter.getItemCount());
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DBhelper.dbClose();
     }
 }
