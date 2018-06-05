@@ -500,6 +500,7 @@ public class AddActivity extends AppCompatActivity {
 
         if(cosName.equals("")||cosName.isEmpty()||cosOpenDate.equals("")||cosOpenDate.isEmpty()||cosEndDate.equals("")||cosEndDate.isEmpty()||cosMemo.isEmpty()||cosMemo.equals("")){
             Toast.makeText(AddActivity.this,"이름,개봉일,교체권장일,메모를 입력해주세요.",Toast.LENGTH_SHORT).show();
+            return;
         }
 
         if (MainActivity.fragNum == 1) {

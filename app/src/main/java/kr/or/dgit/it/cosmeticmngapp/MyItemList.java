@@ -51,7 +51,6 @@ public class MyItemList extends Fragment {
     private int fragNum;
     public static MyAdapter adapter;
     private UserCosmeticDAO userCosmeticDAO;
-    private UserCosmeticDAO userCosmeticDAO1;
 
     public static MyItemList newInstance() {
         return new MyItemList();
@@ -254,5 +253,25 @@ public class MyItemList extends Fragment {
             ViewCompat.setElevation(view, 10.0f);
             outRect.set(20, 10, 20, 10);
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode==RESULT_OK){
+            if (requestCode == 100){
+                getListDatas();
+                adapter.setList(list);
+                adapter.notifyDataSetChanged();
+            }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        Log.d(TAG, "onResume: ");
+        super.onResume();
+        getListDatas();
+        adapter.setList(list);
+        adapter.notifyDataSetChanged();
     }
 }

@@ -1,6 +1,7 @@
 package kr.or.dgit.it.cosmeticmngapp;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -22,6 +23,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
     public static int fragNum = 1;
     android.support.v7.app.ActionBar actionBar;
     private static MyItemList.MyAdapter sendAdapter;
+    private MyItemList fragment;
 
     @Override
     protected void onCreate(android.os.Bundle savedInstanceState) {
@@ -97,7 +99,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
         }
         setTitleName();
 
-        MyItemList fragment = MyItemList.newInstance();
+        fragment = MyItemList.newInstance();
         Bundle bundle = new Bundle();
         bundle.putInt("frag", fragNum);
         fragment.setArguments(bundle);
@@ -121,9 +123,6 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
 
     @Override
     public boolean onOptionsItemSelected(android.view.MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         switch (id) {
@@ -131,36 +130,15 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
                 drawerLayout.openDrawer(android.support.v4.view.GravityCompat.START);
                 return true;
             case R.id.searchIcon:
-                drawerLayout.openDrawer(android.support.v4.view.GravityCompat.START);
+                Intent intentSearch = new  Intent(this, SelectActivity.class);
+                startActivity(intentSearch);
                 return true;
             case R.id.registerIcon:
-                android.content.Intent intent = new android.content.Intent(this, AddActivity.class);
-                startActivity(intent);
+                Intent intentRegister = new Intent(this, AddActivity.class);
+                startActivity(intentRegister);
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume: ");
-        if(sendAdapter != null){
-            Log.d(TAG, "onSendAdapter: Main 전"+sendAdapter.getItemCount());
-            sendAdapter.notifyDataSetChanged();
-            Log.d(TAG, "onSendAdapter: Main 후"+sendAdapter.getItemCount());
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d(TAG, "onPause: ");
-        if(sendAdapter != null){
-            Log.d(TAG, "onSendAdapter: Main 전"+sendAdapter.getItemCount());
-            sendAdapter.notifyDataSetChanged();
-            Log.d(TAG, "onSendAdapter: Main 후"+sendAdapter.getItemCount());
-        }
     }
 
     @Override
