@@ -1,6 +1,6 @@
 package kr.or.dgit.it.cosmeticmngapp.dto;
 
-public class UserLensDTO {
+public class UserCosmeticTools extends ItemVO{
     private int _id;
     private String name;
     private String img;
@@ -10,7 +10,10 @@ public class UserLensDTO {
     private String favorite;
     private String cate_id;
 
-    public UserLensDTO(int _id, String name, String img, String openDate, String endDate, String memo, String favorite, String cate_id) {
+    public UserCosmeticTools() {
+    }
+
+    public UserCosmeticTools(int _id, String name, String img, String openDate, String endDate, String memo, String favorite, String cate_id) {
         this._id = _id;
         this.name = name;
         this.img = img;
@@ -83,5 +86,10 @@ public class UserLensDTO {
 
     public void setCate_id(String cate_id) {
         this.cate_id = cate_id;
+    }
+
+    @Override
+    public int getType() {
+        return ItemVO.TYPE_DATA;
     }
 }

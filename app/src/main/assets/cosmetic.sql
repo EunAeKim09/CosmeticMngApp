@@ -70,10 +70,6 @@
    );
 
 
-
-
-
-
     create table userCosmeticTools (
         _id integer primary key autoincrement,
         img,
@@ -99,3 +95,13 @@
      );
 
 
+
+   insert into userCosmetic (cate_id,name,openDate,endDate,memo) values (10,'키스미 아이라이너','2018-05-29','2019-05-28','키스미13900원');
+   insert into userCosmetic (cate_id,name,openDate,endDate,memo) values (11,'키스미 마스카라','2018-05-29','2018-11-28','키스미13900원');
+   insert into userCosmetic (cate_id,name,openDate,endDate,memo) values (3,'이니스프리 크림','2018-05-29','2019-05-28','이니스프리 18900원');
+   insert into userCosmetic (cate_id,name,openDate,endDate,memo) values (10,'키스미 아이라이너','2018-05-29','2019-05-28','키스미13900원');
+   insert into userCosmetic (cate_id,name,openDate,endDate,memo) values (11,'키스미 마스카라','2018-05-29','2018-11-28','키스미13900원');
+   insert into userCosmetic (cate_id,name,openDate,endDate,memo) values (3,'이니스프리 크림','2018-05-29','2019-05-28','이니스프리 18900원');
+   insert into userCosmetic (cate_id,name,openDate,endDate,memo) values (10,'키스미 아이라이너','2018-05-29','2019-05-28','키스미13900원');
+   insert into userCosmetic (cate_id,name,openDate,endDate,memo) values (11,'키스미 마스카라','2018-05-29','2018-11-28','키스미13900원');
+   insert into userCosmetic (cate_id,name,openDate,endDate,memo) values (3,'이니스프리 크림','2018-05-29','2019-05-28','이니스프리 18900원');

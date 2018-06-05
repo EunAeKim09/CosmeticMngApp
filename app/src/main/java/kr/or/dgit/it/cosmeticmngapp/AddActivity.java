@@ -12,8 +12,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
@@ -37,7 +35,6 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -51,16 +48,12 @@ import java.util.Locale;
 import kr.or.dgit.it.cosmeticmngapp.dao.UserCosmeticDAO;
 import kr.or.dgit.it.cosmeticmngapp.db.DBhelper;
 import kr.or.dgit.it.cosmeticmngapp.dto.CosmeticCategoryDTO;
-import kr.or.dgit.it.cosmeticmngapp.dto.UserCosmeticDTO;
+import kr.or.dgit.it.cosmeticmngapp.dto.UserCosmetic;
 
 public class AddActivity extends AppCompatActivity {
     private static final int PICK_FROM_CAMERA = 0;
     private static final int PICK_FROM_ALBUM = 1;
-    private static final int CROP_FROM_IMAGE = 2;
-    private String mCurrentPhotoPath;
     private Uri photoUri = null;
-    private Uri albumUri = null;
-    private boolean album;
     EditText openEditdate;
     EditText endEditdate;
     EditText cosmeticName;
@@ -217,16 +210,16 @@ public class AddActivity extends AppCompatActivity {
         Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath, options);
         int dstWidth;
         int dstHeight;
-        if (bitmap.getHeight() > bitmap.getWidth()) {   //세로모드
-            float ratioX = 720 / (float) bitmap.getWidth();
-            float ratioY = 1280 / (float) bitmap.getHeight();
+        if(bitmap.getHeight()>bitmap.getWidth()){   //세로모드
+            float ratioX = 720 / (float)bitmap.getWidth();
+            float ratioY = 1280 / (float)bitmap.getHeight();
 
             dstWidth = Math.round(bitmap.getWidth() * ratioX);
             dstHeight = Math.round(bitmap.getHeight() * ratioY);
 
-        } else {  //가로모드
-            float ratioX = 1280 / (float) bitmap.getWidth();
-            float ratioY = 720 / (float) bitmap.getHeight();
+        }else{  //가로모드
+            float ratioX = 1280 / (float)bitmap.getWidth();
+            float ratioY = 720 / (float)bitmap.getHeight();
 
             dstWidth = Math.round(bitmap.getWidth() * ratioX);
             dstHeight = Math.round(bitmap.getHeight() * ratioY);
@@ -255,7 +248,7 @@ public class AddActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_FROM_CAMERA && resultCode == RESULT_OK) {
             getPictureForPhoto();
-        } else if (requestCode == PICK_FROM_ALBUM && resultCode == RESULT_OK) {
+        }else if (requestCode == PICK_FROM_ALBUM && resultCode == RESULT_OK) {
             sendPicture(data.getData());
         }
     }
@@ -301,15 +294,16 @@ public class AddActivity extends AppCompatActivity {
     }
 
     private String getRealPathFromURI(Uri contentUri) {
-        int column_index = 0;
+        int column_index=0;
         String[] proj = {MediaStore.Images.Media.DATA};
         Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
-        if (cursor.moveToFirst()) {
+        if(cursor.moveToFirst()){
             column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
         }
 
         return cursor.getString(column_index);
     }
+
 
 
     public void opendateClick(View view) {
@@ -488,7 +482,7 @@ public class AddActivity extends AppCompatActivity {
             Toast.makeText(AddActivity.this,"이름,개봉일,교체권장일,메모를 입력해주세요.",Toast.LENGTH_SHORT).show();
         }
 
-        UserCosmeticDTO dto = new UserCosmeticDTO();
+        UserCosmetic dto = new UserCosmetic();
         dto.setCate_id(cosId);
         dto.setEndDate(cosEndDate);
         dto.setOpenDate(cosOpenDate);
