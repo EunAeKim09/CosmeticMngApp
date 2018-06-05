@@ -9,18 +9,22 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-public class MainActivity extends android.support.v7.app.AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends android.support.v7.app.AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, SendAdapter{
+    private static final String TAG = "Main";
     DrawerLayout drawerLayout;
     boolean permission;
     public static int fragNum = 1;
     android.support.v7.app.ActionBar actionBar;
+    private static MyItemList.MyAdapter sendAdapter;
 
     @Override
     protected void onCreate(android.os.Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate: ");
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -97,8 +101,8 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
         fragment.setArguments(bundle);
 
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.fragment_container, fragment);
-        fragmentTransaction.detach(fragment).attach(fragment);
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        //fragmentTransaction.detach(fragment).attach(fragment);
         fragmentTransaction.commit();
 
         android.support.v4.widget.DrawerLayout drawer = (android.support.v4.widget.DrawerLayout) findViewById(R.id.drawerlayout);
@@ -135,10 +139,31 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
         return super.onOptionsItemSelected(item);
     }
 
-    /*@Override
-    public void onClick(View v) {
-        if(v.getId()==R.id.naviCloseBtn){
-            onBackPressed();
+    @Override
+    public void onSendAdapter(MyItemList.MyAdapter adapter) {
+        sendAdapter = adapter;
+        sendAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: ");
+        if(sendAdapter != null){
+            Log.d(TAG, "onSendAdapter: Main 전"+sendAdapter.getItemCount());
+            sendAdapter.notifyDataSetChanged();
+            Log.d(TAG, "onSendAdapter: Main 후"+sendAdapter.getItemCount());
         }
-    }*/
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause: ");
+        if(sendAdapter != null){
+            Log.d(TAG, "onSendAdapter: Main 전"+sendAdapter.getItemCount());
+            sendAdapter.notifyDataSetChanged();
+            Log.d(TAG, "onSendAdapter: Main 후"+sendAdapter.getItemCount());
+        }
+    }
 }

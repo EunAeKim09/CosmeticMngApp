@@ -21,6 +21,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -42,7 +43,7 @@ import kr.or.dgit.it.cosmeticmngapp.dto.UserLens;
 
 import static android.content.ContentValues.TAG;
 
-public class DetailViewActivity extends AppCompatActivity {
+public class DetailViewActivity extends AppCompatActivity{
     private int fragNum = MainActivity.fragNum;
     private UserCosmeticDAO cosmeticdao;
     private UserCosmeticToolsDAO cosmeticToolsdao;
@@ -333,7 +334,7 @@ public class DetailViewActivity extends AppCompatActivity {
             cosmeticdao.deleteItemById(Integer.parseInt(num));
         }else if(fragNum==2){
             cosmeticToolsdao.deleteItemById(Integer.parseInt(num));
-        }else if(fragNum==3){
+        }else if(fragNum==3) {
             lensdao.deleteItemById(Integer.parseInt(num));
         }
         finish();

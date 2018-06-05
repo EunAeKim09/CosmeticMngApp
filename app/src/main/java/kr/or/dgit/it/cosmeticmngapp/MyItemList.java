@@ -1,5 +1,6 @@
 package kr.or.dgit.it.cosmeticmngapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -42,6 +44,7 @@ public class MyItemList extends Fragment {
 
     private List<ItemVO> list;
     private int fragNum;
+    public static MyAdapter adapter;
 
     public static MyItemList newInstance() {
         return new MyItemList();
@@ -79,7 +82,6 @@ public class MyItemList extends Fragment {
                 list.add(cosmetic);
             }
         }else if (fragNum == 2) {
-
             Cursor cursor = cosmeticToolsdao.selectItemAll(null, null);
             while (cursor.moveToNext()){
                 UserCosmeticTools itme = new UserCosmeticTools(cursor.getInt(0), cursor.getString(1), cursor.getString(2),
@@ -103,12 +105,13 @@ public class MyItemList extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         recyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_my_item_list, container, false);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(new MyAdapter(list));
+        adapter = new MyAdapter(list);
+        recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new MyDecoration());
         return recyclerView;
     }
 
-    private class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+    public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         private final List<ItemVO> list;
         public MyAdapter(List<ItemVO> list){
             this.list=list;
@@ -126,7 +129,6 @@ public class MyItemList extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getContext(), DetailViewActivity.class);
-
                     ItemVO itemVO = list.get(recyclerView.getChildAdapterPosition(v));
                     String num="";
                     if(fragNum == 1){
@@ -139,6 +141,7 @@ public class MyItemList extends Fragment {
                         UserLens dataItem=(UserLens)itemVO;
                         num = Integer.toString(dataItem.get_id());
                     }
+                    ((MainActivity)getActivity()).onSendAdapter(adapter);
                     intent.putExtra("idNum", num);
                     startActivity(intent);
                 }
