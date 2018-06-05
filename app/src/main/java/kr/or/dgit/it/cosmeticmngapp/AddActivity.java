@@ -287,6 +287,7 @@ public class AddActivity extends AppCompatActivity {
 
         Bitmap bitmap = BitmapFactory.decodeFile(imagePath);//경로를 통해 비트맵으로 전환
         imgview.setImageBitmap(rotate(bitmap, exifDegree));//이미지 뷰에 비트맵 넣기
+        Toast.makeText(this,"imagePath : "+imagePath, Toast.LENGTH_LONG).show();
     }
 
     private String getRealPathFromURI(Uri contentUri) {

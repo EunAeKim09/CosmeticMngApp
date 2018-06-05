@@ -4,8 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
+import android.media.ExifInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -22,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -148,7 +153,7 @@ public class MyItemList extends Fragment {
                         num = Integer.toString(dataItem.get_id());
                     }
                     intent.putExtra("idNum", num);
-                    startActivityForResult(intent, 100);
+                    startActivity(intent);
                 }
             });
             return new DataViewHolder(view);
@@ -163,17 +168,57 @@ public class MyItemList extends Fragment {
                 viewHolder.nameView.setText(dataItem.getName());
                 viewHolder.openDateView.setText(dataItem.getOpenDate());
                 viewHolder.endDateView.setText(dataItem.getEndDate());
+                if(dataItem.getImg() != null){
+                    viewHolder.imgView.setImageBitmap(resize(dataItem.getImg()));//이미지 뷰에 비트맵 넣기
+                }
             }else if(fragNum == 2){
                 UserCosmeticTools dataItem=(UserCosmeticTools)itemVO;
                 viewHolder.nameView.setText(dataItem.getName());
                 viewHolder.openDateView.setText(dataItem.getOpenDate());
                 viewHolder.endDateView.setText(dataItem.getEndDate());
+                if(dataItem.getImg() != null){
+                    viewHolder.imgView.setImageBitmap(resize(dataItem.getImg()));//이미지 뷰에 비트맵 넣기
+                }
             }else if(fragNum == 3){
                 UserLens dataItem=(UserLens)itemVO;
                 viewHolder.nameView.setText(dataItem.getName());
                 viewHolder.openDateView.setText(dataItem.getOpenDate());
                 viewHolder.endDateView.setText(dataItem.getEndDate());
+                if(dataItem.getImg() != null){
+                    viewHolder.imgView.setImageBitmap(resize(dataItem.getImg()));//이미지 뷰에 비트맵 넣기
+                }
             }
+        }
+
+        private Bitmap resize(String src){
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 4;
+            Bitmap bitmap = BitmapFactory.decodeFile(src, options);
+            int dstWidth;
+            int dstHeight;
+            if(bitmap.getHeight()>bitmap.getWidth()){   //세로모드
+                float ratioX = 720 / (float)bitmap.getWidth();
+                float ratioY = 1280 / (float)bitmap.getHeight();
+
+                dstWidth = Math.round(bitmap.getWidth() * ratioX);
+                dstHeight = Math.round(bitmap.getHeight() * ratioY);
+
+            }else{  //가로모드
+                float ratioX = 1280 / (float)bitmap.getWidth();
+                float ratioY = 720 / (float)bitmap.getHeight();
+
+                dstWidth = Math.round(bitmap.getWidth() * ratioX);
+                dstHeight = Math.round(bitmap.getHeight() * ratioY);
+            }
+            Bitmap resized = Bitmap.createScaledBitmap(bitmap, dstWidth, dstHeight, true);
+
+            return  resized;
+        }
+
+        private Bitmap rotate(Bitmap src, float degree) {
+            Matrix matrix = new Matrix();    // Matrix 객체 생성
+            matrix.postRotate(degree);       // 회전 각도 셋팅
+            return Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), matrix, true); // 이미지와 Matrix 를 셋팅해서 Bitmap 객체 생성
         }
 
         @Override
@@ -212,17 +257,6 @@ public class MyItemList extends Fragment {
             view.setBackgroundColor(0xFFFFFFFF);
             ViewCompat.setElevation(view, 10.0f);
             outRect.set(20, 10, 20, 10);
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode==RESULT_OK){
-            if (requestCode == 100){
-                getListDatas();
-                adapter.setList(list);
-                adapter.notifyDataSetChanged();
-            }
         }
     }
 

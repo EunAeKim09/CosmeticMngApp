@@ -94,6 +94,7 @@ public class DetailViewActivity extends AppCompatActivity{
                 openDate.setText(cursor.getString(3));
                 endDate.setText(cursor.getString(4));
                 memo.setText(cursor.getString(5));
+                imgview.setImageBitmap(resize(cursor.getString(2)));
             }
         }else if (fragNum == 2) {
             Cursor cursor = cosmeticToolsdao.selectItemAll("_id=?", new String[]{num});
@@ -106,6 +107,7 @@ public class DetailViewActivity extends AppCompatActivity{
                 openDate.setText(cursor.getString(3));
                 endDate.setText(cursor.getString(4));
                 memo.setText(cursor.getString(5));
+                imgview.setImageBitmap(resize(cursor.getString(2)));
             }
         } else if (fragNum == 3) {
             Cursor cursor = lensdao.selectItemAll("_id=?", new String[]{num});
@@ -118,6 +120,7 @@ public class DetailViewActivity extends AppCompatActivity{
                 openDate.setText(cursor.getString(3));
                 endDate.setText(cursor.getString(4));
                 memo.setText(cursor.getString(5));
+                imgview.setImageBitmap(resize(cursor.getString(2)));
             }
         }
     }
@@ -222,6 +225,31 @@ public class DetailViewActivity extends AppCompatActivity{
         return 0;
     }
 
+    private Bitmap resize(String src){
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 4;
+        Bitmap bitmap = BitmapFactory.decodeFile(src, options);
+        int dstWidth;
+        int dstHeight;
+        if(bitmap.getHeight()>bitmap.getWidth()){   //세로모드
+            float ratioX = 720 / (float)bitmap.getWidth();
+            float ratioY = 1280 / (float)bitmap.getHeight();
+
+            dstWidth = Math.round(bitmap.getWidth() * ratioX);
+            dstHeight = Math.round(bitmap.getHeight() * ratioY);
+
+        }else{  //가로모드
+            float ratioX = 1280 / (float)bitmap.getWidth();
+            float ratioY = 720 / (float)bitmap.getHeight();
+
+            dstWidth = Math.round(bitmap.getWidth() * ratioX);
+            dstHeight = Math.round(bitmap.getHeight() * ratioY);
+        }
+        Bitmap resized = Bitmap.createScaledBitmap(bitmap, dstWidth, dstHeight, true);
+
+        return  resized;
+    }
+
     private void getPictureForPhoto() {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 4;
@@ -324,7 +352,6 @@ public class DetailViewActivity extends AppCompatActivity{
         }else if(fragNum==3) {
             lensdao.deleteItemById(Integer.parseInt(num));
         }
-        setResult(RESULT_OK);
         finish();
     }
 }
