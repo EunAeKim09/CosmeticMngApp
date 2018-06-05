@@ -81,8 +81,8 @@ public class MyItemList extends Fragment {
             Cursor cursor = cosmeticdao.selectItemAll(null, null);
             while (cursor.moveToNext()){
                 UserCosmetic cosmetic = new UserCosmetic(cursor.getInt(0), cursor.getString(1), cursor.getString(2),
-                        cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6),
-                        cursor.getString(7));
+                        cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getInt(6),
+                        cursor.getInt(7));
                 list.add(cosmetic);
             }
         }else if (fragNum == 2) {
@@ -224,5 +224,14 @@ public class MyItemList extends Fragment {
                 adapter.notifyDataSetChanged();
             }
         }
+    }
+
+    @Override
+    public void onResume() {
+        Log.d(TAG, "onResume: ");
+        super.onResume();
+        getListDatas();
+        adapter.setList(list);
+        adapter.notifyDataSetChanged();
     }
 }

@@ -136,7 +136,6 @@ public class AddActivity extends AppCompatActivity {
         alertBuilder.show();
 
         cursor.close();
-        db.close();
     }
 
     public void cameraClick(View view) {
@@ -301,55 +300,6 @@ public class AddActivity extends AppCompatActivity {
         return cursor.getString(column_index);
     }
 
- /*   private void showDayDialog(){
-        Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int date = calendar.get(Calendar.DAY_OF_MONTH);
-
-        datedialog = new Dialog(this);
-        datedialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        datedialog.setContentView(R.layout.calendar_numberpicker_layout);
-        confirmBtn = datedialog.findViewById(R.id.btn_dialog_confirm);
-        cancelBtn = datedialog.findViewById(R.id.btn_dialog_cancel);
-
-        yearp = datedialog.findViewById(R.id.picker_year);
-        monthp = datedialog.findViewById(R.id.picker_month);
-        datep = datedialog.findViewById(R.id.picker_date);
-
-        yearp.setMinValue(year-10);
-        yearp.setMaxValue(year+10);
-        yearp.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);  // 데이터 선택 시 editText 방지
-        yearp.setValue(year);
-        yearp.setWrapSelectorWheel(true);
-
-        monthp.setMinValue(1);
-        monthp.setMaxValue(12);
-        monthp.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);  // 데이터 선택 시 editText 방지
-        monthp.setValue(month+1);
-        monthp.setWrapSelectorWheel(true);
-
-      *//*  String[] stringDate = new String[31];
-        for(i=0; i<31; i++){
-            stringDate[i] = Integer.toString(i+1);
-        }
-        datep.setDisplayedValues(stringDate);*//*
-        if(monthp.getValue()==1||monthp.getValue()==3||monthp.getValue()==5||monthp.getValue()==9||monthp.getValue()==11){
-            datep.setMaxValue(30);
-        }else{
-            datep.setMaxValue(31);
-        }
-
-        datep.setMinValue(1);
-        datep.setValue(date);
-        datep.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);  // 데이터 선택 시 editText 방지
-        datep.setWrapSelectorWheel(true);
-
-        datedialog.show();
-    }*/
-
-
-
     public void opendateClick(View view) {
         CalendarValue();
         datePicker.init(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(), new DatePicker.OnDateChangedListener() {
@@ -416,7 +366,6 @@ public class AddActivity extends AppCompatActivity {
                         } else if (MainActivity.fragNum == 3) {
                             addEndDate();
                         }
-                        db.close();
                         break;
                 }
                 dialog.dismiss();
@@ -523,6 +472,7 @@ public class AddActivity extends AppCompatActivity {
 
         if(cosName.equals("")||cosName.isEmpty()||cosOpenDate.equals("")||cosOpenDate.isEmpty()||cosEndDate.equals("")||cosEndDate.isEmpty()||cosMemo.isEmpty()||cosMemo.equals("")){
             Toast.makeText(AddActivity.this,"이름,개봉일,교체권장일,메모를 입력해주세요.",Toast.LENGTH_SHORT).show();
+            return;
         }
 
         UserCosmetic dto = new UserCosmetic();
@@ -534,6 +484,7 @@ public class AddActivity extends AppCompatActivity {
         dto.setName(cosName);
         dto.setFavorite(0);
         userCosmeticDAO.insertItem(dto);
+
         finish();
     }
 }
