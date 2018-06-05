@@ -7,11 +7,40 @@ public class UserCosmeticDTO {
     private String openDate;
     private String endDate;
     private String memo;
-    private String favorite;
-    private String cate_id;
+    private int favorite;
+    private int cate_id;
 
-    public UserCosmeticDTO(int _id, String name, String img, String openDate, String endDate, String memo, String favorite, String cate_id) {
+    @Override
+    public String toString() {
+        return "UserCosmeticDTO{" +
+                "_id=" + _id +
+                ", name='" + name + '\'' +
+                ", img='" + img + '\'' +
+                ", openDate='" + openDate + '\'' +
+                ", endDate='" + endDate + '\'' +
+                ", memo='" + memo + '\'' +
+                ", favorite=" + favorite +
+                ", cate_id=" + cate_id +
+                '}';
+    }
+
+    public UserCosmeticDTO() {
+
+
+    }
+
+    public UserCosmeticDTO(int _id, String name, String img, String openDate, String endDate, String memo, int favorite, int cate_id) {
         this._id = _id;
+        this.name = name;
+        this.img = img;
+        this.openDate = openDate;
+        this.endDate = endDate;
+        this.memo = memo;
+        this.favorite = favorite;
+        this.cate_id = cate_id;
+    }
+
+    public UserCosmeticDTO(String name, String img, String openDate, String endDate, String memo, int favorite, int cate_id) {
         this.name = name;
         this.img = img;
         this.openDate = openDate;
@@ -69,19 +98,19 @@ public class UserCosmeticDTO {
         this.memo = memo;
     }
 
-    public String getFavorite() {
+    public int getFavorite() {
         return favorite;
     }
 
-    public void setFavorite(String favorite) {
+    public void setFavorite(int favorite) {
         this.favorite = favorite;
     }
 
-    public String getCate_id() {
+    public int getCate_id() {
         return cate_id;
     }
 
-    public void setCate_id(String cate_id) {
+    public void setCate_id(int cate_id) {
         this.cate_id = cate_id;
     }
 }
