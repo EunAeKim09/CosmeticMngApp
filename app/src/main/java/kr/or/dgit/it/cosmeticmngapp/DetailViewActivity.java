@@ -36,6 +36,10 @@ import kr.or.dgit.it.cosmeticmngapp.dao.UserCosmeticDAO;
 import kr.or.dgit.it.cosmeticmngapp.dao.UserCosmeticToolsDAO;
 import kr.or.dgit.it.cosmeticmngapp.dao.UserLensDAO;
 import kr.or.dgit.it.cosmeticmngapp.db.DBhelper;
+import kr.or.dgit.it.cosmeticmngapp.dto.CosmeticCategoryDTO;
+import kr.or.dgit.it.cosmeticmngapp.dto.UserCosmetic;
+import kr.or.dgit.it.cosmeticmngapp.dto.UserCosmeticTools;
+import kr.or.dgit.it.cosmeticmngapp.dto.UserLens;
 
 public class DetailViewActivity extends AppCompatActivity{
     private int fragNum = MainActivity.fragNum;
@@ -58,6 +62,9 @@ public class DetailViewActivity extends AppCompatActivity{
     private ImageView imgview;
     private String num;
     private MyItemList.MyAdapter sendAdapter;
+    private ArrayAdapter<CosmeticCategoryDTO> adapter;
+    private int cosId;
+    private String imagePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,33 +137,35 @@ public class DetailViewActivity extends AppCompatActivity{
     public void categoryBtnClick(View view) {
         SQLiteDatabase db = DBhelper.getInstance(this).getDb();
         Cursor cursor = null;
-        if(fragNum == 1){
-            cursor = db.rawQuery("select name from cosmeticCategory order by name", null);
-        }else if(fragNum == 2){
-            cursor = db.rawQuery("select name from cosmeticToolsCategory order by name", null);
-        }else if(fragNum == 3){
-            cursor = db.rawQuery("select name from lensCategory order by name", null);
+        if (MainActivity.fragNum == 1) {
+            cursor = db.rawQuery("select * from cosmeticCategory order by name", null);
+        } else if (MainActivity.fragNum == 2) {
+            cursor = db.rawQuery("select * from cosmeticToolsCategory order by name", null);
+        } else if (MainActivity.fragNum == 3) {
+            cursor = db.rawQuery("select * from lensCategory order by name", null);
         }
 
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
         // List Adapter 생성
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item);
+        adapter = new ArrayAdapter<CosmeticCategoryDTO>(this, android.R.layout.select_dialog_item);
 
-        while(cursor.moveToNext()){
-            adapter.add(cursor.getString(0));
+
+        while (cursor.moveToNext()) {
+            adapter.add(new CosmeticCategoryDTO(cursor.getInt(0), cursor.getString(1), cursor.getInt(2), cursor.getInt(3), cursor.getInt(4)));
+
         }
 
         alertBuilder.setAdapter(adapter, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                categoryTV.setText(adapter.getItem(which));
+                categoryTV.setText(adapter.getItem(which).getName());
+                cosId = adapter.getItem(which).get_id();
                 dialog.dismiss();
             }
         });
         alertBuilder.show();
 
         cursor.close();
-        db.close();
     }
 
     public void cameraClick(View view) {
@@ -291,7 +300,8 @@ public class DetailViewActivity extends AppCompatActivity{
     }
 
     private void sendPicture(Uri imgUri) {
-        String imagePath = getRealPathFromURI(imgUri); // path 경로
+        // path 경로
+        imagePath = getRealPathFromURI(imgUri);
         ExifInterface exif = null;
         try {
             exif = new ExifInterface(imagePath);
@@ -326,5 +336,56 @@ public class DetailViewActivity extends AppCompatActivity{
         }
         setResult(RESULT_OK);
         finish();
+    }
+
+    public void updateCosmeticClick(View view) {
+        String cosName = name.getText().toString();
+        String cosOpenDate = openDate.getText().toString();
+        String cosEndDate = endDate.getText().toString();
+        String cosMemo = memo.getText().toString();
+        String cosImg = null;
+        if(currentPhotoPath != null){
+            cosImg = currentPhotoPath;
+        }else if (imagePath != null ){
+            cosImg = imagePath;
+        }
+
+        if(cosName.equals("")||cosName.isEmpty()||cosOpenDate.equals("")||cosOpenDate.isEmpty()||cosEndDate.equals("")||cosEndDate.isEmpty()||cosMemo.isEmpty()||cosMemo.equals("")){
+            Toast.makeText(DetailViewActivity.this,"이름,개봉일,교체권장일,메모를 입력해주세요.",Toast.LENGTH_SHORT).show();
+        }
+
+        if (MainActivity.fragNum == 1) {
+            UserCosmetic dto = new UserCosmetic();
+            dto.setCate_id(cosId);
+            dto.setEndDate(cosEndDate);
+            dto.setOpenDate(cosOpenDate);
+            dto.setImg(cosImg);
+            dto.setMemo(cosMemo);
+            dto.setName(cosName);
+            dto.setFavorite(0);
+            cosmeticdao.updateItem(dto);
+        } else if (MainActivity.fragNum == 2) {
+            UserCosmeticTools dto = new UserCosmeticTools();
+            dto.setCate_id(String.valueOf(cosId));
+            dto.setEndDate(cosEndDate);
+            dto.setOpenDate(cosOpenDate);
+            dto.setImg(cosImg);
+            dto.setMemo(cosMemo);
+            dto.setName(cosName);
+            dto.setFavorite(String.valueOf(0));
+            cosmeticToolsdao.updateItem(dto);
+        } else if (MainActivity.fragNum == 3) {
+            UserLens dto = new UserLens();
+            dto.setCate_id(String.valueOf(cosId));
+            dto.setEndDate(cosEndDate);
+            dto.setOpenDate(cosOpenDate);
+            dto.setImg(cosImg);
+            dto.setMemo(cosMemo);
+            dto.setName(cosName);
+            dto.setFavorite(String.valueOf(0));
+            lensdao.updateItem(dto);
+        }
+        finish();
+
     }
 }

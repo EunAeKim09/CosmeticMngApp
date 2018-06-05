@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -47,6 +50,8 @@ public class MyItemList extends Fragment {
     private List<ItemVO> list;
     private int fragNum;
     public static MyAdapter adapter;
+    private UserCosmeticDAO userCosmeticDAO;
+    private UserCosmeticDAO userCosmeticDAO1;
 
     public static MyItemList newInstance() {
         return new MyItemList();
@@ -66,8 +71,13 @@ public class MyItemList extends Fragment {
         lensdao = new UserLensDAO(getContext());
         lensdao.open();
 
+        userCosmeticDAO = new UserCosmeticDAO(getContext());
+        userCosmeticDAO.open();
+
         Bundle extra = getArguments();
         fragNum = extra.getInt("frag");
+
+
 
         getListDatas();
     }
@@ -81,8 +91,8 @@ public class MyItemList extends Fragment {
             Cursor cursor = cosmeticdao.selectItemAll(null, null);
             while (cursor.moveToNext()){
                 UserCosmetic cosmetic = new UserCosmetic(cursor.getInt(0), cursor.getString(1), cursor.getString(2),
-                        cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6),
-                        cursor.getString(7));
+                        cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getInt(6),
+                        cursor.getInt(7));
                 list.add(cosmetic);
             }
         }else if (fragNum == 2) {
@@ -118,6 +128,7 @@ public class MyItemList extends Fragment {
 
     public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         private List<ItemVO> list;
+        private UserCosmetic dataItem;
 
         public void setList(List<ItemVO> list) {
             this.list = list;
@@ -132,11 +143,14 @@ public class MyItemList extends Fragment {
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.registerlist_cardview_layout, parent, false);
             view.setOnClickListener(new View.OnClickListener() {
+
+                private String num;
+
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getContext(), DetailViewActivity.class);
                     ItemVO itemVO = list.get(recyclerView.getChildAdapterPosition(v));
-                    String num="";
+                    num = "";
                     if(fragNum == 1){
                         UserCosmetic dataItem=(UserCosmetic)itemVO;
                         num = Integer.toString(dataItem.get_id());
@@ -148,18 +162,19 @@ public class MyItemList extends Fragment {
                         num = Integer.toString(dataItem.get_id());
                     }
                     intent.putExtra("idNum", num);
-                    startActivityForResult(intent, 100);
+                    startActivity(intent);
                 }
             });
             return new DataViewHolder(view);
         }
+
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             ItemVO itemVO=list.get(position);
             DataViewHolder viewHolder=(DataViewHolder)holder;
             if(fragNum == 1){
-                UserCosmetic dataItem=(UserCosmetic)itemVO;
+                dataItem = (UserCosmetic)itemVO;
                 viewHolder.nameView.setText(dataItem.getName());
                 viewHolder.openDateView.setText(dataItem.getOpenDate());
                 viewHolder.endDateView.setText(dataItem.getEndDate());
@@ -181,7 +196,7 @@ public class MyItemList extends Fragment {
             return list.size();
         }
 
-        private class DataViewHolder extends RecyclerView.ViewHolder{
+        private class DataViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
             public TextView nameView;
             public TextView openDateView;
             public TextView endDateView;
@@ -195,6 +210,30 @@ public class MyItemList extends Fragment {
                 endDateView=itemView.findViewById(R.id.item_deaddate);
                 imgView=itemView.findViewById(R.id.item_product);
                 bookmarkView=itemView.findViewById(R.id.item_bookmark);
+
+                bookmarkView.setOnClickListener(this);
+            }
+
+            @Override
+            public void onClick(View v) {
+                Drawable temp = bookmarkView.getDrawable();
+                Drawable temp1 = getContext().getResources().getDrawable(R.drawable.book_mark_on_2);
+
+                Bitmap tmpBitmap = ((BitmapDrawable)temp).getBitmap();
+                Bitmap tmpBitmap1 = ((BitmapDrawable)temp1).getBitmap();
+                if(!tmpBitmap.equals(tmpBitmap1)){
+                    UserCosmetic dto = new UserCosmetic();
+                    dto.setFavorite(1);
+                    dto.set_id(dataItem.get_id());
+                    userCosmeticDAO.updateFavoriteItem(dto);
+                    bookmarkView.setImageResource(R.drawable.book_mark_on_2);
+                }else{
+                    UserCosmetic dto = new UserCosmetic();
+                    dto.setFavorite(0);
+                    dto.set_id(dataItem.get_id());
+                    userCosmeticDAO.updateFavoriteItem(dto);
+                    bookmarkView.setImageResource(R.drawable.book_mark_off);
+                }
             }
         }
     }
@@ -202,6 +241,7 @@ public class MyItemList extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+
     }
 
     private class MyDecoration extends RecyclerView.ItemDecoration {
@@ -209,20 +249,10 @@ public class MyItemList extends Fragment {
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             super.getItemOffsets(outRect, view, parent, state);
             int index=parent.getChildAdapterPosition(view);
+            ItemVO itemVO=list.get(index);
             view.setBackgroundColor(0xFFFFFFFF);
             ViewCompat.setElevation(view, 10.0f);
             outRect.set(20, 10, 20, 10);
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode==RESULT_OK){
-            if (requestCode == 100){
-                getListDatas();
-                adapter.setList(list);
-                adapter.notifyDataSetChanged();
-            }
         }
     }
 }
