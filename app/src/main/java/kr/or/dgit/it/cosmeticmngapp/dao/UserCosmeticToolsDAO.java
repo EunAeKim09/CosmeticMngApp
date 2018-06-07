@@ -95,8 +95,8 @@ public class UserCosmeticToolsDAO {
                 item.setOpenDate(cursor.getColumnName(3));
                 item.setEndDate(cursor.getColumnName(4));
                 item.setMemo(cursor.getColumnName(5));
-                item.setFavorite(cursor.getColumnName(6));
-                item.setCate_id(cursor.getColumnName(7));
+                item.setFavorite(Integer.parseInt(cursor.getColumnName(6)));
+                item.setCate_id(Integer.parseInt(cursor.getColumnName(7)));
 
                 list.add(item);
             }while (cursor.moveToNext());

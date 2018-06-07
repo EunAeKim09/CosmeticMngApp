@@ -11,8 +11,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 
 import kr.or.dgit.it.cosmeticmngapp.db.DBhelper;
 
@@ -22,7 +20,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
     boolean permission;
     public static int fragNum = 1;
     android.support.v7.app.ActionBar actionBar;
-    private static MyItemList.MyAdapter sendAdapter;
+    private static MyAdapter sendAdapter;
     private MyItemList fragment;
 
     @Override

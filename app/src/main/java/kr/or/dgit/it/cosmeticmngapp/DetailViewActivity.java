@@ -66,7 +66,7 @@ public class DetailViewActivity extends AppCompatActivity{
     private boolean permission;
     private ImageView imgview;
     private String num;
-    private MyItemList.MyAdapter sendAdapter;
+    private MyAdapter sendAdapter;
     private ArrayAdapter<CosmeticCategoryDTO> adapter;
     private int cosId;
     private String imagePath;
@@ -113,6 +113,7 @@ public class DetailViewActivity extends AppCompatActivity{
                 openDate.setText(cursor.getString(3));
                 endDate.setText(cursor.getString(4));
                 memo.setText(cursor.getString(5));
+                imgview.setImageBitmap(resize(cursor.getString(2)));
             }
         }else if (fragNum == 2) {
             Cursor cursor = cosmeticToolsdao.selectItemAll("_id=?", new String[]{num});
@@ -125,6 +126,7 @@ public class DetailViewActivity extends AppCompatActivity{
                 openDate.setText(cursor.getString(3));
                 endDate.setText(cursor.getString(4));
                 memo.setText(cursor.getString(5));
+                imgview.setImageBitmap(resize(cursor.getString(2)));
             }
         } else if (fragNum == 3) {
             Cursor cursor = lensdao.selectItemAll("_id=?", new String[]{num});
@@ -137,6 +139,7 @@ public class DetailViewActivity extends AppCompatActivity{
                 openDate.setText(cursor.getString(3));
                 endDate.setText(cursor.getString(4));
                 memo.setText(cursor.getString(5));
+                imgview.setImageBitmap(resize(cursor.getString(2)));
             }
         }
     }
@@ -243,6 +246,36 @@ public class DetailViewActivity extends AppCompatActivity{
         return 0;
     }
 
+    private Bitmap resize(String src){
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 4;
+        Bitmap bitmap = BitmapFactory.decodeFile(src, options);
+        int dstWidth;
+        int dstHeight;
+
+        Bitmap resized = null;
+        if(bitmap != null){
+            if(bitmap.getHeight()>bitmap.getWidth()){   //세로모드
+                float ratioX = 720 / (float)bitmap.getWidth();
+                float ratioY = 1280 / (float)bitmap.getHeight();
+
+                dstWidth = Math.round(bitmap.getWidth() * ratioX);
+                dstHeight = Math.round(bitmap.getHeight() * ratioY);
+
+            }else{  //가로모드
+                float ratioX = 1280 / (float)bitmap.getWidth();
+                float ratioY = 720 / (float)bitmap.getHeight();
+
+                dstWidth = Math.round(bitmap.getWidth() * ratioX);
+                dstHeight = Math.round(bitmap.getHeight() * ratioY);
+            }
+            resized = Bitmap.createScaledBitmap(bitmap, dstWidth, dstHeight, true);
+        }
+
+
+        return  resized;
+    }
+
     private void getPictureForPhoto() {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 4;
@@ -346,7 +379,6 @@ public class DetailViewActivity extends AppCompatActivity{
         }else if(fragNum==3) {
             lensdao.deleteItemById(Integer.parseInt(num));
         }
-        setResult(RESULT_OK);
         finish();
     }
 
@@ -540,23 +572,23 @@ public class DetailViewActivity extends AppCompatActivity{
             cosmeticdao.updateItem(dto);
         } else if (MainActivity.fragNum == 2) {
             UserCosmeticTools dto = new UserCosmeticTools();
-            dto.setCate_id(String.valueOf(cosId));
+            dto.setCate_id(cosId);
             dto.setEndDate(cosEndDate);
             dto.setOpenDate(cosOpenDate);
             dto.setImg(cosImg);
             dto.setMemo(cosMemo);
             dto.setName(cosName);
-            dto.setFavorite(String.valueOf(0));
+            dto.setFavorite(0);
             cosmeticToolsdao.updateItem(dto);
         } else if (MainActivity.fragNum == 3) {
             UserLens dto = new UserLens();
-            dto.setCate_id(String.valueOf(cosId));
+            dto.setCate_id(cosId);
             dto.setEndDate(cosEndDate);
             dto.setOpenDate(cosOpenDate);
             dto.setImg(cosImg);
             dto.setMemo(cosMemo);
             dto.setName(cosName);
-            dto.setFavorite(String.valueOf(0));
+            dto.setFavorite(0);
             lensdao.updateItem(dto);
         }
         finish();

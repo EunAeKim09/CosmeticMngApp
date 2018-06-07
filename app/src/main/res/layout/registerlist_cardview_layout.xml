@@ -15,10 +15,12 @@
 
         <ImageView
             android:id="@+id/item_product"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="80dp"
+            android:layout_height="70dp"
             android:adjustViewBounds="true"
-            android:maxHeight="80dp"
+            android:scaleType="centerCrop"
+            android:foregroundGravity="center"
+            android:maxHeight="70dp"
             android:maxWidth="80dp"
             android:src="@drawable/camera" />
 
