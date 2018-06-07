@@ -46,7 +46,6 @@ public class UserCosmeticDAO {
 
     public void insertItem(UserCosmetic item){
         ContentValues row = new ContentValues();
-        Log.d("values",item.toString());
         row.put(COL_NAME, item.getName());
         row.put(COL_IMG, item.getImg());
         row.put(COL_OPENDATE, item.getOpenDate());
@@ -72,8 +71,6 @@ public class UserCosmeticDAO {
     }
 
     public void updateFavoriteItem(UserCosmetic item){
-        Log.d(TAG, "updateFavoriteItem: "+item.toString());
-        Log.d(TAG, "updateFavoriteItem: "+db);
         ContentValues row = new ContentValues();
         row.put(COL_FAVORITE, item.getFavorite());
         db.update(TABLE_NAME, row, COL_ID +"=?", new String[]{String.valueOf(item.get_id())});

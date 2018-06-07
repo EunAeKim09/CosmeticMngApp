@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,10 +35,13 @@ public class UserCosmeticToolsDAO {
 
     public UserCosmeticToolsDAO(Context mCtx) {
         this.mCtx = mCtx;
+        open();
     }
 
     public void open() throws SQLException {
-        db = DBhelper.getInstance(mCtx).getDb();
+        if (db==null) {
+            db = DBhelper.getInstance(mCtx).getDb();
+        }
     }
 
     public void insertItem(UserCosmeticTools item){
@@ -73,6 +77,7 @@ public class UserCosmeticToolsDAO {
     }
 
     public Cursor selectItemAll(String selection, String[] selectionArgs){
+        Log.d("TAG", "selectItemAll: "+db);
         Cursor mCursor = db.query(TABLE_NAME, COLUMNS, selection, selectionArgs,null,null,null);
         return mCursor;
     }

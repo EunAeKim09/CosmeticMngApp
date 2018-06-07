@@ -34,10 +34,13 @@ public class UserLensDAO {
 
     public UserLensDAO(Context mCtx) {
         this.mCtx = mCtx;
+        open();
     }
 
     public void open() throws SQLException {
-        db = DBhelper.getInstance(mCtx).getDb();
+        if (db==null) {
+            db = DBhelper.getInstance(mCtx).getDb();
+        }
     }
 
     public void insertItem(UserLens item) {

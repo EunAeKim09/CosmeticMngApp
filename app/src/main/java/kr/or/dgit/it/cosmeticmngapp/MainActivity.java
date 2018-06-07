@@ -20,7 +20,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
     boolean permission;
     public static int fragNum = 1;
     android.support.v7.app.ActionBar actionBar;
-    private static MyAdapter sendAdapter;
+    private static MyItemList.MyAdapter sendAdapter;
     private MyItemList fragment;
 
     @Override
@@ -101,6 +101,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
         Bundle bundle = new Bundle();
         bundle.putInt("frag", fragNum);
         fragment.setArguments(bundle);
+        fragment.getListDatas();
 
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, fragment);
@@ -141,6 +142,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
 
     @Override
     protected void onDestroy() {
+        Log.d(TAG, "onDestroy: ");
         super.onDestroy();
         DBhelper.dbClose();
     }

@@ -66,7 +66,7 @@ public class DetailViewActivity extends AppCompatActivity{
     private boolean permission;
     private ImageView imgview;
     private String num;
-    private MyAdapter sendAdapter;
+    private MyItemList.MyAdapter sendAdapter;
     private ArrayAdapter<CosmeticCategoryDTO> adapter;
     private int cosId;
     private String imagePath;
