@@ -28,16 +28,20 @@ public class UserCosmeticDAO {
 
     //selection
     static final String[] COLUMNS =  new String[]{COL_ID, COL_NAME, COL_IMG, COL_OPENDATE, COL_ENDDATE, COL_MEMO, COL_FAVORITE, COL_CATE_ID};
+    private static final String TAG = "UserDao";
 
     private SQLiteDatabase db;
     private final Context mCtx;
 
     public UserCosmeticDAO(Context mCtx) {
         this.mCtx = mCtx;
+        open();
     }
 
     public void open() throws SQLException {
-        db = DBhelper.getInstance(mCtx).getDb();
+        if (db==null) {
+            db = DBhelper.getInstance(mCtx).getDb();
+        }
     }
 
     public void insertItem(UserCosmetic item){
@@ -68,6 +72,8 @@ public class UserCosmeticDAO {
     }
 
     public void updateFavoriteItem(UserCosmetic item){
+        Log.d(TAG, "updateFavoriteItem: "+item.toString());
+        Log.d(TAG, "updateFavoriteItem: "+db);
         ContentValues row = new ContentValues();
         row.put(COL_FAVORITE, item.getFavorite());
         db.update(TABLE_NAME, row, COL_ID +"=?", new String[]{String.valueOf(item.get_id())});

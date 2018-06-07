@@ -516,23 +516,23 @@ public class AddActivity extends AppCompatActivity {
             userCosmeticDAO.insertItem(dto);
         } else if (MainActivity.fragNum == 2) {
             UserCosmeticTools dto = new UserCosmeticTools();
-            dto.setCate_id(String.valueOf(cosId));
+            dto.setCate_id(cosId);
             dto.setEndDate(cosEndDate);
             dto.setOpenDate(cosOpenDate);
             dto.setImg(cosImg);
             dto.setMemo(cosMemo);
             dto.setName(cosName);
-            dto.setFavorite(String.valueOf(0));
+            dto.setFavorite(0);
             userCosmeticToolsDAO.insertItem(dto);
         } else if (MainActivity.fragNum == 3) {
             UserLens dto = new UserLens();
-            dto.setCate_id(String.valueOf(cosId));
+            dto.setCate_id(cosId);
             dto.setEndDate(cosEndDate);
             dto.setOpenDate(cosOpenDate);
             dto.setImg(cosImg);
             dto.setMemo(cosMemo);
             dto.setName(cosName);
-            dto.setFavorite(String.valueOf(0));
+            dto.setFavorite(0);
             userLensDAO.insertItem(dto);
         }
         finish();
