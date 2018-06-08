@@ -144,6 +144,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
     protected void onDestroy() {
         Log.d(TAG, "onDestroy: ");
         super.onDestroy();
-        DBhelper.dbClose();
+
+        DBhelper.getInstance(this).dbClose();
     }
 }

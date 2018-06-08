@@ -62,8 +62,6 @@ public class MyItemList extends Fragment {
 
         Bundle extra = getArguments();
         fragNum = extra.getInt("frag");
-
-        SQLiteDatabase db = DBhelper.getInstance(getContext()).getDb();
         getListDatas();
     }
 
