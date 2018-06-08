@@ -62,6 +62,7 @@ public class MyItemList extends Fragment {
 
         Bundle extra = getArguments();
         fragNum = extra.getInt("frag");
+
         getListDatas();
     }
 
@@ -93,6 +94,15 @@ public class MyItemList extends Fragment {
                         cursor.getInt(7));
                 list.add(item);
             }
+        }
+
+        if(list.size()>0){  //list에 내용이 있을 때
+            MainActivity.emptyTV.setVisibility(View.GONE);
+        }else{
+            if(MainActivity.emptyTV.getVisibility()==View.GONE){
+                MainActivity.emptyTV.setVisibility(View.VISIBLE);
+            }
+            MainActivity.emptyTV.setText("아이템을 등록해주세요.");
         }
     }
 

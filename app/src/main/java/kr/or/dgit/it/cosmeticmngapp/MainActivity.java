@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.widget.TextView;
 
 import kr.or.dgit.it.cosmeticmngapp.db.DBhelper;
 
@@ -20,6 +21,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
     boolean permission;
     public static int fragNum = 1;
     android.support.v7.app.ActionBar actionBar;
+    public static TextView emptyTV;
     private static MyItemList.MyAdapter sendAdapter;
     private MyItemList fragment;
 
@@ -53,6 +55,8 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
         Bundle bundle = new Bundle();
         bundle.putInt("frag", 1);
         fragment.setArguments(bundle);
+
+        emptyTV = (TextView) findViewById(R.id.emptyTV);
 
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.fragment_container, fragment);
