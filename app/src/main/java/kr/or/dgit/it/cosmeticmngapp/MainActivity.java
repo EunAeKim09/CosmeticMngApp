@@ -158,7 +158,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
             drawerLayout.closeDrawer(android.support.v4.view.GravityCompat.START);
         }else{
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("정말 종료 하시겠습니까?");
+            builder.setMessage("정말 종료하시겠습니까?");
             builder.setPositiveButton("확인", dialogListener);
             builder.setNegativeButton("취소", null);
 

@@ -77,6 +77,7 @@ public class DetailViewActivity extends AppCompatActivity{
     private int pYear;
     private int pMonth;
     private int pDate;
+    AlertDialog alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -372,15 +373,30 @@ public class DetailViewActivity extends AppCompatActivity{
     }
 
     public void deleteBtnClick(View view) {
-        if(fragNum==1){
-            cosmeticdao.deleteItemById(Integer.parseInt(num));
-        }else if(fragNum==2){
-            cosmeticToolsdao.deleteItemById(Integer.parseInt(num));
-        }else if(fragNum==3) {
-            lensdao.deleteItemById(Integer.parseInt(num));
-        }
-        finish();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("정말 삭제하시겠습니까?");
+        builder.setPositiveButton("확인", dialogListener);
+        builder.setNegativeButton("취소", null);
+
+        alertDialog=builder.create();
+        alertDialog.show();
     }
+
+    DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            if(dialog==alertDialog && which==DialogInterface.BUTTON_POSITIVE){
+                if(fragNum==1){
+                    cosmeticdao.deleteItemById(Integer.parseInt(num));
+                }else if(fragNum==2){
+                    cosmeticToolsdao.deleteItemById(Integer.parseInt(num));
+                }else if(fragNum==3) {
+                    lensdao.deleteItemById(Integer.parseInt(num));
+                }
+                finish();
+            }
+        }
+    };
 
     public void opendateClick(View view) {
         CalendarValue();
