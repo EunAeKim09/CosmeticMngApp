@@ -40,7 +40,20 @@
         </provider>
 
         <activity android:name=".DetailViewActivity" />
-        <activity android:name=".SelectActivity"></activity>
+        <activity android:name=".SelectActivity" />
+
+        <receiver
+            android:name=".AlarmReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="kr.or.dgit.it.cosmeticmngapp.PUSH_ALARM" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".MyAlarmService"
+            android:exported="false"></service>
     </application>
 
 </manifest>

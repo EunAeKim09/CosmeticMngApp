@@ -1,12 +1,19 @@
 package kr.or.dgit.it.cosmeticmngapp;
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -21,6 +28,13 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
+import kr.or.dgit.it.cosmeticmngapp.dao.UserCosmeticDAO;
+import kr.or.dgit.it.cosmeticmngapp.dao.UserCosmeticToolsDAO;
+import kr.or.dgit.it.cosmeticmngapp.dao.UserLensDAO;
 import kr.or.dgit.it.cosmeticmngapp.db.DBhelper;
 
 public class MainActivity extends android.support.v7.app.AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -32,6 +46,13 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
     public static TextView emptyTV;
     private MyItemList fragment;
     AlertDialog alertDialog;
+    NotificationManager manager;
+    NotificationCompat.Builder builder = null;
+    private PendingIntent pIntent;
+
+    private UserCosmeticDAO cosmeticdao;
+    private UserCosmeticToolsDAO cosmeticToolsdao;
+    private UserLensDAO lensdao;
 
     @Override
     protected void onCreate(android.os.Bundle savedInstanceState) {
@@ -50,8 +71,6 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
         toolbar.setNavigationIcon(R.drawable.menu);
 
         setTitleName();
-
-
 
         drawerLayout = findViewById(R.id.drawerlayout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,R.string.openT,R.string.closeT);
@@ -87,6 +106,17 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
                     new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
                     200);
         }
+
+        Intent serviceIntent = new Intent(this, MyAlarmService.class);
+        startService(serviceIntent);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        /*Intent intent = new Intent();
+        intent.setAction("kr.or.dgit.it.cosmeticmngapp.PUSH_ALARM");
+        sendBroadcast(intent);*/
     }
 
     private void setTitleName() {
@@ -182,4 +212,5 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
         super.onDestroy();
         DBhelper.getInstance(this).dbClose();
     }
+
 }
