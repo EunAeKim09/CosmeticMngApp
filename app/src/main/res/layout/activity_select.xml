@@ -38,10 +38,13 @@
         android:gravity="center"
         android:onClick="categoryBtnClick"
         android:text="카테고리"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:textSize="@dimen/textBtnTextSize" />
 
     <EditText
         android:id="@+id/selectName"
+        android:inputType="text"
         android:layout_width="270dp"
         android:layout_height="@dimen/textBtnheight"
         android:layout_alignStart="@+id/closeBtn"
@@ -59,12 +62,22 @@
         android:background="@drawable/button_style"
         android:gravity="center"
         android:text="검색"
-        android:textSize="@dimen/textBtnTextSize" />
+        android:textSize="@dimen/textBtnTextSize"
+        android:onClick="selectBtnClick"/>
     </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/emptyTV"
+        android:gravity="center"
+        android:textSize="@dimen/textBtnTextSize"
+        android:text=""
+        android:layout_marginTop="20dp"/>
+
     <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/recycler_select_view"
-        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>

@@ -1,6 +1,7 @@
 package kr.or.dgit.it.cosmeticmngapp;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -9,8 +10,16 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.TextView;
 
 import kr.or.dgit.it.cosmeticmngapp.db.DBhelper;
 
@@ -20,8 +29,9 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
     boolean permission;
     public static int fragNum = 1;
     android.support.v7.app.ActionBar actionBar;
-    private static MyAdapter sendAdapter;
+    public static TextView emptyTV;
     private MyItemList fragment;
+    AlertDialog alertDialog;
 
     @Override
     protected void onCreate(android.os.Bundle savedInstanceState) {
@@ -34,12 +44,14 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
         actionBar = getSupportActionBar();
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(true);
-        setTitleName();
-
         actionBar.setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.menu);
 
         toolbar.setNavigationIcon(R.drawable.menu);
+
+        setTitleName();
+
+
 
         drawerLayout = findViewById(R.id.drawerlayout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,R.string.openT,R.string.closeT);
@@ -54,12 +66,14 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
         bundle.putInt("frag", 1);
         fragment.setArguments(bundle);
 
+        emptyTV = (TextView) findViewById(R.id.emptyTV);
+
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.fragment_container, fragment);
         fragmentTransaction.commit();
 
-        /*Button closeNavi = navigationView.findViewById(R.id.naviCloseBtn);
-        closeNavi.setOnClickListener(this);*/
+        Button closeNavi = navigationView.findViewById(R.id.naviCloseBtn);
+       /* closeNavi.setOnClickListener();*/
 
         //permission
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
@@ -101,14 +115,13 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
         Bundle bundle = new Bundle();
         bundle.putInt("frag", fragNum);
         fragment.setArguments(bundle);
+        fragment.getListDatas();
 
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, fragment);
-        //fragmentTransaction.detach(fragment).attach(fragment);
         fragmentTransaction.commit();
 
-        android.support.v4.widget.DrawerLayout drawer = (android.support.v4.widget.DrawerLayout) findViewById(R.id.drawerlayout);
-        drawer.closeDrawer(android.support.v4.view.GravityCompat.START);
+        drawerLayout.closeDrawer(android.support.v4.view.GravityCompat.START);
         return true;
     }
 
@@ -140,8 +153,33 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
     }
 
     @Override
+    public void onBackPressed() {
+        if(drawerLayout.isDrawerOpen(android.support.v4.view.GravityCompat.START)){
+            drawerLayout.closeDrawer(android.support.v4.view.GravityCompat.START);
+        }else{
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("정말 종료하시겠습니까?");
+            builder.setPositiveButton("확인", dialogListener);
+            builder.setNegativeButton("취소", null);
+
+            alertDialog=builder.create();
+            alertDialog.show();
+        }
+    }
+
+    DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            if(dialog==alertDialog && which==DialogInterface.BUTTON_POSITIVE){
+                finish();
+            }
+        }
+    };
+
+    @Override
     protected void onDestroy() {
+        Log.d(TAG, "onDestroy: ");
         super.onDestroy();
-        DBhelper.dbClose();
+        DBhelper.getInstance(this).dbClose();
     }
 }

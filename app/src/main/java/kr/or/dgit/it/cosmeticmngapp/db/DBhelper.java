@@ -10,10 +10,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class DBhelper extends SQLiteOpenHelper{
+    private AtomicInteger mOpenCounter = new AtomicInteger();
     private static final  String TAG = DBhelper.class.getSimpleName();
-    public static final int DATABASE_VERSION=7;
+    public static final int DATABASE_VERSION=8;
     private static final String DB_NAME = "datadb.db";
     private final  Context context;
 
@@ -38,8 +40,10 @@ public class DBhelper extends SQLiteOpenHelper{
         return db;
     }
 
-    public static void dbClose(){
-        db.close();
+    public void dbClose(){
+        if(mOpenCounter.decrementAndGet() == 0) {
+            db.close();
+        }
     }
 
     @Override
