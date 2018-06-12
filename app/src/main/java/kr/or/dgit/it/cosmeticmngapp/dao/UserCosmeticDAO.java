@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import kr.or.dgit.it.cosmeticmngapp.db.DBhelper;
@@ -58,6 +59,14 @@ public class UserCosmeticDAO {
     public void deleteItemById(int id){
         db.delete(TABLE_NAME, COL_ID + "=?", new String[]{String.valueOf(id)});
     }
+
+    public void deleteItemByAll(){
+        db.delete(TABLE_NAME,null,null);
+    }
+
+    /*public void deleteItemBySelectId(HashMap<Object,String> map){
+        db.delete();
+    }*/
 
     public void updateItem(UserCosmetic item){
         ContentValues row = new ContentValues();

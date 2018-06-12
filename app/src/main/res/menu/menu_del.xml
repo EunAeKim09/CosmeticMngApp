@@ -2,20 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/favoriteIcon"
+        android:id="@+id/delIcon"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/book_mark_off"
+        android:icon="@drawable/trash"
         android:title="favoriteIcon"
+
         />
-    <item
-        android:id="@+id/searchIcon"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/search"
-        android:title="searchIcon"
-        />
-    <item
-        android:id="@+id/registerIcon"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/write_1"
-        android:title="registerIcon"/>
+
 </menu>
