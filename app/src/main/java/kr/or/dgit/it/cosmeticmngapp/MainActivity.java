@@ -165,7 +165,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
     @Override
     public boolean onOptionsItemSelected(android.view.MenuItem item) {
         int id = item.getItemId();
-
+        int favorite = 0;
         switch (id) {
             case android.R.id.home:
                 drawerLayout.openDrawer(android.support.v4.view.GravityCompat.START);
@@ -178,6 +178,15 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
                 Intent intentRegister = new Intent(this, AddActivity.class);
                 startActivity(intentRegister);
                 return true;
+            case R.id.favoriteIcon:
+                /*fragment = MyItemList.newInstance();
+                if(favorite==0){
+                    fragment.getfavoriteListDatas();
+                    favorite = 1;
+                }else{
+                    fragment.getListDatas();
+                    favorite = 0;
+                }*/
         }
         return super.onOptionsItemSelected(item);
     }

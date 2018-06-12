@@ -122,6 +122,46 @@ public class MyItemList extends Fragment {
         }
     }
 
+    public void getfavoriteListDatas() {
+        list=new ArrayList<>();
+        Cursor cursor=null;
+        if (fragNum == 1) {
+            /*Cursor cursor = db.rawQuery("select _id, name, img, openDate, endDate, memo, favorite, cate_id  from userCosmetic order by name", null);*/
+            cursor = cosmeticdao.selectItemAll("favorite=?", new String[]{"1"});
+            while (cursor.moveToNext()){
+                UserCosmetic cosmetic = new UserCosmetic(cursor.getInt(0), cursor.getString(1), cursor.getString(2),
+                        cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getInt(6),
+                        cursor.getInt(7));
+                list.add(cosmetic);
+            }
+        }else if (fragNum == 2) {
+            cursor = cosmeticToolsdao.selectItemAll("favorite=?", new String[]{"1"});
+            while (cursor.moveToNext()){
+                UserCosmeticTools item = new UserCosmeticTools(cursor.getInt(0), cursor.getString(1), cursor.getString(2),
+                        cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getInt(6),
+                        cursor.getInt(7));
+                list.add(item);
+            }
+        }else if (fragNum == 3) {
+            cursor = lensdao.selectItemAll("favorite=?", new String[]{"1"});
+            while (cursor.moveToNext()){
+                UserLens item = new UserLens(cursor.getInt(0), cursor.getString(1), cursor.getString(2),
+                        cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getInt(6),
+                        cursor.getInt(7));
+                list.add(item);
+            }
+        }
+
+        if(list.size()>0){  //list에 내용이 있을 때
+            MainActivity.emptyTV.setVisibility(View.GONE);
+        }else{
+            if(MainActivity.emptyTV.getVisibility()==View.GONE){
+                MainActivity.emptyTV.setVisibility(View.VISIBLE);
+            }
+            MainActivity.emptyTV.setText("즐겨찾는 아이템이 없습니다.");
+        }
+    }
+
     public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         private MyItemList myItemList;
         private List<ItemVO> list;
@@ -291,19 +331,6 @@ public class MyItemList extends Fragment {
                 if(checkLayout.getVisibility()==View.VISIBLE){
                     
                 }
-
-               /* checkBox.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Snackbar.make(cardView,"선택한 카드를 삭제하시겠습니까?",Snackbar.LENGTH_LONG).setAction("선택 삭제", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                            }
-                        });
-                    }
-                });*/
-
                 bookmarkView.setOnClickListener(this);
             }
 
