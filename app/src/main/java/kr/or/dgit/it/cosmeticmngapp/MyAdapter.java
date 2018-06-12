@@ -1,19 +1,26 @@
 package kr.or.dgit.it.cosmeticmngapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import kr.or.dgit.it.cosmeticmngapp.dao.UserCosmeticDAO;
@@ -28,6 +35,14 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private MyItemList myItemList;
     private List<ItemVO> list;
 //    private UserCosmetic dataItem;
+    LinearLayout linearLayout;
+    CheckBox itemcheckBox;
+    private List<UserCosmetic> userCosmetics;
+    private List<UserCosmeticTools> userCosmeticTools;
+    private List<UserLens> userLens;
+
+
+    boolean flag = false;
 
     public MyAdapter(MyItemList myItemList) {
         this.myItemList = myItemList;
@@ -45,6 +60,27 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.registerlist_cardview_layout, parent, false);
+
+        //꾹 눌렀을 때
+       /* parent.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                linearLayout = view.findViewById(R.id.item_checkbox_layout);
+                itemcheckBox = view.findViewById(R.id.item_checked);
+                linearLayout.setVisibility(View.VISIBLE);
+                Toast.makeText(v.getContext(),"클릭",Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });*/
+/*
+        view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                notifyDataSetChanged();
+                linearLayout.setVisibility(View.VISIBLE);
+                return true;
+            }
+        });*/
         view.setOnClickListener(new View.OnClickListener() {
 
             private String num;
@@ -72,7 +108,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder,final int position) {
         ItemVO itemVO=list.get(position);
         DataViewHolder viewHolder=(DataViewHolder)holder;
         if(myItemList.fragNum == 1){
@@ -83,6 +119,34 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             if(dataItem.getImg() != null){
                 viewHolder.imgView.setImageBitmap(resize(dataItem.getImg()));//이미지 뷰에 비트맵 넣기
             }
+
+             viewHolder.checkBox.setChecked(dataItem.isChecked());
+            viewHolder.checkBox.setVisibility(dataItem.getVisible());
+            viewHolder.checkBoxLinearLayout.setVisibility(dataItem.getVisible());
+            viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    viewHolder.checkBox.setChecked(isChecked);
+                }
+            });
+
+
+
+           ((DataViewHolder) holder).imgView.setOnLongClickListener(new View.OnLongClickListener() {
+               @Override
+               public boolean onLongClick(View v) {
+                   for(int i=0; i<myItemList.recyclerView.getAdapter().getItemCount(); i++){
+
+                   }
+                   if(viewHolder.checkBoxLinearLayout.getVisibility() == View.GONE){
+                       dataItem.setVisible(View.VISIBLE);
+                   }else {
+                       dataItem.setVisible(View.GONE);
+                   }
+                   notifyDataSetChanged();
+                   return true;
+               }
+           });
         }else if(myItemList.fragNum == 2){
             UserCosmeticTools dataItem=(UserCosmeticTools)itemVO;
             viewHolder.nameView.setText(dataItem.getName());
@@ -144,6 +208,8 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         public TextView endDateView;
         public ImageView imgView;
         public ImageView bookmarkView;
+        public LinearLayout checkBoxLinearLayout;
+        public CheckBox checkBox;
 
         public DataViewHolder(View itemView){
             super(itemView);
@@ -152,6 +218,8 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             endDateView=itemView.findViewById(R.id.item_deaddate);
             imgView=itemView.findViewById(R.id.item_product);
             bookmarkView=itemView.findViewById(R.id.item_bookmark);
+            checkBoxLinearLayout = itemView.findViewById(R.id.item_checkbox_layout);
+            checkBox = itemView.findViewById(R.id.item_checked);
 
             bookmarkView.setOnClickListener(this);
         }
