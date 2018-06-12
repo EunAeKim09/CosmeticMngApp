@@ -406,7 +406,7 @@ public class DetailViewActivity extends AppCompatActivity{
                 pYear = year;
                 pMonth = monthOfYear + 1;
                 pDate = dayOfMonth;
-                openDate.setText(String.format("%d - %d - %d", pYear, pMonth, pDate));
+                openDate.setText(String.format("%d - %02d - %d", pYear, pMonth, pDate));
             }
         });
 
@@ -414,7 +414,7 @@ public class DetailViewActivity extends AppCompatActivity{
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openDate.setText(String.format("%d - %d - %d", pYear, pMonth, pDate));
+                openDate.setText(String.format("%d - %02d - %d", pYear, pMonth, pDate));
                 datedialog.dismiss();
             }
         });
@@ -519,14 +519,14 @@ public class DetailViewActivity extends AppCompatActivity{
         c.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dateArray[2]) - 1);
 
         c.add(Calendar.YEAR, 0);
-        c.add(Calendar.MONTH, 1);
+        c.add(Calendar.MONTH, 0);
         c.add(Calendar.DAY_OF_MONTH, dur);
 
 
         pYear = c.get(Calendar.YEAR);
-        pMonth = c.get(Calendar.MONTH);
+        pMonth = c.get(Calendar.MONTH)+1;
         pDate = c.get(Calendar.DAY_OF_MONTH);
-        endDate.setText(String.format("%d - %d - %d", pYear, pMonth, pDate));
+        endDate.setText(String.format("%d - %02d - %d", pYear, pMonth, pDate));
     }
 
 
@@ -540,7 +540,7 @@ public class DetailViewActivity extends AppCompatActivity{
                 pYear = year;
                 pMonth = monthOfYear + 1;
                 pDate = dayOfMonth;
-                endDate.setText(String.format("%d - %d - %d", pYear, pMonth, pDate));
+                endDate.setText(String.format("%d - %02d - %d", pYear, pMonth, pDate));
             }
         });
 
@@ -548,7 +548,7 @@ public class DetailViewActivity extends AppCompatActivity{
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                endDate.setText(String.format("%d - %d - %d", pYear, pMonth, pDate));
+                endDate.setText(String.format("%d - %02d - %d", pYear, pMonth, pDate));
                 datedialog.dismiss();
             }
         });
