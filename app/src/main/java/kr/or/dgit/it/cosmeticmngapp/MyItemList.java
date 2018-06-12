@@ -12,15 +12,19 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.CheckBox;
@@ -53,6 +57,8 @@ public class MyItemList extends Fragment {
     public MyAdapter adapter;
     private UserCosmeticDAO userCosmeticDAO;
 
+    ActionBar actionBar;
+
     public static MyItemList newInstance() {
         return new MyItemList();
     }
@@ -61,10 +67,13 @@ public class MyItemList extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         cosmeticdao = new UserCosmeticDAO(getContext());
         cosmeticToolsdao = new UserCosmeticToolsDAO(getContext());
         lensdao = new UserLensDAO(getContext());
         lensdao.open();
+
+
 
 
         Bundle extra = getArguments();
@@ -116,6 +125,7 @@ public class MyItemList extends Fragment {
     public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         private MyItemList myItemList;
         private List<ItemVO> list;
+        public boolean isDelMode= false;
 
         public MyAdapter(MyItemList myItemList) {
             this.myItemList = myItemList;
@@ -163,6 +173,7 @@ public class MyItemList extends Fragment {
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             ItemVO itemVO=list.get(position);
             DataViewHolder viewHolder=(DataViewHolder)holder;
+
             if(myItemList.fragNum == 1){
                 UserCosmetic dataItem = (UserCosmetic)itemVO;
                 viewHolder.nameView.setText(dataItem.getName());
@@ -171,6 +182,34 @@ public class MyItemList extends Fragment {
                 if(dataItem.getImg() != null){
                     viewHolder.imgView.setImageBitmap(resize(dataItem.getImg()));//이미지 뷰에 비트맵 넣기
                 }
+
+                viewHolder.checkLayout.setVisibility(dataItem.getVisible());
+                viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        dataItem.setChecked(isChecked);
+                    }
+                });
+                viewHolder.imgView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        Log.d("recyclerviewCount",recyclerView.getChildCount()+"..");
+                        isDelMode = !isDelMode;
+
+
+                        for(int i=0; i<list.size(); i++){
+                            UserCosmetic itemVO= (UserCosmetic)list.get(i);
+                            if(isDelMode == true){
+                                itemVO.setVisible(View.VISIBLE);
+
+                            }else {
+                                itemVO.setVisible(View.GONE);
+                            }
+                        }
+                        notifyDataSetChanged();
+                        return true;
+                    }
+                });
             }else if(myItemList.fragNum == 2){
                 UserCosmeticTools dataItem=(UserCosmeticTools)itemVO;
                 viewHolder.nameView.setText(dataItem.getName());
@@ -232,6 +271,9 @@ public class MyItemList extends Fragment {
             public TextView endDateView;
             public ImageView imgView;
             public ImageView bookmarkView;
+            public LinearLayout checkLayout;
+            public CheckBox checkBox;
+            public CardView cardView;
 
             public DataViewHolder(View itemView){
                 super(itemView);
@@ -240,6 +282,27 @@ public class MyItemList extends Fragment {
                 endDateView=itemView.findViewById(R.id.item_deaddate);
                 imgView=itemView.findViewById(R.id.item_product);
                 bookmarkView=itemView.findViewById(R.id.item_bookmark);
+                checkLayout = itemView.findViewById(R.id.item_checkbox_layout);
+                checkBox = itemView.findViewById(R.id.item_checked);
+                cardView = itemView.findViewById(R.id.card_view);
+
+                Toolbar toolbar = itemView.findViewById(R.id.toolbar);
+
+                if(checkLayout.getVisibility()==View.VISIBLE){
+                    
+                }
+
+               /* checkBox.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Snackbar.make(cardView,"선택한 카드를 삭제하시겠습니까?",Snackbar.LENGTH_LONG).setAction("선택 삭제", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                            }
+                        });
+                    }
+                });*/
 
                 bookmarkView.setOnClickListener(this);
             }
