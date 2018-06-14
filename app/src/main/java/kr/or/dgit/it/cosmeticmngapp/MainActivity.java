@@ -1,15 +1,26 @@
 package kr.or.dgit.it.cosmeticmngapp;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.AlarmManager;
+import android.app.Fragment;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -28,6 +39,13 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
+import kr.or.dgit.it.cosmeticmngapp.dao.UserCosmeticDAO;
+import kr.or.dgit.it.cosmeticmngapp.dao.UserCosmeticToolsDAO;
+import kr.or.dgit.it.cosmeticmngapp.dao.UserLensDAO;
 import kr.or.dgit.it.cosmeticmngapp.db.DBhelper;
 
 import static kr.or.dgit.it.cosmeticmngapp.R.string.addAlldel;
@@ -61,12 +79,6 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
 
         setTitleName();
 
-
-
-
-
-
-
         drawerLayout = findViewById(R.id.drawerlayout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,R.string.openT,R.string.closeT);
         drawerLayout.addDrawerListener(toggle);
@@ -82,11 +94,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
         fragment.setArguments(bundle);
 
         emptyTV = (TextView) findViewById(R.id.emptyTV);
-
-        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.fragment_container, fragment);
-        fragmentTransaction.commit();
-
+        getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
         Button closeNavi = navigationView.findViewById(R.id.naviCloseBtn);
        /* closeNavi.setOnClickListener();*/
 
@@ -102,6 +110,27 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
                     new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
                     200);
         }
+
+        Intent serviceIntent = new Intent(this, AlarmService.class);
+        startService(serviceIntent);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        isServiceRunningCheck();
+    }
+
+    public boolean isServiceRunningCheck() {
+        ActivityManager manager = (ActivityManager) this.getSystemService(Activity.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if ("kr.or.dgit.it.cosmeticmngapp.AlarmService".equals(service.service.getClassName())) {
+                return true;
+            }
+            Intent serviceIntent = new Intent(this, AlarmService.class);
+            startService(serviceIntent);
+        }
+        return false;
     }
 
     private void setTitleName() {
@@ -111,6 +140,8 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
             actionBar.setTitle("화장도구");
         }else if(fragNum == 3){
             actionBar.setTitle("렌즈");
+        }else if(fragNum == 4){
+            actionBar.setTitle("설정");
         }
     }
 
@@ -123,7 +154,10 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
             fragNum = 2;
         }else if(id==R.id.app_menu3){
             fragNum = 3;
+        }else if(id==R.id.app_menu4) {
+            fragNum = 4;
         }
+
         setTitleName();
 
         fragment = MyItemList.newInstance();
@@ -133,9 +167,22 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
         fragment.setArguments(bundle);
         fragment.getListDatas();
 
-        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, fragment);
-        fragmentTransaction.commit();
+
+        if(fragNum == 4){
+            Fragment settingFragment = new SettingFragment();
+          //  fragmentTransaction.replace(R.id.fragment_container, (Fragment)settingFragment).commit();
+
+
+           getFragmentManager().beginTransaction().replace(R.id.fragment_container, settingFragment).show(settingFragment).commit();
+        }else{
+            Bundle bundle = new Bundle();
+            bundle.putInt("frag", fragNum);
+            fragment.setArguments(bundle);
+            fragment.getListDatas();
+            getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+        }
+
+
 
         drawerLayout.closeDrawer(android.support.v4.view.GravityCompat.START);
         return true;
@@ -151,7 +198,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
     @Override
     public boolean onOptionsItemSelected(android.view.MenuItem item) {
         int id = item.getItemId();
-
+        int favorite = 0;
         switch (id) {
             case android.R.id.home:
                 drawerLayout.openDrawer(android.support.v4.view.GravityCompat.START);
@@ -187,6 +234,15 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
 
 
 
+            case R.id.favoriteIcon:
+                fragment = MyItemList.newInstance();
+                if(favorite==0){
+                    fragment.getfavoriteListDatas();
+                    favorite = 1;
+                }else{
+                    fragment.getListDatas();
+                    favorite = 0;
+                }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -221,6 +277,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
         super.onDestroy();
         DBhelper.getInstance(this).dbClose();
     }
+
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
