@@ -1,5 +1,6 @@
 package kr.or.dgit.it.cosmeticmngapp;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -13,7 +14,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.CardView;
@@ -55,6 +55,7 @@ public class MyItemList extends Fragment {
     List<CardView> linearLayoutList ;
 
     private List<ItemVO> list;
+    private List<ItemVO> favoritelist;
     int fragNum;
     public MyAdapter adapter;
     private UserCosmeticDAO userCosmeticDAO;
@@ -68,15 +69,10 @@ public class MyItemList extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         cosmeticdao = new UserCosmeticDAO(getContext());
         cosmeticToolsdao = new UserCosmeticToolsDAO(getContext());
         lensdao = new UserLensDAO(getContext());
         lensdao.open();
-
-
-
 
         Bundle extra = getArguments();
         fragNum = extra.getInt("frag");
@@ -125,7 +121,8 @@ public class MyItemList extends Fragment {
     }
 
     public void getfavoriteListDatas() {
-        list=new ArrayList<>();
+        list = null;
+        favoritelist=new ArrayList<>();
         Cursor cursor=null;
         if (fragNum == 1) {
             /*Cursor cursor = db.rawQuery("select _id, name, img, openDate, endDate, memo, favorite, cate_id  from userCosmetic order by name", null);*/
@@ -134,7 +131,7 @@ public class MyItemList extends Fragment {
                 UserCosmetic cosmetic = new UserCosmetic(cursor.getInt(0), cursor.getString(1), cursor.getString(2),
                         cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getInt(6),
                         cursor.getInt(7));
-                list.add(cosmetic);
+                favoritelist.add(cosmetic);
             }
         }else if (fragNum == 2) {
             cursor = cosmeticToolsdao.selectItemAll("favorite=?", new String[]{"1"});
@@ -142,7 +139,7 @@ public class MyItemList extends Fragment {
                 UserCosmeticTools item = new UserCosmeticTools(cursor.getInt(0), cursor.getString(1), cursor.getString(2),
                         cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getInt(6),
                         cursor.getInt(7));
-                list.add(item);
+                favoritelist.add(item);
             }
         }else if (fragNum == 3) {
             cursor = lensdao.selectItemAll("favorite=?", new String[]{"1"});
@@ -150,11 +147,11 @@ public class MyItemList extends Fragment {
                 UserLens item = new UserLens(cursor.getInt(0), cursor.getString(1), cursor.getString(2),
                         cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getInt(6),
                         cursor.getInt(7));
-                list.add(item);
+                favoritelist.add(item);
             }
         }
 
-        if(list.size()>0){  //list에 내용이 있을 때
+        if(favoritelist.size()>0){  //list에 내용이 있을 때
             MainActivity.emptyTV.setVisibility(View.GONE);
         }else{
             if(MainActivity.emptyTV.getVisibility()==View.GONE){
@@ -237,7 +234,6 @@ public class MyItemList extends Fragment {
                     public boolean onLongClick(View v) {
                         Log.d("recyclerviewCount",recyclerView.getChildCount()+"..");
                         isDelMode = !isDelMode;
-
 
                         for(int i=0; i<list.size(); i++){
                             UserCosmetic itemVO= (UserCosmetic)list.get(i);
@@ -349,15 +345,19 @@ public class MyItemList extends Fragment {
                     UserCosmeticDAO userCosmeticDAO = new UserCosmeticDAO(myItemList.getContext());
                     if(!tmpBitmap.equals(tmpBitmap1)){
                         UserCosmetic dto = (UserCosmetic) itemVO;
+                        Log.d(TAG, "favorite 전: "+dto.toString());
                         dto.setFavorite(1);
                         dto.set_id(dataItem.get_id());
                         userCosmeticDAO.updateFavoriteItem(dto);
+                        Log.d(TAG, "favorite: "+dto.toString());
                         bookmarkView.setImageResource(R.drawable.book_mark_on_2);
                     }else{
                         UserCosmetic dto = new UserCosmetic();
+                        Log.d(TAG, "favorite 전: "+dto.toString());
                         dto.setFavorite(0);
                         dto.set_id(dataItem.get_id());
                         userCosmeticDAO.updateFavoriteItem(dto);
+                        Log.d(TAG, "favorite: "+dto.toString());
                         bookmarkView.setImageResource(R.drawable.book_mark_off);
                     }
                 }else if(myItemList.fragNum == 2)            {

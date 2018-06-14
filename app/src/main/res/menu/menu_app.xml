@@ -15,6 +15,6 @@
 
     <item
         android:id="@+id/app_menu4"
-        android:title="기타" />
+        android:title="설정" />
 
 </menu>

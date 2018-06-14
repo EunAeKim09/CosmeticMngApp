@@ -30,7 +30,6 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d("TAG", "AlarmReceiver: ");
 
         cosmeticdao = new UserCosmeticDAO(context);
         cosmeticToolsdao = new UserCosmeticToolsDAO(context);
@@ -45,19 +44,39 @@ public class AlarmReceiver extends BroadcastReceiver {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy - MM - dd");
         String getDate = sdf.format(date);
 
-        Log.d("TAG", "getDate: "+getDate);
-        int id = 0;
+        Intent intent1 = new Intent(context, MainActivity.class);
 
+        int id = 0;
         Cursor cursor = cosmeticdao.selectItemAll("endDate=?", new String[]{getDate});
-        Log.d("TAG", "cursor: "+cursor.getCount());
         while (cursor.moveToNext()){
             id++;
             builder.setContentTitle(title);
             builder.setContentText(cursor.getString(1)+"의 교체/세척 권장일입니다.");
             builder.setAutoCancel(true);
-            pIntent = PendingIntent.getActivity(context, 10, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            pIntent = PendingIntent.getActivity(context, 10, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
             builder.setContentIntent(pIntent);
+            manager.notify(id, builder.build());
+        }
 
+        cursor = cosmeticToolsdao.selectItemAll("endDate=?", new String[]{getDate});
+        while (cursor.moveToNext()){
+            id++;
+            builder.setContentTitle(title);
+            builder.setContentText(cursor.getString(1)+"의 교체/세척 권장일입니다.");
+            builder.setAutoCancel(true);
+            pIntent = PendingIntent.getActivity(context, 10, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+            builder.setContentIntent(pIntent);
+            manager.notify(id, builder.build());
+        }
+
+        cursor = lensdao.selectItemAll("endDate=?", new String[]{getDate});
+        while (cursor.moveToNext()){
+            id++;
+            builder.setContentTitle(title);
+            builder.setContentText(cursor.getString(1)+"의 교체/세척 권장일입니다.");
+            builder.setAutoCancel(true);
+            pIntent = PendingIntent.getActivity(context, 10, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+            builder.setContentIntent(pIntent);
             manager.notify(id, builder.build());
         }
     }
