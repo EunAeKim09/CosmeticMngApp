@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -29,6 +30,8 @@ import android.widget.Toast;
 
 import kr.or.dgit.it.cosmeticmngapp.db.DBhelper;
 
+import static kr.or.dgit.it.cosmeticmngapp.R.string.addAlldel;
+
 public class MainActivity extends android.support.v7.app.AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private static final String TAG = "Main";
     DrawerLayout drawerLayout;
@@ -38,6 +41,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
     public static TextView emptyTV;
     private MyItemList fragment;
     AlertDialog alertDialog;
+    private BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(android.os.Bundle savedInstanceState) {
@@ -56,6 +60,10 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
         toolbar.setNavigationIcon(R.drawable.menu);
 
         setTitleName();
+
+
+
+
 
 
 
@@ -156,6 +164,29 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
                 Intent intentRegister = new Intent(this, AddActivity.class);
                 startActivity(intentRegister);
                 return true;
+            case  R.id.delIcon:
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setIcon(R.drawable.trash);
+                builder.setTitle("삭제");
+                builder.setMessage("정말 삭제 하시겠습니까?");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(getApplicationContext(),"삭제합니다.",Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(getApplicationContext(),"취소하셨습니다.",Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                alertDialog=builder.create();
+                alertDialog.show();
+
+
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -191,6 +222,77 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
         DBhelper.getInstance(this).dbClose();
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        toolbarHandler =  new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                if(msg.what==1){
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                    actionBar.setDisplayShowTitleEnabled(false);
+                    getSupportActionBar().setCustomView(R.layout.all_delete_button);
+
+                    menu.removeItem(android.R.id.home);
+                    menu.removeItem(R.id.searchIcon);
+                    menu.removeItem(R.id.registerIcon);
+                    android.view.MenuInflater inflater = getMenuInflater();
+                    inflater.inflate(R.menu.menu_del ,menu);
+                }
+                if(msg.what==2){
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                    actionBar.setDisplayShowTitleEnabled(true);
+
+                    menu.removeItem(R.id.delIcon);
+                    android.view.MenuInflater inflater = getMenuInflater();
+                    inflater.inflate(R.menu.menu_set ,menu);
+                }
+            }
+        };
+        /*if(toolbarHandler.hasMessages(1)){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            actionBar.setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setCustomView(R.layout.all_delete_button);
+
+            menu.removeItem(android.R.id.home);
+            menu.removeItem(R.id.searchIcon);
+            menu.removeItem(R.id.registerIcon);
+            android.view.MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.menu_del ,menu);
+        }else if(toolbarHandler.hasMessages(2)){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowTitleEnabled(true);
+
+            menu.removeItem(R.id.delIcon);
+            android.view.MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.menu_set ,menu);
+        }*/
+/*        Handler toolbarHandler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                if(msg.what==1){
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                    actionBar.setDisplayShowTitleEnabled(false);
+                    getSupportActionBar().setCustomView(R.layout.all_delete_button);
+
+                    menu.removeItem(android.R.id.home);
+                    menu.removeItem(R.id.searchIcon);
+                    menu.removeItem(R.id.registerIcon);
+                    android.view.MenuInflater inflater = getMenuInflater();
+                    inflater.inflate(R.menu.menu_del ,menu);
+                }
+                if(msg.what==2){
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                    actionBar.setDisplayShowTitleEnabled(true);
+
+                    menu.removeItem(R.id.delIcon);
+                    android.view.MenuInflater inflater = getMenuInflater();
+                    inflater.inflate(R.menu.menu_set ,menu);
+                }
+            }
+        };*/
+      return true;
+    }
+
     Handler toolbarHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -198,8 +300,11 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
                 Toast.makeText(getApplicationContext(),"1111",Toast.LENGTH_SHORT).show();//툴바 바꾸기 ~~
 
 
+
             }else if(msg.what == 2){
                 Toast.makeText(getApplicationContext(),"2222",Toast.LENGTH_SHORT).show();//툴바 바꾸기 ~~
+
+
             }
         }
     };

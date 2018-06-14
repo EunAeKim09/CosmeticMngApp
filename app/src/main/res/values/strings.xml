@@ -10,4 +10,6 @@
 
     <string name="openT">Open toggle</string>
     <string name="closeT">Close toggle</string>
+
+    <string name="addAlldel">전체 삭제</string>
 </resources>
