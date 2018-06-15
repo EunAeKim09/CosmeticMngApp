@@ -328,9 +328,7 @@ public class AddActivity extends AppCompatActivity {
 
         return cursor.getString(column_index);
     }
-
-
-
+    
     public void opendateClick(View view) {
         CalendarValue();
         datePicker.init(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(), new DatePicker.OnDateChangedListener() {
@@ -342,7 +340,6 @@ public class AddActivity extends AppCompatActivity {
 /*
                 String mDateFormat = "yyy - MM - dd";
                 simpleDateFormat = new SimpleDateFormat(mDateFormat);
-
                 simpleDateFormat.format(date);
                 openEditdate.setText(simpleDateFormat.toString());
                 openEditdate.setText(simpleDateFormat.format());*/
@@ -359,7 +356,6 @@ public class AddActivity extends AppCompatActivity {
             }
         });
         datedialog.show();
-
     }
 
     private void CalendarValue() {

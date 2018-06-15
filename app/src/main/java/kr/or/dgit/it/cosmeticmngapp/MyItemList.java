@@ -1,6 +1,7 @@
 package kr.or.dgit.it.cosmeticmngapp;
 
 
+import android.app.Application;
 import android.app.Fragment;
 import android.content.Intent;
 import android.database.Cursor;
@@ -290,12 +291,9 @@ public class MyItemList extends Fragment {
                             ArrayList<UserCosmetic> itemVOS = new ArrayList<UserCosmetic>();
                             if(isDelMode == true){
                                 itemVO.setVisible(View.VISIBLE);
-
-
                             }else {
                                 itemVO.setVisible(View.GONE);
                                 itemVO.setChecked(false);
-
                             }
                         }
                         notifyDataSetChanged();
@@ -315,9 +313,7 @@ public class MyItemList extends Fragment {
                 viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
                         dataItem.setChecked(isChecked);
-
                     }
                 });
                 viewHolder.imgView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -332,9 +328,6 @@ public class MyItemList extends Fragment {
                             Message message = Message.obtain(myItemList.toolbarHandler,2, null);
                             myItemList.toolbarHandler.sendMessage(message);
                         }
-
-
-
                         for(int i=0; i<list.size(); i++){
                             UserCosmetic itemVO= (UserCosmetic)list.get(i);
                             ArrayList<UserCosmetic> itemVOS = new ArrayList<UserCosmetic>();
@@ -378,9 +371,6 @@ public class MyItemList extends Fragment {
                             Message message = Message.obtain(myItemList.toolbarHandler,2, null);
                             myItemList.toolbarHandler.sendMessage(message);
                         }
-
-
-
                         for(int i=0; i<list.size(); i++){
                             UserCosmetic itemVO= (UserCosmetic)list.get(i);
                             ArrayList<UserCosmetic> itemVOS = new ArrayList<UserCosmetic>();

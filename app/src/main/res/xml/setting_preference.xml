@@ -10,14 +10,18 @@
             android:defaultValue="true"
             android:key="alarmSound"
             android:title="소리"/>
-        <RingtonePreference
-            android:dependency="alarm"
-            android:title="알림음"
-            android:key="ringtone"/>
         <SwitchPreference
             android:dependency="alarm"
             android:defaultValue="true"
             android:key="alarmVib"
             android:title="진동"/>
+        <ListPreference
+            android:dependency="alarm"
+            android:title="알림 시간"
+            android:key="alarmTime"
+            android:entries="@array/alarmTime"
+            android:entryValues="@array/alarmTimeValues"
+            android:defaultValue="9"
+            />
     </PreferenceCategory>
 </PreferenceScreen>
