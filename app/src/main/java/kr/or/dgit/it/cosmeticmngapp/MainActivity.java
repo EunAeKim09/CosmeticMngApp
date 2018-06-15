@@ -175,7 +175,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
 
            getFragmentManager().beginTransaction().replace(R.id.fragment_container, settingFragment).show(settingFragment).commit();
         }else{
-            Bundle bundle = new Bundle();
+            Bundle bundle1 = new Bundle();
             bundle.putInt("frag", fragNum);
             fragment.setArguments(bundle);
             fragment.getListDatas();
