@@ -303,7 +303,7 @@ public class AddActivity extends AppCompatActivity {
     }
 
     private void sendPicture(Uri imgUri) {
-        String imagePath = getRealPathFromURI(imgUri); // path 경로
+        imagePath = getRealPathFromURI(imgUri); // path 경로
         ExifInterface exif = null;
         try {
             exif = new ExifInterface(imagePath);
@@ -328,9 +328,7 @@ public class AddActivity extends AppCompatActivity {
 
         return cursor.getString(column_index);
     }
-
-
-
+    
     public void opendateClick(View view) {
         CalendarValue();
         datePicker.init(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(), new DatePicker.OnDateChangedListener() {
@@ -342,7 +340,6 @@ public class AddActivity extends AppCompatActivity {
 /*
                 String mDateFormat = "yyy - MM - dd";
                 simpleDateFormat = new SimpleDateFormat(mDateFormat);
-
                 simpleDateFormat.format(date);
                 openEditdate.setText(simpleDateFormat.toString());
                 openEditdate.setText(simpleDateFormat.format());*/
@@ -359,7 +356,6 @@ public class AddActivity extends AppCompatActivity {
             }
         });
         datedialog.show();
-
     }
 
     private void CalendarValue() {
@@ -508,6 +504,7 @@ public class AddActivity extends AppCompatActivity {
         }else if (imagePath != null ){
             cosImg = imagePath;
         }
+        Log.d("imgPath",imagePath+"..."+currentPhotoPath+"................");
 
         if(cosName.equals("")||cosName.isEmpty()||cosOpenDate.equals("")||cosOpenDate.isEmpty()||cosEndDate.equals("")||cosEndDate.isEmpty()){
             Toast.makeText(AddActivity.this,"이름,개봉일,교체권장일을 입력해주세요.",Toast.LENGTH_SHORT).show();
