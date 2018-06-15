@@ -1,5 +1,6 @@
 package kr.or.dgit.it.cosmeticmngapp;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -38,6 +39,10 @@ public class AlarmReceiver extends BroadcastReceiver {
         manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         builder = new NotificationCompat.Builder(context);
         builder.setSmallIcon(android.R.drawable.ic_notification_overlay);
+
+        //진동, 소리 설정
+        //builder.setDefaults(Notification.DEFAULT_SOUND|Notification.FLAG_INSISTENT);
+        //알람 시간 설정
 
         long now = System.currentTimeMillis();
         Date date = new Date(now);
