@@ -1,6 +1,7 @@
 package kr.or.dgit.it.cosmeticmngapp;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -10,11 +11,15 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 public class SettingFragment extends PreferenceFragment {
+
+    private ListPreference listPreference;
+
 
     public static SettingFragment newInstance() {
         return new SettingFragment();
@@ -25,7 +30,6 @@ public class SettingFragment extends PreferenceFragment {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.setting_preference);
         setOnPreferenceChange(findPreference("alarmTime"));
-
     }
 
     private Preference.OnPreferenceChangeListener onPreferenceChangeListener = new Preference.OnPreferenceChangeListener() {

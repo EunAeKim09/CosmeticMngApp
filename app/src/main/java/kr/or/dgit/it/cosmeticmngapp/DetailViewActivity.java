@@ -445,7 +445,6 @@ public class DetailViewActivity extends AppCompatActivity{
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         AlertDialog.Builder builder1 = builder.setItems(info, new DialogInterface.OnClickListener() {
 
-
             @Override
             public void onClick(final DialogInterface dialog, int which) {
 
@@ -521,7 +520,6 @@ public class DetailViewActivity extends AppCompatActivity{
         c.add(Calendar.YEAR, 0);
         c.add(Calendar.MONTH, 0);
         c.add(Calendar.DAY_OF_MONTH, dur);
-
 
         pYear = c.get(Calendar.YEAR);
         pMonth = c.get(Calendar.MONTH)+1;

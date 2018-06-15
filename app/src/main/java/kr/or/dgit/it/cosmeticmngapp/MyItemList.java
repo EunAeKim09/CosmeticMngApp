@@ -1,5 +1,6 @@
 package kr.or.dgit.it.cosmeticmngapp;
 
+import android.app.Application;
 import android.app.Fragment;
 import android.content.Intent;
 import android.database.Cursor;
@@ -17,7 +18,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.CardView;
@@ -51,7 +51,7 @@ import kr.or.dgit.it.cosmeticmngapp.dto.UserLens;
 
 import static android.content.ContentValues.TAG;
 
-public class MyItemList extends Fragment {
+public class MyItemList extends android.app.Fragment {
     RecyclerView recyclerView;
     private UserCosmeticDAO cosmeticdao;
     private UserCosmeticToolsDAO cosmeticToolsdao;
@@ -65,10 +65,6 @@ public class MyItemList extends Fragment {
     int fragNum;
     public MyAdapter adapter;
     private UserCosmeticDAO userCosmeticDAO;
-
-
-
-
 
     ActionBar actionBar;
 
@@ -87,9 +83,9 @@ public class MyItemList extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        cosmeticdao = new UserCosmeticDAO(getContext());
-        cosmeticToolsdao = new UserCosmeticToolsDAO(getContext());
-        lensdao = new UserLensDAO(getContext());
+        cosmeticdao = new UserCosmeticDAO(getActivity());
+        cosmeticToolsdao = new UserCosmeticToolsDAO(getActivity());
+        lensdao = new UserLensDAO(getActivity());
         lensdao.open();
 
         Bundle extra = getArguments();
@@ -206,7 +202,7 @@ public class MyItemList extends Fragment {
 
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(myItemList.getContext(), DetailViewActivity.class);
+                    Intent intent = new Intent(myItemList.getActivity(), DetailViewActivity.class);
                     ItemVO itemVO = list.get(myItemList.recyclerView.getChildAdapterPosition(v));
                     num = "";
                     if(myItemList.fragNum == 1){
@@ -268,27 +264,14 @@ public class MyItemList extends Fragment {
                             myItemList.toolbarHandler.sendMessage(message);
                         }
 
-                        if(isDelMode == true){
-
-                            Message message = Message.obtain(myItemList.toolbarHandler,1, null);
-                            myItemList.toolbarHandler.sendMessage(message);
-                        }else{
-                            Message message = Message.obtain(myItemList.toolbarHandler,2, null);
-                            myItemList.toolbarHandler.sendMessage(message);
-                        }
-
-
                         for(int i=0; i<list.size(); i++){
                             UserCosmetic itemVO= (UserCosmetic)list.get(i);
                             ArrayList<UserCosmetic> itemVOS = new ArrayList<UserCosmetic>();
                             if(isDelMode == true){
                                 itemVO.setVisible(View.VISIBLE);
-
-
                             }else {
                                 itemVO.setVisible(View.GONE);
                                 itemVO.setChecked(false);
-
                             }
                         }
                         notifyDataSetChanged();
@@ -308,9 +291,7 @@ public class MyItemList extends Fragment {
                 viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
                         dataItem.setChecked(isChecked);
-
                     }
                 });
                 viewHolder.imgView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -325,9 +306,6 @@ public class MyItemList extends Fragment {
                             Message message = Message.obtain(myItemList.toolbarHandler,2, null);
                             myItemList.toolbarHandler.sendMessage(message);
                         }
-
-
-
                         for(int i=0; i<list.size(); i++){
                             UserCosmetic itemVO= (UserCosmetic)list.get(i);
                             ArrayList<UserCosmetic> itemVOS = new ArrayList<UserCosmetic>();
@@ -371,9 +349,6 @@ public class MyItemList extends Fragment {
                             Message message = Message.obtain(myItemList.toolbarHandler,2, null);
                             myItemList.toolbarHandler.sendMessage(message);
                         }
-
-
-
                         for(int i=0; i<list.size(); i++){
                             UserCosmetic itemVO= (UserCosmetic)list.get(i);
                             ArrayList<UserCosmetic> itemVOS = new ArrayList<UserCosmetic>();
@@ -480,14 +455,14 @@ public class MyItemList extends Fragment {
             @Override
             public void onClick(View v) {
                 Drawable temp = bookmarkView.getDrawable();
-                Drawable temp1 = myItemList.getContext().getResources().getDrawable(R.drawable.book_mark_on_2);
+                Drawable temp1 = myItemList.getActivity().getResources().getDrawable(R.drawable.book_mark_on_2);
                 ItemVO itemVO = list.get(getAdapterPosition());
                 Bitmap tmpBitmap = ((BitmapDrawable)temp).getBitmap();
                 Bitmap tmpBitmap1 = ((BitmapDrawable)temp1).getBitmap();
 
                 if(myItemList.fragNum == 1){
                     UserCosmetic dataItem = (UserCosmetic) itemVO;
-                    UserCosmeticDAO userCosmeticDAO = new UserCosmeticDAO(myItemList.getContext());
+                    UserCosmeticDAO userCosmeticDAO = new UserCosmeticDAO(myItemList.getActivity());
                     if(!tmpBitmap.equals(tmpBitmap1)){
                         UserCosmetic dto = (UserCosmetic) itemVO;
                         Log.d(TAG, "favorite 전: "+dto.toString());
@@ -507,7 +482,7 @@ public class MyItemList extends Fragment {
                     }
                 }else if(myItemList.fragNum == 2)            {
                     UserCosmeticTools dataItem = (UserCosmeticTools) itemVO;
-                    UserCosmeticToolsDAO userCosmeticToolsDAO = new UserCosmeticToolsDAO(myItemList.getContext());
+                    UserCosmeticToolsDAO userCosmeticToolsDAO = new UserCosmeticToolsDAO(myItemList.getActivity());
                     if(!tmpBitmap.equals(tmpBitmap1)){
                         UserCosmeticTools dto = (UserCosmeticTools) itemVO;
                         dto.setFavorite(1);
@@ -523,7 +498,7 @@ public class MyItemList extends Fragment {
                     }
                 }else if(myItemList.fragNum == 3)            {
                     UserLens dataItem = (UserLens) itemVO;
-                    UserLensDAO userLensDAO = new UserLensDAO(myItemList.getContext());
+                    UserLensDAO userLensDAO = new UserLensDAO(myItemList.getActivity());
                     if(!tmpBitmap.equals(tmpBitmap1)){
                         UserLens dto = (UserLens) itemVO;
                         dto.setFavorite(1);
@@ -551,7 +526,7 @@ public class MyItemList extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         recyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_my_item_list, container, false);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new MyAdapter(this);
         adapter.setList(list);
         recyclerView.setAdapter(adapter);
