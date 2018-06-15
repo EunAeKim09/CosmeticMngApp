@@ -6,6 +6,7 @@
         app:showAsAction="ifRoom"
         android:icon="@drawable/book_mark_off"
         android:title="favoriteIcon"
+
         />
     <item
         android:id="@+id/searchIcon"

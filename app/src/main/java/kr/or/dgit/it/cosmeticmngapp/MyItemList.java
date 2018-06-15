@@ -1,5 +1,6 @@
 package kr.or.dgit.it.cosmeticmngapp;
 
+
 import android.app.Fragment;
 import android.content.Intent;
 import android.database.Cursor;
@@ -17,7 +18,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
+
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.CardView;
@@ -66,9 +67,7 @@ public class MyItemList extends Fragment {
     public MyAdapter adapter;
     private UserCosmeticDAO userCosmeticDAO;
 
-
-
-
+    ArrayList<String> proId = new ArrayList<>();
 
     ActionBar actionBar;
 
@@ -87,14 +86,14 @@ public class MyItemList extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        cosmeticdao = new UserCosmeticDAO(getContext());
-        cosmeticToolsdao = new UserCosmeticToolsDAO(getContext());
-        lensdao = new UserLensDAO(getContext());
+        cosmeticdao = new UserCosmeticDAO(getActivity());
+        cosmeticToolsdao = new UserCosmeticToolsDAO(getActivity());
+        lensdao = new UserLensDAO(getActivity());
         lensdao.open();
 
         Bundle extra = getArguments();
         fragNum = extra.getInt("frag");
-
+        Log.d("nasdfasdfsdfnnn","졸라망함............");
         getListDatas();
     }
 
@@ -109,6 +108,7 @@ public class MyItemList extends Fragment {
                         cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getInt(6),
                         cursor.getInt(7));
                 list.add(cosmetic);
+                Log.d("nnnnnnnnnnnn",cosmetic.toString());
             }
         }else if (fragNum == 2) {
             cursor = cosmeticToolsdao.selectItemAll(null, null);
@@ -129,30 +129,41 @@ public class MyItemList extends Fragment {
         }
 
         if(list.size()>0){  //list에 내용이 있을 때
+            Log.d("size",list.size()+"..");
             MainActivity.emptyTV.setVisibility(View.GONE);
         }else{
+            Log.d("size",list.size()+"..");
             if(MainActivity.emptyTV.getVisibility()==View.GONE){
+
                 MainActivity.emptyTV.setVisibility(View.VISIBLE);
+                MainActivity.emptyTV.setText("아이템을 등록해주세요.");
             }
-            MainActivity.emptyTV.setText("아이템을 등록해주세요.");
+
         }
     }
 
     public void getfavoriteListDatas() {
-        list = null;
+        Bundle extra = getArguments();
+        fragNum = extra.getInt("frag");
+        cosmeticdao = new UserCosmeticDAO(getActivity());
+        cosmeticToolsdao = new UserCosmeticToolsDAO(getActivity());
+        lensdao = new UserLensDAO(getActivity());
+
+//        list = null;
         favoritelist=new ArrayList<>();
         Cursor cursor=null;
         if (fragNum == 1) {
             /*Cursor cursor = db.rawQuery("select _id, name, img, openDate, endDate, memo, favorite, cate_id  from userCosmetic order by name", null);*/
-            cursor = cosmeticdao.selectItemAll("favorite=?", new String[]{"1"});
+            cursor = cosmeticdao.selectItemByFavorite();
             while (cursor.moveToNext()){
                 UserCosmetic cosmetic = new UserCosmetic(cursor.getInt(0), cursor.getString(1), cursor.getString(2),
                         cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getInt(6),
                         cursor.getInt(7));
                 favoritelist.add(cosmetic);
+                Log.d("Dddddddddddddd",cosmetic.toString());
             }
         }else if (fragNum == 2) {
-            cursor = cosmeticToolsdao.selectItemAll("favorite=?", new String[]{"1"});
+            cursor = cosmeticToolsdao.selectItemByFavorite(null, null);
             while (cursor.moveToNext()){
                 UserCosmeticTools item = new UserCosmeticTools(cursor.getInt(0), cursor.getString(1), cursor.getString(2),
                         cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getInt(6),
@@ -160,16 +171,17 @@ public class MyItemList extends Fragment {
                 favoritelist.add(item);
             }
         }else if (fragNum == 3) {
-            cursor = lensdao.selectItemAll("favorite=?", new String[]{"1"});
+            cursor = lensdao.selectItemByFavorite(null, null);
             while (cursor.moveToNext()){
                 UserLens item = new UserLens(cursor.getInt(0), cursor.getString(1), cursor.getString(2),
                         cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getInt(6),
                         cursor.getInt(7));
                 favoritelist.add(item);
             }
-        }
+        };
 
         if(favoritelist.size()>0){  //list에 내용이 있을 때
+
             MainActivity.emptyTV.setVisibility(View.GONE);
         }else{
             if(MainActivity.emptyTV.getVisibility()==View.GONE){
@@ -206,7 +218,7 @@ public class MyItemList extends Fragment {
 
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(myItemList.getContext(), DetailViewActivity.class);
+                    Intent intent = new Intent(myItemList.getActivity(), DetailViewActivity.class);
                     ItemVO itemVO = list.get(myItemList.recyclerView.getChildAdapterPosition(v));
                     num = "";
                     if(myItemList.fragNum == 1){
@@ -243,16 +255,20 @@ public class MyItemList extends Fragment {
 
                 viewHolder.checkLayout.setVisibility(dataItem.getVisible());
                 viewHolder.checkBox.setText(Integer.toString(dataItem.get_id()));
-
+                Log.d("checkBoxId", (String) viewHolder.checkBox.getText());
                 viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         dataItem.setChecked(isChecked);
                         //여기서 선택한 체크박스 어떤건지 체크하고 어레이 리스트 만들어서 메인엑티비티로 보내기;
-                        for(int i=0; i<list.size(); i++){
-                            UserCosmetic itemVO= (UserCosmetic)list.get(i);
+                        if(isChecked == true){
+                            Log.d("buttonView", (String) buttonView.getText());
+
+                            Message message = Message.obtain(myItemList.toolbarHandler,3, buttonView.getText());
+                            myItemList.toolbarHandler.sendMessage(message);
 
                         }
+
                     }
                 });
                 viewHolder.imgView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -261,15 +277,6 @@ public class MyItemList extends Fragment {
                         Log.d("recyclerviewCount",recyclerView.getChildCount()+"..");
                         isDelMode = !isDelMode;
                         if(isDelMode == true){
-                            Message message = Message.obtain(myItemList.toolbarHandler,1, null);
-                            myItemList.toolbarHandler.sendMessage(message);
-                        }else{
-                            Message message = Message.obtain(myItemList.toolbarHandler,2, null);
-                            myItemList.toolbarHandler.sendMessage(message);
-                        }
-
-                        if(isDelMode == true){
-
                             Message message = Message.obtain(myItemList.toolbarHandler,1, null);
                             myItemList.toolbarHandler.sendMessage(message);
                         }else{
@@ -385,6 +392,7 @@ public class MyItemList extends Fragment {
                             }
                         }
                         notifyDataSetChanged();
+
                         return true;
                     }
                 });
@@ -447,31 +455,6 @@ public class MyItemList extends Fragment {
                 bookmarkView=itemView.findViewById(R.id.item_bookmark);
                 checkLayout = itemView.findViewById(R.id.item_checkbox_layout);
                 checkBox = itemView.findViewById(R.id.item_checked);
-
-
-                checkBox.setOnCheckedChangeListener(this);
-
-
-
-
-
-                if(checkLayout.getVisibility()==View.VISIBLE){
-
-                }
-
-
-               /* checkBox.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Snackbar.make(cardView,"선택한 카드를 삭제하시겠습니까?",Snackbar.LENGTH_LONG).setAction("선택 삭제", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                            }
-                        });
-                    }
-                });*/
-
                 bookmarkView.setOnClickListener(this);
             }
 
@@ -480,14 +463,14 @@ public class MyItemList extends Fragment {
             @Override
             public void onClick(View v) {
                 Drawable temp = bookmarkView.getDrawable();
-                Drawable temp1 = myItemList.getContext().getResources().getDrawable(R.drawable.book_mark_on_2);
+                Drawable temp1 = myItemList.getActivity().getResources().getDrawable(R.drawable.book_mark_on_2);
                 ItemVO itemVO = list.get(getAdapterPosition());
                 Bitmap tmpBitmap = ((BitmapDrawable)temp).getBitmap();
                 Bitmap tmpBitmap1 = ((BitmapDrawable)temp1).getBitmap();
 
                 if(myItemList.fragNum == 1){
                     UserCosmetic dataItem = (UserCosmetic) itemVO;
-                    UserCosmeticDAO userCosmeticDAO = new UserCosmeticDAO(myItemList.getContext());
+                    UserCosmeticDAO userCosmeticDAO = new UserCosmeticDAO(myItemList.getActivity());
                     if(!tmpBitmap.equals(tmpBitmap1)){
                         UserCosmetic dto = (UserCosmetic) itemVO;
                         Log.d(TAG, "favorite 전: "+dto.toString());
@@ -507,7 +490,7 @@ public class MyItemList extends Fragment {
                     }
                 }else if(myItemList.fragNum == 2)            {
                     UserCosmeticTools dataItem = (UserCosmeticTools) itemVO;
-                    UserCosmeticToolsDAO userCosmeticToolsDAO = new UserCosmeticToolsDAO(myItemList.getContext());
+                    UserCosmeticToolsDAO userCosmeticToolsDAO = new UserCosmeticToolsDAO(myItemList.getActivity());
                     if(!tmpBitmap.equals(tmpBitmap1)){
                         UserCosmeticTools dto = (UserCosmeticTools) itemVO;
                         dto.setFavorite(1);
@@ -523,7 +506,7 @@ public class MyItemList extends Fragment {
                     }
                 }else if(myItemList.fragNum == 3)            {
                     UserLens dataItem = (UserLens) itemVO;
-                    UserLensDAO userLensDAO = new UserLensDAO(myItemList.getContext());
+                    UserLensDAO userLensDAO = new UserLensDAO(myItemList.getActivity());
                     if(!tmpBitmap.equals(tmpBitmap1)){
                         UserLens dto = (UserLens) itemVO;
                         dto.setFavorite(1);
@@ -551,7 +534,7 @@ public class MyItemList extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         recyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_my_item_list, container, false);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new MyAdapter(this);
         adapter.setList(list);
         recyclerView.setAdapter(adapter);
@@ -580,6 +563,18 @@ public class MyItemList extends Fragment {
     public void onResume() {
         super.onResume();
         getListDatas();
+        adapter.setList(list);
+        adapter.notifyDataSetChanged();
+    }
+
+    public void returnList(){
+        getListDatas();
+        if(adapter == null){
+            Log.d("dddddddddd","널입니다.");
+        }else {
+            Log.d("dddddddddd","널dk입니다.");
+        }
+        adapter = new MyAdapter(this);
         adapter.setList(list);
         adapter.notifyDataSetChanged();
     }

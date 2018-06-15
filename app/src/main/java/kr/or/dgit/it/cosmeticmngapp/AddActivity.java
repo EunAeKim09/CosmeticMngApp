@@ -303,7 +303,7 @@ public class AddActivity extends AppCompatActivity {
     }
 
     private void sendPicture(Uri imgUri) {
-        String imagePath = getRealPathFromURI(imgUri); // path 경로
+        imagePath = getRealPathFromURI(imgUri); // path 경로
         ExifInterface exif = null;
         try {
             exif = new ExifInterface(imagePath);
@@ -508,6 +508,7 @@ public class AddActivity extends AppCompatActivity {
         }else if (imagePath != null ){
             cosImg = imagePath;
         }
+        Log.d("imgPath",imagePath+"..."+currentPhotoPath+"................");
 
         if(cosName.equals("")||cosName.isEmpty()||cosOpenDate.equals("")||cosOpenDate.isEmpty()||cosEndDate.equals("")||cosEndDate.isEmpty()){
             Toast.makeText(AddActivity.this,"이름,개봉일,교체권장일을 입력해주세요.",Toast.LENGTH_SHORT).show();
