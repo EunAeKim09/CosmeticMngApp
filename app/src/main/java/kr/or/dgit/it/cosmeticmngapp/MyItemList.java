@@ -11,9 +11,13 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.CardView;
@@ -54,16 +58,30 @@ public class MyItemList extends Fragment {
     private UserLensDAO lensdao;
     List<CardView> linearLayoutList ;
 
+    Handler toolbarHandler;
+
     private List<ItemVO> list;
     private List<ItemVO> favoritelist;
     int fragNum;
     public MyAdapter adapter;
     private UserCosmeticDAO userCosmeticDAO;
 
+
+
+
+
     ActionBar actionBar;
 
     public static MyItemList newInstance() {
         return new MyItemList();
+    }
+
+    public Handler getToolbarHandler() {
+        return toolbarHandler;
+    }
+
+    public void setToolbarHandler(Handler toolbarHandler) {
+        this.toolbarHandler = toolbarHandler;
     }
 
     @Override
@@ -218,6 +236,118 @@ public class MyItemList extends Fragment {
                 viewHolder.nameView.setText(dataItem.getName());
                 viewHolder.openDateView.setText(dataItem.getOpenDate());
                 viewHolder.endDateView.setText(dataItem.getEndDate());
+
+                if(dataItem.getImg() != null){
+                    viewHolder.imgView.setImageBitmap(resize(dataItem.getImg()));//이미지 뷰에 비트맵 넣기
+                }
+
+                viewHolder.checkLayout.setVisibility(dataItem.getVisible());
+                viewHolder.checkBox.setText(Integer.toString(dataItem.get_id()));
+
+                viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        dataItem.setChecked(isChecked);
+                        //여기서 선택한 체크박스 어떤건지 체크하고 어레이 리스트 만들어서 메인엑티비티로 보내기;
+                        for(int i=0; i<list.size(); i++){
+                            UserCosmetic itemVO= (UserCosmetic)list.get(i);
+
+                        }
+                    }
+                });
+                viewHolder.imgView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        Log.d("recyclerviewCount",recyclerView.getChildCount()+"..");
+                        isDelMode = !isDelMode;
+                        if(isDelMode == true){
+                            Message message = Message.obtain(myItemList.toolbarHandler,1, null);
+                            myItemList.toolbarHandler.sendMessage(message);
+                        }else{
+                            Message message = Message.obtain(myItemList.toolbarHandler,2, null);
+                            myItemList.toolbarHandler.sendMessage(message);
+                        }
+
+                        if(isDelMode == true){
+
+                            Message message = Message.obtain(myItemList.toolbarHandler,1, null);
+                            myItemList.toolbarHandler.sendMessage(message);
+                        }else{
+                            Message message = Message.obtain(myItemList.toolbarHandler,2, null);
+                            myItemList.toolbarHandler.sendMessage(message);
+                        }
+
+
+                        for(int i=0; i<list.size(); i++){
+                            UserCosmetic itemVO= (UserCosmetic)list.get(i);
+                            ArrayList<UserCosmetic> itemVOS = new ArrayList<UserCosmetic>();
+                            if(isDelMode == true){
+                                itemVO.setVisible(View.VISIBLE);
+
+
+                            }else {
+                                itemVO.setVisible(View.GONE);
+                                itemVO.setChecked(false);
+
+                            }
+                        }
+                        notifyDataSetChanged();
+                        return true;
+                    }
+                });
+            }else if(myItemList.fragNum == 2){
+                UserCosmeticTools dataItem=(UserCosmeticTools)itemVO;
+                viewHolder.nameView.setText(dataItem.getName());
+                viewHolder.openDateView.setText(dataItem.getOpenDate());
+                viewHolder.endDateView.setText(dataItem.getEndDate());
+                if(dataItem.getImg() != null){
+                    viewHolder.imgView.setImageBitmap(resize(dataItem.getImg()));//이미지 뷰에 비트맵 넣기
+                }
+
+                viewHolder.checkLayout.setVisibility(dataItem.getVisible());
+                viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                        dataItem.setChecked(isChecked);
+
+                    }
+                });
+                viewHolder.imgView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        Log.d("recyclerviewCount",recyclerView.getChildCount()+"..");
+                        isDelMode = !isDelMode;
+                        if(isDelMode == true){
+                            Message message = Message.obtain(myItemList.toolbarHandler,1, null);
+                            myItemList.toolbarHandler.sendMessage(message);
+                        }else{
+                            Message message = Message.obtain(myItemList.toolbarHandler,2, null);
+                            myItemList.toolbarHandler.sendMessage(message);
+                        }
+
+
+
+                        for(int i=0; i<list.size(); i++){
+                            UserCosmetic itemVO= (UserCosmetic)list.get(i);
+                            ArrayList<UserCosmetic> itemVOS = new ArrayList<UserCosmetic>();
+                            if(isDelMode == true){
+                                itemVO.setVisible(View.VISIBLE);
+
+                            }else {
+                                itemVO.setVisible(View.GONE);
+                                itemVO.setChecked(false);
+                            }
+                        }
+                        notifyDataSetChanged();
+                        return true;
+                    }
+                });
+            }else if(myItemList.fragNum == 3){
+                UserLens dataItem=(UserLens)itemVO;
+                viewHolder.nameView.setText(dataItem.getName());
+                viewHolder.openDateView.setText(dataItem.getOpenDate());
+                viewHolder.endDateView.setText(dataItem.getEndDate());
                 if(dataItem.getImg() != null){
                     viewHolder.imgView.setImageBitmap(resize(dataItem.getImg()));//이미지 뷰에 비트맵 넣기
                 }
@@ -234,9 +364,19 @@ public class MyItemList extends Fragment {
                     public boolean onLongClick(View v) {
                         Log.d("recyclerviewCount",recyclerView.getChildCount()+"..");
                         isDelMode = !isDelMode;
+                        if(isDelMode == true){
+                            Message message = Message.obtain(myItemList.toolbarHandler,1, null);
+                            myItemList.toolbarHandler.sendMessage(message);
+                        }else{
+                            Message message = Message.obtain(myItemList.toolbarHandler,2, null);
+                            myItemList.toolbarHandler.sendMessage(message);
+                        }
+
+
 
                         for(int i=0; i<list.size(); i++){
                             UserCosmetic itemVO= (UserCosmetic)list.get(i);
+                            ArrayList<UserCosmetic> itemVOS = new ArrayList<UserCosmetic>();
                             if(isDelMode == true){
                                 itemVO.setVisible(View.VISIBLE);
 
@@ -248,22 +388,6 @@ public class MyItemList extends Fragment {
                         return true;
                     }
                 });
-            }else if(myItemList.fragNum == 2){
-                UserCosmeticTools dataItem=(UserCosmeticTools)itemVO;
-                viewHolder.nameView.setText(dataItem.getName());
-                viewHolder.openDateView.setText(dataItem.getOpenDate());
-                viewHolder.endDateView.setText(dataItem.getEndDate());
-                if(dataItem.getImg() != null){
-                    viewHolder.imgView.setImageBitmap(resize(dataItem.getImg()));//이미지 뷰에 비트맵 넣기
-                }
-            }else if(myItemList.fragNum == 3){
-                UserLens dataItem=(UserLens)itemVO;
-                viewHolder.nameView.setText(dataItem.getName());
-                viewHolder.openDateView.setText(dataItem.getOpenDate());
-                viewHolder.endDateView.setText(dataItem.getEndDate());
-                if(dataItem.getImg() != null){
-                    viewHolder.imgView.setImageBitmap(resize(dataItem.getImg()));//이미지 뷰에 비트맵 넣기
-                }
             }
         }
 
@@ -298,12 +422,14 @@ public class MyItemList extends Fragment {
             return Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), matrix, true); // 이미지와 Matrix 를 셋팅해서 Bitmap 객체 생성
         }
 
+
+
         @Override
         public int getItemCount() {
             return list.size();
         }
 
-        private class DataViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private class DataViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
             public TextView nameView;
             public TextView openDateView;
             public TextView endDateView;
@@ -311,7 +437,6 @@ public class MyItemList extends Fragment {
             public ImageView bookmarkView;
             public LinearLayout checkLayout;
             public CheckBox checkBox;
-            public CardView cardView;
 
             public DataViewHolder(View itemView){
                 super(itemView);
@@ -322,15 +447,35 @@ public class MyItemList extends Fragment {
                 bookmarkView=itemView.findViewById(R.id.item_bookmark);
                 checkLayout = itemView.findViewById(R.id.item_checkbox_layout);
                 checkBox = itemView.findViewById(R.id.item_checked);
-                cardView = itemView.findViewById(R.id.card_view);
 
-                Toolbar toolbar = itemView.findViewById(R.id.toolbar);
+
+                checkBox.setOnCheckedChangeListener(this);
+
+
+
+
 
                 if(checkLayout.getVisibility()==View.VISIBLE){
-                    
+
                 }
+
+
+               /* checkBox.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Snackbar.make(cardView,"선택한 카드를 삭제하시겠습니까?",Snackbar.LENGTH_LONG).setAction("선택 삭제", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                            }
+                        });
+                    }
+                });*/
+
                 bookmarkView.setOnClickListener(this);
             }
+
+
 
             @Override
             public void onClick(View v) {
@@ -393,6 +538,11 @@ public class MyItemList extends Fragment {
                         bookmarkView.setImageResource(R.drawable.book_mark_off);
                     }
                 }
+            }
+
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+               Log.d("checked",compoundButton.toString()+"..");
             }
         }
     }

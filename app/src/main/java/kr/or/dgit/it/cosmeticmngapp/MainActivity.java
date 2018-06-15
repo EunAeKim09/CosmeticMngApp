@@ -3,11 +3,17 @@ package kr.or.dgit.it.cosmeticmngapp;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.AlarmManager;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.Handler;
+import android.os.Message;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -16,9 +22,26 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
+import kr.or.dgit.it.cosmeticmngapp.dao.UserCosmeticDAO;
+import kr.or.dgit.it.cosmeticmngapp.dao.UserCosmeticToolsDAO;
+import kr.or.dgit.it.cosmeticmngapp.dao.UserLensDAO;
 import kr.or.dgit.it.cosmeticmngapp.db.DBhelper;
+
+import static kr.or.dgit.it.cosmeticmngapp.R.string.addAlldel;
 
 public class MainActivity extends android.support.v7.app.AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private static final String TAG = "Main";
@@ -29,6 +52,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
     public static TextView emptyTV;
     private MyItemList fragment;
     AlertDialog alertDialog;
+    private BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(android.os.Bundle savedInstanceState) {
@@ -57,6 +81,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
         navigationView.setNavigationItemSelectedListener(this);
 
         MyItemList fragment = MyItemList.newInstance();
+        fragment.setToolbarHandler(toolbarHandler);
         Bundle bundle = new Bundle();
         bundle.putInt("frag", 1);
         fragment.setArguments(bundle);
@@ -128,6 +153,11 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
 
         setTitleName();
         fragment = MyItemList.newInstance();
+        fragment.setToolbarHandler(toolbarHandler);
+        Bundle bundle = new Bundle();
+        bundle.putInt("frag", fragNum);
+        fragment.setArguments(bundle);
+        fragment.getListDatas();
 
         if(fragNum == 4){
             Fragment settingFragment = new SettingFragment();
@@ -167,6 +197,29 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
                 Intent intentRegister = new Intent(this, AddActivity.class);
                 startActivity(intentRegister);
                 return true;
+            case  R.id.delIcon:
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setIcon(R.drawable.trash);
+                builder.setTitle("삭제");
+                builder.setMessage("정말 삭제 하시겠습니까?");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(getApplicationContext(),"삭제합니다.",Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(getApplicationContext(),"취소하셨습니다.",Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                alertDialog=builder.create();
+                alertDialog.show();
+
+
+
             case R.id.favoriteIcon:
                 fragment = MyItemList.newInstance();
                 if(favorite==0){
@@ -211,4 +264,104 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
         DBhelper.getInstance(this).dbClose();
     }
 
+    Handler toolbarHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            if(msg.what == 1){
+                Toast.makeText(getApplicationContext(),"1111",Toast.LENGTH_SHORT).show();//툴바 바꾸기 ~~
+
+
+            }else if(msg.what == 2){
+                Toast.makeText(getApplicationContext(),"2222",Toast.LENGTH_SHORT).show();//툴바 바꾸기 ~~
+            }
+        }
+    };
+
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        toolbarHandler =  new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                if(msg.what==1){
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                    actionBar.setDisplayShowTitleEnabled(false);
+                    getSupportActionBar().setCustomView(R.layout.all_delete_button);
+
+                    menu.removeItem(android.R.id.home);
+                    menu.removeItem(R.id.searchIcon);
+                    menu.removeItem(R.id.registerIcon);
+                    android.view.MenuInflater inflater = getMenuInflater();
+                    inflater.inflate(R.menu.menu_del ,menu);
+                }
+                if(msg.what==2){
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                    actionBar.setDisplayShowTitleEnabled(true);
+
+                    menu.removeItem(R.id.delIcon);
+                    android.view.MenuInflater inflater = getMenuInflater();
+                    inflater.inflate(R.menu.menu_set ,menu);
+                }
+            }
+        };
+        /*if(toolbarHandler.hasMessages(1)){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            actionBar.setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setCustomView(R.layout.all_delete_button);
+
+            menu.removeItem(android.R.id.home);
+            menu.removeItem(R.id.searchIcon);
+            menu.removeItem(R.id.registerIcon);
+            android.view.MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.menu_del ,menu);
+        }else if(toolbarHandler.hasMessages(2)){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowTitleEnabled(true);
+
+            menu.removeItem(R.id.delIcon);
+            android.view.MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.menu_set ,menu);
+        }*/
+/*        Handler toolbarHandler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                if(msg.what==1){
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                    actionBar.setDisplayShowTitleEnabled(false);
+                    getSupportActionBar().setCustomView(R.layout.all_delete_button);
+
+                    menu.removeItem(android.R.id.home);
+                    menu.removeItem(R.id.searchIcon);
+                    menu.removeItem(R.id.registerIcon);
+                    android.view.MenuInflater inflater = getMenuInflater();
+                    inflater.inflate(R.menu.menu_del ,menu);
+                }
+                if(msg.what==2){
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                    actionBar.setDisplayShowTitleEnabled(true);
+
+                    menu.removeItem(R.id.delIcon);
+                    android.view.MenuInflater inflater = getMenuInflater();
+                    inflater.inflate(R.menu.menu_set ,menu);
+                }
+            }
+        };*/
+      return true;
+    }
+
+    Handler toolbarHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            if(msg.what == 1){
+                Toast.makeText(getApplicationContext(),"1111",Toast.LENGTH_SHORT).show();//툴바 바꾸기 ~~
+
+
+
+            }else if(msg.what == 2){
+                Toast.makeText(getApplicationContext(),"2222",Toast.LENGTH_SHORT).show();//툴바 바꾸기 ~~
+
+
+            }
+        }
+    };
 }
