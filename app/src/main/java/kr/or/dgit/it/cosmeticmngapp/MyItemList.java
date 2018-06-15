@@ -10,6 +10,8 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -54,6 +56,8 @@ public class MyItemList extends Fragment {
     private UserLensDAO lensdao;
     List<CardView> linearLayoutList ;
 
+    Handler toolbarHandler;
+
     private List<ItemVO> list;
     int fragNum;
     public MyAdapter adapter;
@@ -63,6 +67,14 @@ public class MyItemList extends Fragment {
 
     public static MyItemList newInstance() {
         return new MyItemList();
+    }
+
+    public Handler getToolbarHandler() {
+        return toolbarHandler;
+    }
+
+    public void setToolbarHandler(Handler toolbarHandler) {
+        this.toolbarHandler = toolbarHandler;
     }
 
     @Override
@@ -197,6 +209,14 @@ public class MyItemList extends Fragment {
                     public boolean onLongClick(View v) {
                         Log.d("recyclerviewCount",recyclerView.getChildCount()+"..");
                         isDelMode = !isDelMode;
+                        if(isDelMode == true){
+                            Message message = Message.obtain(myItemList.toolbarHandler,1, null);
+                            myItemList.toolbarHandler.sendMessage(message);
+                        }else{
+                            Message message = Message.obtain(myItemList.toolbarHandler,2, null);
+                            myItemList.toolbarHandler.sendMessage(message);
+                        }
+
 
 
                         for(int i=0; i<list.size(); i++){
@@ -262,6 +282,8 @@ public class MyItemList extends Fragment {
             return Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), matrix, true); // 이미지와 Matrix 를 셋팅해서 Bitmap 객체 생성
         }
 
+
+
         @Override
         public int getItemCount() {
             return list.size();
@@ -290,9 +312,7 @@ public class MyItemList extends Fragment {
 
                 Toolbar toolbar = itemView.findViewById(R.id.toolbar);
 
-                if(checkLayout.getVisibility()==View.VISIBLE){
-                    
-                }
+
 
                /* checkBox.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -308,6 +328,8 @@ public class MyItemList extends Fragment {
 
                 bookmarkView.setOnClickListener(this);
             }
+
+
 
             @Override
             public void onClick(View v) {
@@ -406,4 +428,6 @@ public class MyItemList extends Fragment {
         adapter.setList(list);
         adapter.notifyDataSetChanged();
     }
+
+
 }
