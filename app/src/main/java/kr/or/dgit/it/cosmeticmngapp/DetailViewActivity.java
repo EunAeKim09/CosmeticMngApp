@@ -568,13 +568,12 @@ public class DetailViewActivity extends AppCompatActivity{
             cosImg = imagePath;
         }
 
-        if(cosName.equals("")||cosName.isEmpty()||cosOpenDate.equals("")||cosOpenDate.isEmpty()||cosEndDate.equals("")||cosEndDate.isEmpty()||cosMemo.isEmpty()||cosMemo.equals("")){
-            Toast.makeText(DetailViewActivity.this,"이름,개봉일,교체권장일,메모를 입력해주세요.",Toast.LENGTH_SHORT).show();
+        if(cosName.equals("")||cosName.isEmpty()||cosOpenDate.equals("")||cosOpenDate.isEmpty()||cosEndDate.equals("")||cosEndDate.isEmpty()){
+            Toast.makeText(DetailViewActivity.this,"이름,개봉일,교체권장일을 입력해주세요.",Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (MainActivity.fragNum == 1) {
-
             UserCosmetic dto = new UserCosmetic();
             dto.setCate_id(cosId);
             dto.setEndDate(cosEndDate);
@@ -595,6 +594,7 @@ public class DetailViewActivity extends AppCompatActivity{
             dto.setMemo(cosMemo);
             dto.setName(cosName);
             dto.setFavorite(0);
+            dto.set_id(Integer.parseInt(num));
             cosmeticToolsdao.updateItem(dto);
         } else if (MainActivity.fragNum == 3) {
             UserLens dto = new UserLens();
@@ -605,6 +605,7 @@ public class DetailViewActivity extends AppCompatActivity{
             dto.setMemo(cosMemo);
             dto.setName(cosName);
             dto.setFavorite(0);
+            dto.set_id(Integer.parseInt(num));
             lensdao.updateItem(dto);
         }
         finish();
