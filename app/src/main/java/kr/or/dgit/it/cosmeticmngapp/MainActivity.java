@@ -179,6 +179,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
         Bundle bundle = new Bundle();
         bundle.putInt("frag", fragNum);
         fragment.setArguments(bundle);
+        Log.d("nasdfasdfsdfnnn","졸라망함............1");
         fragment.getListDatas();
 
 
@@ -192,6 +193,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
 //            Bundle bundle1 = new Bundle();
             bundle.putInt("frag", fragNum);
             fragment.setArguments(bundle);
+            Log.d("nasdfasdfsdfnnn","졸라망함............2");
             fragment.getListDatas();
             getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
         }

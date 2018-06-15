@@ -553,12 +553,16 @@ public class MyItemList extends Fragment {
     public void onResume() {
         super.onResume();
         getListDatas();
+        Log.d("nasdfasdfsdfnnn","졸라망함...........56465."); //이게 즐겨찾기 안되는 원인.............
+        //페이버릿이 눌려졌냐 안눌러졌다
+        
         adapter.setList(list);
         adapter.notifyDataSetChanged();
     }
 
     public void returnList(){
         getListDatas();
+        Log.d("nasdfasdfsdfnnn","졸라망함............3423");
         if(adapter == null){
             Log.d("dddddddddd","널입니다.");
         }else {
