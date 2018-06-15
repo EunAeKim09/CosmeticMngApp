@@ -95,7 +95,7 @@ public class MyItemList extends Fragment {
         Bundle extra = getArguments();
         fragNum = extra.getInt("frag");
         Log.d("nasdfasdfsdfnnn","졸라망함............");
-        getListDatas();
+        //getListDatas();
     }
 
     public void getListDatas() {
@@ -129,7 +129,7 @@ public class MyItemList extends Fragment {
             }
         }
 
-        if(list.size()>0){  //list에 내용이 있을 때
+        /*if(list.size()>0){  //list에 내용이 있을 때
             Log.d("size",list.size()+"..");
             MainActivity.emptyTV.setVisibility(View.GONE);
         }else{
@@ -140,7 +140,7 @@ public class MyItemList extends Fragment {
                 MainActivity.emptyTV.setText("아이템을 등록해주세요.");
             }
 
-        }
+        }*/
     }
 
     public void getfavoriteListDatas() {
