@@ -11,13 +11,13 @@
         />-->
     <item
         android:id="@+id/searchIcon"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:icon="@drawable/search"
         android:title="searchIcon"
         />
     <item
         android:id="@+id/registerIcon"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:icon="@drawable/write_1"
         android:title="registerIcon"/>
 </menu>

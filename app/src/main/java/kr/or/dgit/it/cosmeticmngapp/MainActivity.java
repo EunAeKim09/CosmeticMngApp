@@ -13,6 +13,8 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.AdaptiveIconDrawable;
+import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -70,13 +72,14 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
     UserCosmeticToolsDAO userCosmeticToolsDAO;
     ArrayList<Integer> numberlist = new ArrayList<>();
     int favorite = 0;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(android.os.Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: ");
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         userCosmeticDAO = new UserCosmeticDAO(this);
@@ -365,7 +368,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
 
         if (showcheckbox == true) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-            actionBar.setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
             getSupportActionBar().setDisplayShowCustomEnabled(true);
             getSupportActionBar().setCustomView(R.layout.all_delete_button);
 
@@ -375,20 +378,20 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
           //  menu.removeItem(R.id.favoriteIcon);
             android.view.MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.menu_del, menu);
-        } else {
-          //  actionBar.setDisplayShowCustomEnabled(true);
-            actionBar.setDisplayShowTitleEnabled(true);
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(DrawerArrowDrawable.ARROW_DIRECTION_LEFT);
-          // actionBar.setHomeAsUpIndicator(getDrawerToggleDelegate().getThemeUpIndicator()); //이렇게 하니까 둘다 바꿔짐.. 메뉴 3줄이 아니라 뒤로가는걸로..ㅠㅅㅂ
+        } else if(showcheckbox == false) {
 
+            getSupportActionBar().setDisplayShowTitleEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowCustomEnabled(false);
-            actionBar.setDisplayShowTitleEnabled(true);
 
+
+            drawerLayout = findViewById(R.id.drawerlayout);
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.openT, R.string.closeT);
+            drawerLayout.addDrawerListener(toggle);
+            toggle.syncState();
 
             menu.removeItem(R.id.delIcon);
-            android.view.MenuInflater inflater = getMenuInflater();
-            inflater.inflate(R.menu.menu_set, menu);
+      
         }
         return true;
     }
