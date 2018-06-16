@@ -106,7 +106,8 @@
         android:layout_toRightOf="@+id/openDay"
         android:layout_below="@+id/tvName"
         android:inputType="date"
-        android:focusableInTouchMode="false"/>
+        android:focusableInTouchMode="false"
+        android:onClick="opendateClick"/>
     <TextView
         android:id="@+id/endDay"
         android:layout_width="@dimen/inputWidth"

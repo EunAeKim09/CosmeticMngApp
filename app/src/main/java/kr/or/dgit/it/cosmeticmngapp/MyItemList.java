@@ -94,8 +94,7 @@ public class MyItemList extends Fragment {
 
         Bundle extra = getArguments();
         fragNum = extra.getInt("frag");
-        Log.d("nasdfasdfsdfnnn","졸라망함............");
-        //getListDatas();
+        getListDatas();
     }
 
     public void getListDatas() {
@@ -129,7 +128,7 @@ public class MyItemList extends Fragment {
             }
         }
 
-        /*if(list.size()>0){  //list에 내용이 있을 때
+        if(list.size()>0){  //list에 내용이 있을 때
             Log.d("size",list.size()+"..");
             MainActivity.emptyTV.setVisibility(View.GONE);
         }else{
@@ -140,21 +139,21 @@ public class MyItemList extends Fragment {
                 MainActivity.emptyTV.setText("아이템을 등록해주세요.");
             }
 
-        }*/
+        }
     }
 
-    public void getfavoriteListDatas() {
-        Bundle extra = getArguments();
+    /*public void getfavoriteListDatas() {
+        *//*Bundle extra = getArguments();
         fragNum = extra.getInt("frag");
         cosmeticdao = new UserCosmeticDAO(getActivity());
         cosmeticToolsdao = new UserCosmeticToolsDAO(getActivity());
         lensdao = new UserLensDAO(getActivity());
-
+*//*
 //        list = null;
         favoritelist=new ArrayList<>();
         Cursor cursor=null;
         if (fragNum == 1) {
-            /*Cursor cursor = db.rawQuery("select _id, name, img, openDate, endDate, memo, favorite, cate_id  from userCosmetic order by name", null);*/
+            *//*Cursor cursor = db.rawQuery("select _id, name, img, openDate, endDate, memo, favorite, cate_id  from userCosmetic order by name", null);*//*
             cursor = cosmeticdao.selectItemByFavorite();
             while (cursor.moveToNext()){
                 UserCosmetic cosmetic = new UserCosmetic(cursor.getInt(0), cursor.getString(1), cursor.getString(2),
@@ -190,7 +189,7 @@ public class MyItemList extends Fragment {
             }
             MainActivity.emptyTV.setText("즐겨찾는 아이템이 없습니다.");
         }
-    }
+    }*/
 
     public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         private MyItemList myItemList;
@@ -553,8 +552,8 @@ public class MyItemList extends Fragment {
     public void onResume() {
         super.onResume();
         getListDatas();
-        Log.d("nasdfasdfsdfnnn","졸라망함...........56465."); //이게 즐겨찾기 안되는 원인.............
-        //페이버릿이 눌려졌냐 안눌러졌다
+       /* Log.d("nasdfasdfsdfnnn","졸라망함...........56465."); //이게 즐겨찾기 안되는 원인.............
+        //페이버릿이 눌려졌냐 안눌러졌다*/
 
         adapter.setList(list);
         adapter.notifyDataSetChanged();

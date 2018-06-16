@@ -418,6 +418,13 @@ public class DetailViewActivity extends AppCompatActivity{
                 datedialog.dismiss();
             }
         });
+
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                datedialog.cancel();
+            }
+        });
         datedialog.show();
 
     }
@@ -548,6 +555,13 @@ public class DetailViewActivity extends AppCompatActivity{
             public void onClick(View v) {
                 endDate.setText(String.format("%d - %02d - %d", pYear, pMonth, pDate));
                 datedialog.dismiss();
+            }
+        });
+
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                datedialog.cancel();
             }
         });
         datedialog.show();
