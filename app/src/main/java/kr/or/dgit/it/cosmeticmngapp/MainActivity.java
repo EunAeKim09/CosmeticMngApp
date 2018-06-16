@@ -27,6 +27,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.graphics.drawable.DrawerArrowDrawable;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
@@ -235,23 +236,31 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
                         public void onClick(DialogInterface dialogInterface, int i) {
                             Toast.makeText(getApplicationContext(), "삭제합니다.", Toast.LENGTH_SHORT).show();
                             int num;
-                            if (fragNum == 1) {
-                                for (int a = 0; a < numberlist.size(); a++) {
-                                    num = numberlist.get(a);
-                                    Log.d("number::::::::::", num + "...................");
-                                    Log.d("fragment", fragment + "..");
-                                    userCosmeticDAO.deleteItemById(num);
+                            if (fragNum == 1 || fragNum == 2 || fragNum == 3) {
+                                    for (int a = 0; a < numberlist.size(); a++) {
+                                        num = numberlist.get(a);
+                                        Log.d("number::::::::::", num + "...................");
+                                        Log.d("fragment", fragment + "..");
+                                        if(fragNum == 1) {
+                                            userCosmeticDAO.deleteItemById(num);
+                                        }else  if(fragNum == 2){
+                                            userCosmeticToolsDAO.deleteItemById(num);
+                                        }else if(fragNum == 3){
+                                            userLensDAO.deleteItemById(num);
+                                        }
 
-                                    fragment = MyItemList.newInstance();
-                                    fragment.setToolbarHandler(toolbarHandler);
+                                        fragment = MyItemList.newInstance();
+                                        fragment.setToolbarHandler(toolbarHandler);
 
-                                    Bundle bundle1 = new Bundle();
-                                    bundle1.putInt("frag", fragNum);
-                                    fragment.setArguments(bundle1);
-                                    fragment.getListDatas();
-                                    getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                                        Bundle bundle1 = new Bundle();
+                                        bundle1.putInt("frag", fragNum);
+                                        fragment.setArguments(bundle1);
+                                        Message message = Message.obtain(toolbarHandler,2, null);
+                                        toolbarHandler.sendMessage(message);
+                                        fragment.getListDatas();
+                                        getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                                    }
 
-                                }
 
                             }
                         }
@@ -266,7 +275,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
                     alertDialog = builder.create();
                     alertDialog.show();
                 }
-            case R.id.favoriteIcon:
+            //case R.id.favoriteIcon:
             /*    getFragmentManager().beginTransaction().remove(fragment).commit();
                 fragment = MyItemList.newInstance();
                 fragment.setToolbarHandler(toolbarHandler);
@@ -363,13 +372,15 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
             menu.removeItem(android.R.id.home);
             menu.removeItem(R.id.searchIcon);
             menu.removeItem(R.id.registerIcon);
-            menu.removeItem(R.id.favoriteIcon);
+          //  menu.removeItem(R.id.favoriteIcon);
             android.view.MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.menu_del, menu);
         } else {
-            actionBar.setDisplayShowCustomEnabled(true);
+          //  actionBar.setDisplayShowCustomEnabled(true);
             actionBar.setDisplayShowTitleEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(DrawerArrowDrawable.ARROW_DIRECTION_LEFT);
+          // actionBar.setHomeAsUpIndicator(getDrawerToggleDelegate().getThemeUpIndicator()); //이렇게 하니까 둘다 바꿔짐.. 메뉴 3줄이 아니라 뒤로가는걸로..ㅠㅅㅂ
 
             getSupportActionBar().setDisplayShowCustomEnabled(false);
             actionBar.setDisplayShowTitleEnabled(true);

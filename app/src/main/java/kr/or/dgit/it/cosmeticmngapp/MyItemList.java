@@ -309,10 +309,18 @@ public class MyItemList extends Fragment {
                 }
 
                 viewHolder.checkLayout.setVisibility(dataItem.getVisible());
+                viewHolder.checkBox.setText(Integer.toString(dataItem.get_id()));
                 viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         dataItem.setChecked(isChecked);
+                        if(isChecked == true){
+                            Log.d("buttonView", (String) buttonView.getText());
+
+                            Message message = Message.obtain(myItemList.toolbarHandler,3, buttonView.getText());
+                            myItemList.toolbarHandler.sendMessage(message);
+
+                        }
                     }
                 });
                 viewHolder.imgView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -328,7 +336,7 @@ public class MyItemList extends Fragment {
                             myItemList.toolbarHandler.sendMessage(message);
                         }
                         for(int i=0; i<list.size(); i++){
-                            UserCosmetic itemVO= (UserCosmetic)list.get(i);
+                            UserCosmeticTools itemVO= (UserCosmeticTools) list.get(i);
                             ArrayList<UserCosmetic> itemVOS = new ArrayList<UserCosmetic>();
                             if(isDelMode == true){
                                 itemVO.setVisible(View.VISIBLE);
@@ -352,10 +360,18 @@ public class MyItemList extends Fragment {
                 }
 
                 viewHolder.checkLayout.setVisibility(dataItem.getVisible());
+                viewHolder.checkBox.setText(Integer.toString(dataItem.get_id()));
                 viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         dataItem.setChecked(isChecked);
+                        if(isChecked == true){
+                            Log.d("buttonView", (String) buttonView.getText());
+
+                            Message message = Message.obtain(myItemList.toolbarHandler,3, buttonView.getText());
+                            myItemList.toolbarHandler.sendMessage(message);
+
+                        }
                     }
                 });
                 viewHolder.imgView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -371,7 +387,7 @@ public class MyItemList extends Fragment {
                             myItemList.toolbarHandler.sendMessage(message);
                         }
                         for(int i=0; i<list.size(); i++){
-                            UserCosmetic itemVO= (UserCosmetic)list.get(i);
+                            UserLens itemVO= (UserLens) list.get(i);
                             ArrayList<UserCosmetic> itemVOS = new ArrayList<UserCosmetic>();
                             if(isDelMode == true){
                                 itemVO.setVisible(View.VISIBLE);
@@ -441,10 +457,10 @@ public class MyItemList extends Fragment {
                 openDateView=itemView.findViewById(R.id.item_opendate);
                 endDateView=itemView.findViewById(R.id.item_deaddate);
                 imgView=itemView.findViewById(R.id.item_product);
-                bookmarkView=itemView.findViewById(R.id.item_bookmark);
+               // bookmarkView=itemView.findViewById(R.id.item_bookmark);
                 checkLayout = itemView.findViewById(R.id.item_checkbox_layout);
                 checkBox = itemView.findViewById(R.id.item_checked);
-                bookmarkView.setOnClickListener(this);
+//                bookmarkView.setOnClickListener(this);
             }
 
 
