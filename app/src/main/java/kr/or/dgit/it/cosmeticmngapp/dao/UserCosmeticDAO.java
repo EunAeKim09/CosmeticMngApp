@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import kr.or.dgit.it.cosmeticmngapp.db.DBhelper;
@@ -59,6 +60,14 @@ public class UserCosmeticDAO {
         db.delete(TABLE_NAME, COL_ID + "=?", new String[]{String.valueOf(id)});
     }
 
+    public void deleteItemByAll(){
+        db.delete(TABLE_NAME,null,null);
+    }
+
+    /*public void deleteItemBySelectId(HashMap<Object,String> map){
+        db.delete();
+    }*/
+
     public void updateItem(UserCosmetic item){
         ContentValues row = new ContentValues();
         row.put(COL_NAME, item.getName());
@@ -86,6 +95,11 @@ public class UserCosmeticDAO {
         return mCursor;
     }
 
+    public Cursor selectItemByFavorite(){
+        Cursor cursor = db.rawQuery("select  _id, name, img, openDate, endDate, memo, favorite, cate_id  from userCosmetic where favorite = 1", null);
+        return cursor;
+    }
+
     public List<UserCosmetic> selectAllUserCosmetic(){
         List<UserCosmetic> list = new ArrayList<>();
         Cursor cursor = db.rawQuery("select _id, name, img, openDate, endDate, memo, favorite, cate_id from userCosmetic", null);
@@ -108,4 +122,5 @@ public class UserCosmeticDAO {
 
         return list;
     }
+
 }

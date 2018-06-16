@@ -1,5 +1,7 @@
 package kr.or.dgit.it.cosmeticmngapp.dto;
 
+import android.view.View;
+
 public class UserCosmetic extends ItemVO{
     private int _id;
     private String name;
@@ -9,6 +11,8 @@ public class UserCosmetic extends ItemVO{
     private String memo;
     private int favorite;
     private int cate_id;
+    private int visible = View.GONE;
+    private boolean checked;
 
     public UserCosmetic() {    }
 
@@ -97,6 +101,22 @@ public class UserCosmetic extends ItemVO{
         this.cate_id = cate_id;
     }
 
+    public int getVisible() {
+        return visible;
+    }
+
+    public void setVisible(int visible) {
+        this.visible = visible;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
+
     @Override
     public String toString() {
         return "UserCosmetic{" +
@@ -108,6 +128,8 @@ public class UserCosmetic extends ItemVO{
                 ", memo='" + memo + '\'' +
                 ", favorite=" + favorite +
                 ", cate_id=" + cate_id +
+                ", visible=" + visible +
+                ", checked=" + checked +
                 '}';
     }
 

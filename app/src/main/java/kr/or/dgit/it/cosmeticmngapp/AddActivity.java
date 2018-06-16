@@ -37,6 +37,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.ArrayList;
@@ -86,6 +87,7 @@ public class AddActivity extends AppCompatActivity {
     private int cosId;
     private UserCosmeticToolsDAO userCosmeticToolsDAO;
     private UserLensDAO userLensDAO;
+    private SimpleDateFormat simpleDateFormat;
 
 
     @Override
@@ -301,7 +303,7 @@ public class AddActivity extends AppCompatActivity {
     }
 
     private void sendPicture(Uri imgUri) {
-        String imagePath = getRealPathFromURI(imgUri); // path 경로
+        imagePath = getRealPathFromURI(imgUri); // path 경로
         ExifInterface exif = null;
         try {
             exif = new ExifInterface(imagePath);
@@ -326,9 +328,7 @@ public class AddActivity extends AppCompatActivity {
 
         return cursor.getString(column_index);
     }
-
-
-
+    
     public void opendateClick(View view) {
         CalendarValue();
         datePicker.init(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(), new DatePicker.OnDateChangedListener() {
@@ -337,7 +337,13 @@ public class AddActivity extends AppCompatActivity {
                 pYear = year;
                 pMonth = monthOfYear + 1;
                 pDate = dayOfMonth;
-                openEditdate.setText(String.format("%d - %d - %d", pYear, pMonth, pDate));
+/*
+                String mDateFormat = "yyy - MM - dd";
+                simpleDateFormat = new SimpleDateFormat(mDateFormat);
+                simpleDateFormat.format(date);
+                openEditdate.setText(simpleDateFormat.toString());
+                openEditdate.setText(simpleDateFormat.format());*/
+                openEditdate.setText(String.format("%d - %02d - %d", pYear, pMonth, pDate));
             }
         });
 
@@ -345,12 +351,11 @@ public class AddActivity extends AppCompatActivity {
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openEditdate.setText(String.format("%d - %d - %d", pYear, pMonth, pDate));
+                openEditdate.setText(String.format("%d - %02d - %d", pYear, pMonth, pDate));
                 datedialog.dismiss();
             }
         });
         datedialog.show();
-
     }
 
     private void CalendarValue() {
@@ -427,6 +432,7 @@ public class AddActivity extends AppCompatActivity {
                     dur = adapter.getItem(i).getDurationY()*365;
                     break;
                 }
+                Log.d("getDurationM",adapter.getItem(i).getDurationM()+"..");
                 if (adapter.getItem(i).getDurationM() > 0) {
                     dur = adapter.getItem(i).getDurationM()*30;
                     break;
@@ -449,15 +455,15 @@ public class AddActivity extends AppCompatActivity {
         c.set(Calendar.MONTH, Integer.parseInt(dateArray[1]) - 1);
         c.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dateArray[2]) - 1);
 
-        c.add(Calendar.YEAR, 0);
-        c.add(Calendar.MONTH, 1);
+        c.add(Calendar.YEAR,0);
+        c.add(Calendar.MONTH, 0);
         c.add(Calendar.DAY_OF_MONTH, dur);
 
 
         pYear = c.get(Calendar.YEAR);
-        pMonth = c.get(Calendar.MONTH);
+        pMonth = c.get(Calendar.MONTH)+1;
         pDate = c.get(Calendar.DAY_OF_MONTH);
-        endEditdate.setText(String.format("%d - %d - %d", pYear, pMonth, pDate));
+        endEditdate.setText(String.format("%d - %02d - %d", pYear, pMonth, pDate));
     }
 
 
@@ -471,7 +477,7 @@ public class AddActivity extends AppCompatActivity {
                 pYear = year;
                 pMonth = monthOfYear + 1;
                 pDate = dayOfMonth;
-                endEditdate.setText(String.format("%d - %d - %d", pYear, pMonth, pDate));
+                endEditdate.setText(String.format("%d - %02d - %d", pYear, pMonth, pDate));
             }
         });
 
@@ -479,7 +485,7 @@ public class AddActivity extends AppCompatActivity {
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                endEditdate.setText(String.format("%d - %d - %d", pYear, pMonth, pDate));
+                endEditdate.setText(String.format("%d - %02d - %d", pYear, pMonth, pDate));
                 datedialog.dismiss();
             }
         });
@@ -498,9 +504,10 @@ public class AddActivity extends AppCompatActivity {
         }else if (imagePath != null ){
             cosImg = imagePath;
         }
+        Log.d("imgPath",imagePath+"..."+currentPhotoPath+"................");
 
-        if(cosName.equals("")||cosName.isEmpty()||cosOpenDate.equals("")||cosOpenDate.isEmpty()||cosEndDate.equals("")||cosEndDate.isEmpty()||cosMemo.isEmpty()||cosMemo.equals("")){
-            Toast.makeText(AddActivity.this,"이름,개봉일,교체권장일,메모를 입력해주세요.",Toast.LENGTH_SHORT).show();
+        if(cosName.equals("")||cosName.isEmpty()||cosOpenDate.equals("")||cosOpenDate.isEmpty()||cosEndDate.equals("")||cosEndDate.isEmpty()){
+            Toast.makeText(AddActivity.this,"이름,개봉일,교체권장일을 입력해주세요.",Toast.LENGTH_SHORT).show();
             return;
         }
 

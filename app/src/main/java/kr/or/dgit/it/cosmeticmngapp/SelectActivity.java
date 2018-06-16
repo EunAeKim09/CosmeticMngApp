@@ -239,6 +239,8 @@ public class SelectActivity extends AppCompatActivity {
         return list;
     }
 
+
+
     public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         private SelectActivity selectList;
         private List<ItemVO> list;

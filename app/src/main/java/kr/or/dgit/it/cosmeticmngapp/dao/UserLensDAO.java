@@ -43,6 +43,11 @@ public class UserLensDAO {
         }
     }
 
+    public Cursor selectItemByFavorite(String selection, String[] selectionArgs){
+        Cursor cursor = db.rawQuery("select * from userLens where favorite = 0", null);
+        return cursor;
+    }
+
     public void insertItem(UserLens item) {
         ContentValues row = new ContentValues();
         row.put(COL_NAME, item.getName());

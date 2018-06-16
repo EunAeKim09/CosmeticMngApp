@@ -406,7 +406,7 @@ public class DetailViewActivity extends AppCompatActivity{
                 pYear = year;
                 pMonth = monthOfYear + 1;
                 pDate = dayOfMonth;
-                openDate.setText(String.format("%d - %d - %d", pYear, pMonth, pDate));
+                openDate.setText(String.format("%d - %02d - %d", pYear, pMonth, pDate));
             }
         });
 
@@ -414,7 +414,7 @@ public class DetailViewActivity extends AppCompatActivity{
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openDate.setText(String.format("%d - %d - %d", pYear, pMonth, pDate));
+                openDate.setText(String.format("%d - %02d - %d", pYear, pMonth, pDate));
                 datedialog.dismiss();
             }
         });
@@ -444,7 +444,6 @@ public class DetailViewActivity extends AppCompatActivity{
         CharSequence info[] = new CharSequence[]{"직접 날짜 입력", "자동 입력"};
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         AlertDialog.Builder builder1 = builder.setItems(info, new DialogInterface.OnClickListener() {
-
 
             @Override
             public void onClick(final DialogInterface dialog, int which) {
@@ -519,14 +518,13 @@ public class DetailViewActivity extends AppCompatActivity{
         c.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dateArray[2]) - 1);
 
         c.add(Calendar.YEAR, 0);
-        c.add(Calendar.MONTH, 1);
+        c.add(Calendar.MONTH, 0);
         c.add(Calendar.DAY_OF_MONTH, dur);
 
-
         pYear = c.get(Calendar.YEAR);
-        pMonth = c.get(Calendar.MONTH);
+        pMonth = c.get(Calendar.MONTH)+1;
         pDate = c.get(Calendar.DAY_OF_MONTH);
-        endDate.setText(String.format("%d - %d - %d", pYear, pMonth, pDate));
+        endDate.setText(String.format("%d - %02d - %d", pYear, pMonth, pDate));
     }
 
 
@@ -540,7 +538,7 @@ public class DetailViewActivity extends AppCompatActivity{
                 pYear = year;
                 pMonth = monthOfYear + 1;
                 pDate = dayOfMonth;
-                endDate.setText(String.format("%d - %d - %d", pYear, pMonth, pDate));
+                endDate.setText(String.format("%d - %02d - %d", pYear, pMonth, pDate));
             }
         });
 
@@ -548,7 +546,7 @@ public class DetailViewActivity extends AppCompatActivity{
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                endDate.setText(String.format("%d - %d - %d", pYear, pMonth, pDate));
+                endDate.setText(String.format("%d - %02d - %d", pYear, pMonth, pDate));
                 datedialog.dismiss();
             }
         });
@@ -568,13 +566,12 @@ public class DetailViewActivity extends AppCompatActivity{
             cosImg = imagePath;
         }
 
-        if(cosName.equals("")||cosName.isEmpty()||cosOpenDate.equals("")||cosOpenDate.isEmpty()||cosEndDate.equals("")||cosEndDate.isEmpty()||cosMemo.isEmpty()||cosMemo.equals("")){
-            Toast.makeText(DetailViewActivity.this,"이름,개봉일,교체권장일,메모를 입력해주세요.",Toast.LENGTH_SHORT).show();
+        if(cosName.equals("")||cosName.isEmpty()||cosOpenDate.equals("")||cosOpenDate.isEmpty()||cosEndDate.equals("")||cosEndDate.isEmpty()){
+            Toast.makeText(DetailViewActivity.this,"이름,개봉일,교체권장일을 입력해주세요.",Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (MainActivity.fragNum == 1) {
-
             UserCosmetic dto = new UserCosmetic();
             dto.setCate_id(cosId);
             dto.setEndDate(cosEndDate);
@@ -595,6 +592,7 @@ public class DetailViewActivity extends AppCompatActivity{
             dto.setMemo(cosMemo);
             dto.setName(cosName);
             dto.setFavorite(0);
+            dto.set_id(Integer.parseInt(num));
             cosmeticToolsdao.updateItem(dto);
         } else if (MainActivity.fragNum == 3) {
             UserLens dto = new UserLens();
@@ -605,6 +603,7 @@ public class DetailViewActivity extends AppCompatActivity{
             dto.setMemo(cosMemo);
             dto.setName(cosName);
             dto.setFavorite(0);
+            dto.set_id(Integer.parseInt(num));
             lensdao.updateItem(dto);
         }
         finish();

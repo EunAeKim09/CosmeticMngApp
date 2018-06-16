@@ -76,6 +76,11 @@ public class UserCosmeticToolsDAO {
         db.update(TABLE_NAME, row, COL_ID +"=?", new String[]{String.valueOf(item.get_id())});
     }
 
+    public Cursor selectItemByFavorite(String selection, String[] selectionArgs){
+        Cursor cursor = db.rawQuery("select * from userCosmeticTools where favorite = 1", null);
+        return cursor;
+    }
+
     public Cursor selectItemAll(String selection, String[] selectionArgs){
         Log.d("TAG", "selectItemAll: "+db);
         Cursor mCursor = db.query(TABLE_NAME, COLUMNS, selection, selectionArgs,null,null,null);
