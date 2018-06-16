@@ -88,6 +88,7 @@ public class AddActivity extends AppCompatActivity {
     private UserCosmeticToolsDAO userCosmeticToolsDAO;
     private UserLensDAO userLensDAO;
     private SimpleDateFormat simpleDateFormat;
+    private TextView datedialogChangeTextView;
 
 
     @Override
@@ -331,6 +332,7 @@ public class AddActivity extends AppCompatActivity {
     
     public void opendateClick(View view) {
         CalendarValue();
+        datedialogChangeTextView.setText("개봉일을 설정해주세요.");
         datePicker.init(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(), new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -373,6 +375,7 @@ public class AddActivity extends AppCompatActivity {
         datedialog = new Dialog(this);
         datedialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         datedialog.setContentView(R.layout.calendar_numberpicker_layout);
+        datedialogChangeTextView = datedialog.findViewById(R.id.dialog_layout_text);
         confirmBtn = datedialog.findViewById(R.id.btn_dialog_confirm);
         cancelBtn = datedialog.findViewById(R.id.btn_dialog_cancel);
         datePicker = datedialog.findViewById(R.id.datepicker_dialog);

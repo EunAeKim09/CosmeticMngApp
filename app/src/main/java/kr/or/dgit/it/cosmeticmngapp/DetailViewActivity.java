@@ -78,6 +78,7 @@ public class DetailViewActivity extends AppCompatActivity{
     private int pMonth;
     private int pDate;
     AlertDialog alertDialog;
+    private TextView dateChangeTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -400,6 +401,7 @@ public class DetailViewActivity extends AppCompatActivity{
 
     public void opendateClick(View view) {
         CalendarValue();
+        dateChangeTextView.setText("개봉일을 설정해주세요.");
         datePicker.init(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(), new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -442,6 +444,7 @@ public class DetailViewActivity extends AppCompatActivity{
         datedialog = new Dialog(this);
         datedialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         datedialog.setContentView(R.layout.calendar_numberpicker_layout);
+        dateChangeTextView = datedialog.findViewById(R.id.dialog_layout_text);
         confirmBtn = datedialog.findViewById(R.id.btn_dialog_confirm);
         cancelBtn = datedialog.findViewById(R.id.btn_dialog_cancel);
         datePicker = datedialog.findViewById(R.id.datepicker_dialog);

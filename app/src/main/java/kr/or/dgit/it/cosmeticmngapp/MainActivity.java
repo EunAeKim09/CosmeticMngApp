@@ -67,6 +67,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
     AlertDialog alertDialog;
     private BottomNavigationView bottomNavigationView;
     boolean showcheckbox = false;
+    boolean showSetting = false;
     UserCosmeticDAO userCosmeticDAO;
     UserLensDAO userLensDAO;
     UserCosmeticToolsDAO userCosmeticToolsDAO;
@@ -104,7 +105,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
         android.support.design.widget.NavigationView navigationView = findViewById(R.id.navigation);
         navigationView.setNavigationItemSelectedListener(this);
 
-        MyItemList fragment = MyItemList.newInstance();
+       MyItemList fragment = MyItemList.newInstance();
         fragment.setToolbarHandler(toolbarHandler);
         Bundle bundle = new Bundle();
         bundle.putInt("frag", 1);
@@ -192,12 +193,16 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
 
 
             getFragmentManager().beginTransaction().replace(R.id.fragment_container, settingFragment).show(settingFragment).commit();
+
+
+
         } else {
 //            Bundle bundle1 = new Bundle();
             bundle.putInt("frag", fragNum);
             fragment.setArguments(bundle);
             fragment.getListDatas();
             getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+
         }
 
 
@@ -356,6 +361,13 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
                 Log.d(TAG, "handlerMassea13" + msg.obj + "입니다ㅏㅏㅏㅏㅏㅏㅏ");
                 numberlist.add(Integer.parseInt(String.valueOf(msg.obj)));
 
+            }else  if(msg.what == 4){
+                Toast.makeText(getApplicationContext(),"444444444",Toast.LENGTH_SHORT).show();
+                showSetting = true;
+
+            }else  if(msg.what == 5){
+                Toast.makeText(getApplicationContext(),"444444444",Toast.LENGTH_SHORT).show();
+                showSetting = false;
             }
             invalidateOptionsMenu();
         }
@@ -393,6 +405,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
             menu.removeItem(R.id.delIcon);
 
         }
+
         return true;
     }
 
