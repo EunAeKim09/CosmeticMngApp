@@ -72,6 +72,9 @@ public class MyItemList extends Fragment {
 
     ActionBar actionBar;
 
+    MainActivity mainActivity = MainActivity.newInstance();
+
+
     public static MyItemList newInstance() {
         return new MyItemList();
     }
@@ -84,6 +87,11 @@ public class MyItemList extends Fragment {
         this.toolbarHandler = toolbarHandler;
     }
 
+    boolean allChecked = false;
+
+
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,10 +100,24 @@ public class MyItemList extends Fragment {
         lensdao = new UserLensDAO(getActivity());
         lensdao.open();
 
+      //  mainActivity.setCheckedhandler(checkedhandler);
+
         Bundle extra = getArguments();
         fragNum = extra.getInt("frag");
         getListDatas();
     }
+
+    Handler checkedhandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            if(msg.what == 1){
+                    allChecked = true;
+
+            }else if (msg.what == 2){
+                allChecked =false;
+            }
+        }
+    };
 
     public void getListDatas() {
         list=new ArrayList<>();
@@ -141,6 +163,8 @@ public class MyItemList extends Fragment {
 
         }
     }
+
+
 
     /*public void getfavoriteListDatas() {
         *//*Bundle extra = getArguments();
@@ -238,6 +262,8 @@ public class MyItemList extends Fragment {
             return new DataViewHolder(view);
         }
 
+
+
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             ItemVO itemVO=list.get(position);
@@ -263,6 +289,18 @@ public class MyItemList extends Fragment {
                         //여기서 선택한 체크박스 어떤건지 체크하고 어레이 리스트 만들어서 메인엑티비티로 보내기;
                         if(isChecked == true){
                             Log.d("buttonView", (String) buttonView.getText());
+/*
+                            if(allChecked == true){
+                                    for(int i=0; i<list.size(); i++){
+                                        UserCosmetic itemVO= (UserCosmetic)list.get(i);
+                                        itemVO.setChecked(isChecked);
+                                    }
+                            }else if (allChecked == false){
+                                for(int i=0; i<list.size(); i++){
+                                    UserCosmetic itemVO= (UserCosmetic)list.get(i);
+                                    itemVO.setChecked(false);
+                                }
+                            }*/
 
                             Message message = Message.obtain(myItemList.toolbarHandler,3, buttonView.getText());
                             myItemList.toolbarHandler.sendMessage(message);
@@ -271,6 +309,7 @@ public class MyItemList extends Fragment {
 
                     }
                 });
+
                 viewHolder.imgView.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {

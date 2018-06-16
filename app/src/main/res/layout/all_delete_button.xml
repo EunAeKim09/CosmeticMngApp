@@ -4,9 +4,10 @@
     android:layout_height="match_parent">
 
     <Button
+        android:id="@+id/deleteAllbtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/button_style"
-        android:text="전체삭제"/>
+        android:text="전체 선택"/>
 
 </LinearLayout>

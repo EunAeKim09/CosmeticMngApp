@@ -74,6 +74,21 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
     ArrayList<Integer> numberlist = new ArrayList<>();
     int favorite = 0;
     private Toolbar toolbar;
+    Handler checkedhandler;
+
+    public static MainActivity newInstance() {
+        return  new MainActivity();
+    }
+
+    public Handler getCheckedhandler() {
+        return checkedhandler;
+    }
+
+    public void setCheckedhandler(Handler checkedhandler) {
+        this.checkedhandler = checkedhandler;
+    }
+
+
 
     @Override
     protected void onCreate(android.os.Bundle savedInstanceState) {
@@ -384,6 +399,29 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
             getSupportActionBar().setDisplayShowCustomEnabled(true);
             getSupportActionBar().setCustomView(R.layout.all_delete_button);
 
+            Button button = findViewById(R.id.deleteAllbtn);
+          /*  button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Message message = Message.obtain(checkedhandler,1, null);
+                    checkedhandler.sendMessage(message);
+                    button.setText("전체 해제");
+
+                }
+            });
+            if (button.getText().equals("전체 해제")){
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Message message = Message.obtain(checkedhandler,2, null);
+                        checkedhandler.sendMessage(message);
+                        button.setText("전체 선텍");
+
+                    }
+                });
+            }
+*/
             menu.removeItem(android.R.id.home);
             menu.removeItem(R.id.searchIcon);
             menu.removeItem(R.id.registerIcon);

@@ -522,6 +522,9 @@ public class DetailViewActivity extends AppCompatActivity{
             Toast.makeText(DetailViewActivity.this,"개봉일을 선택해주세요.",Toast.LENGTH_SHORT).show();
             return;
         }
+
+        Toast.makeText(getApplicationContext(),open,Toast.LENGTH_SHORT).show();
+
         String dateArray[] = open.split(" - ");
         c.set(Calendar.YEAR, Integer.parseInt(dateArray[0]));
         c.set(Calendar.MONTH, Integer.parseInt(dateArray[1]) - 1);
