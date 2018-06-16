@@ -1,11 +1,9 @@
 package kr.or.dgit.it.cosmeticmngapp;
 
 
-import android.app.Application;
 import android.app.Fragment;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -17,27 +15,20 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.Snackbar;
-
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.CheckBox;
 import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +36,6 @@ import java.util.List;
 import kr.or.dgit.it.cosmeticmngapp.dao.UserCosmeticDAO;
 import kr.or.dgit.it.cosmeticmngapp.dao.UserCosmeticToolsDAO;
 import kr.or.dgit.it.cosmeticmngapp.dao.UserLensDAO;
-import kr.or.dgit.it.cosmeticmngapp.db.DBhelper;
 import kr.or.dgit.it.cosmeticmngapp.dto.ItemVO;
 import kr.or.dgit.it.cosmeticmngapp.dto.UserCosmetic;
 import kr.or.dgit.it.cosmeticmngapp.dto.UserCosmeticTools;
@@ -129,12 +119,11 @@ public class MyItemList extends Fragment {
         }
 
         if(list.size()>0){  //list에 내용이 있을 때
-            Log.d("size",list.size()+"..");
+            Log.d("size",list.size()+"..있음");
             MainActivity.emptyTV.setVisibility(View.GONE);
         }else{
-            Log.d("size",list.size()+"..");
+            Log.d("size",list.size()+"..리스트 비움");
             if(MainActivity.emptyTV.getVisibility()==View.GONE){
-
                 MainActivity.emptyTV.setVisibility(View.VISIBLE);
                 MainActivity.emptyTV.setText("아이템을 등록해주세요.");
             }
