@@ -7,6 +7,11 @@ import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.AdaptiveIconDrawable;
+import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,6 +24,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.menu.ActionMenuItemView;
+import android.support.v7.graphics.drawable.DrawerArrowDrawable;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -52,13 +58,14 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
     UserCosmeticToolsDAO userCosmeticToolsDAO;
     ArrayList<Integer> numberlist = new ArrayList<>();
     int favorite = 0;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(android.os.Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: ");
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         userCosmeticDAO = new UserCosmeticDAO(this);
@@ -114,12 +121,6 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
     @Override
     protected void onStart() {
         super.onStart();
-        /*fragment = MyItemList.newInstance();
-        fragment.setToolbarHandler(toolbarHandler);
-        Bundle bundle = new Bundle();
-        bundle.putInt("frag", 1);
-        fragment.setArguments(bundle);
-        getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();*/
         isServiceRunningCheck();
     }
 
@@ -226,23 +227,32 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
                         public void onClick(DialogInterface dialogInterface, int i) {
                             Toast.makeText(getApplicationContext(), "삭제합니다.", Toast.LENGTH_SHORT).show();
                             int num;
-                            if (fragNum == 1) {
-                                for (int a = 0; a < numberlist.size(); a++) {
-                                    num = numberlist.get(a);
-                                    Log.d("number::::::::::", num + "...................");
-                                    Log.d("fragment", fragment + "..");
-                                    userCosmeticDAO.deleteItemById(num);
+                            if (fragNum == 1 || fragNum == 2 || fragNum == 3) {
+                                    for (int a = 0; a < numberlist.size(); a++) {
+                                        num = numberlist.get(a);
+                                        Log.d("number::::::::::", num + "...................");
+                                        Log.d("fragment", fragment + "..");
+                                        if(fragNum == 1) {
+                                            userCosmeticDAO.deleteItemById(num);
+                                        }else  if(fragNum == 2){
+                                            userCosmeticToolsDAO.deleteItemById(num);
+                                        }else if(fragNum == 3){
+                                            userLensDAO.deleteItemById(num);
+                                        }
 
-                                    fragment = MyItemList.newInstance();
-                                    fragment.setToolbarHandler(toolbarHandler);
+                                        fragment = MyItemList.newInstance();
+                                        fragment.setToolbarHandler(toolbarHandler);
 
-                                    Bundle bundle1 = new Bundle();
-                                    bundle1.putInt("frag", fragNum);
-                                    fragment.setArguments(bundle1);
-                                    fragment.getListDatas();
-                                    getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                                        Bundle bundle1 = new Bundle();
+                                        bundle1.putInt("frag", fragNum);
+                                        fragment.setArguments(bundle1);
+                                        Message message = Message.obtain(toolbarHandler,2, null);
+                                        toolbarHandler.sendMessage(message);
+                                        fragment.getListDatas();
+                                        getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                                    }
 
-                                }
+
                             }
                         }
                     });
@@ -256,7 +266,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
                     alertDialog = builder.create();
                     alertDialog.show();
                 }
-            case R.id.favoriteIcon:
+            //case R.id.favoriteIcon:
             /*    getFragmentManager().beginTransaction().remove(fragment).commit();
                 fragment = MyItemList.newInstance();
                 fragment.setToolbarHandler(toolbarHandler);
@@ -344,31 +354,33 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
     public boolean onPrepareOptionsMenu(Menu menu) {
         Log.d(TAG, "onPrepare");
 
-        /*if (showcheckbox == true) {
+        if (showcheckbox == true) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-            actionBar.setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
             getSupportActionBar().setDisplayShowCustomEnabled(true);
             getSupportActionBar().setCustomView(R.layout.all_delete_button);
 
             menu.removeItem(android.R.id.home);
             menu.removeItem(R.id.searchIcon);
             menu.removeItem(R.id.registerIcon);
-            menu.removeItem(R.id.favoriteIcon);
+          //  menu.removeItem(R.id.favoriteIcon);
             android.view.MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.menu_del, menu);
-        } else {
-            actionBar.setDisplayShowCustomEnabled(true);
-            actionBar.setDisplayShowTitleEnabled(true);
-            actionBar.setDisplayHomeAsUpEnabled(true);
+        } else if(showcheckbox == false) {
 
+            getSupportActionBar().setDisplayShowTitleEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowCustomEnabled(false);
-            actionBar.setDisplayShowTitleEnabled(true);
 
+
+            drawerLayout = findViewById(R.id.drawerlayout);
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.openT, R.string.closeT);
+            drawerLayout.addDrawerListener(toggle);
+            toggle.syncState();
 
             menu.removeItem(R.id.delIcon);
-            android.view.MenuInflater inflater = getMenuInflater();
-            inflater.inflate(R.menu.menu_set, menu);
-        }*/
+
+        }
         return true;
     }
 
