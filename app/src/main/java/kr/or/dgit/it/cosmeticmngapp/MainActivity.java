@@ -44,7 +44,6 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
     AlertDialog alertDialog;
     private BottomNavigationView bottomNavigationView;
     boolean showcheckbox = false;
-    boolean showSetting = false;
     UserCosmeticDAO userCosmeticDAO;
     UserLensDAO userLensDAO;
     UserCosmeticToolsDAO userCosmeticToolsDAO;
@@ -92,8 +91,8 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
         android.support.design.widget.NavigationView navigationView = findViewById(R.id.navigation);
         navigationView.setNavigationItemSelectedListener(this);
 
-        fragNum = 1;
-        fragment = MyItemList.newInstance();
+        //fragNum = 1;
+        MyItemList fragment = MyItemList.newInstance();
         fragment.setToolbarHandler(toolbarHandler);
         Bundle bundle = new Bundle();
         bundle.putInt("frag", fragNum);
@@ -183,7 +182,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
            // menuItem2.setVisibility(View.INVISIBLE);
             menuItem3.setVisibility(View.INVISIBLE);
         } else {
-            //fragment.setToolbarHandler(toolbarHandler);
+            fragment.setToolbarHandler(toolbarHandler);
             Bundle bundle = new Bundle();
             bundle.putInt("frag", fragNum);
             fragment.setArguments(bundle);
@@ -351,13 +350,6 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
                 Log.d(TAG, "handlerMassea13" + msg.obj + "입니다ㅏㅏㅏㅏㅏㅏㅏ");
                 numberlist.add(Integer.parseInt(String.valueOf(msg.obj)));
 
-            }else  if(msg.what == 4){
-                Toast.makeText(getApplicationContext(),"444444444",Toast.LENGTH_SHORT).show();
-                showSetting = true;
-
-            }else  if(msg.what == 5){
-                Toast.makeText(getApplicationContext(),"444444444",Toast.LENGTH_SHORT).show();
-                showSetting = false;
             }
             invalidateOptionsMenu();
         }

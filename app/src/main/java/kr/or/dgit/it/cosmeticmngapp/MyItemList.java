@@ -97,7 +97,7 @@ public class MyItemList extends Fragment {
         getListDatas();
     }
 
-    Handler checkedhandler = new Handler(){
+   /* Handler checkedhandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             if(msg.what == 1){
@@ -108,7 +108,7 @@ public class MyItemList extends Fragment {
             }
         }
     };
-
+*/
     public void getListDatas() {
         list=new ArrayList<>();
         Cursor cursor=null;

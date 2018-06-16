@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class DBhelper extends SQLiteOpenHelper{
     private AtomicInteger mOpenCounter = new AtomicInteger();
     private static final  String TAG = DBhelper.class.getSimpleName();
-    public static final int DATABASE_VERSION=9;
+    public static final int DATABASE_VERSION=10;
     private static final String DB_NAME = "datadb.db";
     private final  Context context;
 
