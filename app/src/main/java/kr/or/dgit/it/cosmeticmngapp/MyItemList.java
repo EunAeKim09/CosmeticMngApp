@@ -123,11 +123,8 @@ public class MyItemList extends Fragment {
             MainActivity.emptyTV.setVisibility(View.GONE);
         }else{
             Log.d("size",list.size()+"..리스트 비움");
-            if(MainActivity.emptyTV.getVisibility()==View.GONE){
-                MainActivity.emptyTV.setVisibility(View.VISIBLE);
-                MainActivity.emptyTV.setText("아이템을 등록해주세요.");
-            }
-
+            MainActivity.emptyTV.setVisibility(View.VISIBLE);
+            MainActivity.emptyTV.setText("아이템을 등록해주세요.");
         }
     }
 
