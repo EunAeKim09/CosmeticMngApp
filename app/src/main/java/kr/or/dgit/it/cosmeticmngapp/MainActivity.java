@@ -104,12 +104,12 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
         android.support.design.widget.NavigationView navigationView = findViewById(R.id.navigation);
         navigationView.setNavigationItemSelectedListener(this);
 
-        fragment = MyItemList.newInstance();
+        MyItemList fragment = MyItemList.newInstance();
         fragment.setToolbarHandler(toolbarHandler);
         Bundle bundle = new Bundle();
         bundle.putInt("frag", 1);
         fragment.setArguments(bundle);
-//        fragment.getListDatas();
+       // fragment.getListDatas();
 
         emptyTV = (TextView) findViewById(R.id.emptyTV);
         getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
@@ -391,7 +391,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
             toggle.syncState();
 
             menu.removeItem(R.id.delIcon);
-      
+
         }
         return true;
     }
