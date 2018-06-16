@@ -3,58 +3,35 @@ package kr.or.dgit.it.cosmeticmngapp;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.AlarmManager;
 import android.app.Fragment;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.AdaptiveIconDrawable;
-import android.graphics.drawable.Icon;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
-
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.graphics.drawable.DrawerArrowDrawable;
+import android.support.v7.view.menu.ActionMenuItemView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 import kr.or.dgit.it.cosmeticmngapp.dao.UserCosmeticDAO;
 import kr.or.dgit.it.cosmeticmngapp.dao.UserCosmeticToolsDAO;
 import kr.or.dgit.it.cosmeticmngapp.dao.UserLensDAO;
 import kr.or.dgit.it.cosmeticmngapp.db.DBhelper;
-
-import static kr.or.dgit.it.cosmeticmngapp.R.string.addAlldel;
 
 public class MainActivity extends android.support.v7.app.AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "Main";
@@ -106,11 +83,6 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
-        // getSupportActionBar().setHomeAsUpIndicator(R.drawable.menu);
-
-        //  toolbar.setNavigationIcon(R.drawable.menu);
-
-        setTitleName();
 
         drawerLayout = findViewById(R.id.drawerlayout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.openT, R.string.closeT);
@@ -120,15 +92,19 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
         android.support.design.widget.NavigationView navigationView = findViewById(R.id.navigation);
         navigationView.setNavigationItemSelectedListener(this);
 
-       MyItemList fragment = MyItemList.newInstance();
+        fragNum = 1;
+        fragment = MyItemList.newInstance();
         fragment.setToolbarHandler(toolbarHandler);
         Bundle bundle = new Bundle();
-        bundle.putInt("frag", 1);
+        bundle.putInt("frag", fragNum);
         fragment.setArguments(bundle);
-       // fragment.getListDatas();
+        //fragment.getListDatas();
+
+        setTitleName();
 
         emptyTV = (TextView) findViewById(R.id.emptyTV);
         getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+
         Button closeNavi = navigationView.findViewById(R.id.naviCloseBtn);
         /* closeNavi.setOnClickListener();*/
 
@@ -195,29 +171,28 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
         setTitleName();
 
         fragment = MyItemList.newInstance();
-        fragment.setToolbarHandler(toolbarHandler);
-        Bundle bundle = new Bundle();
-        bundle.putInt("frag", fragNum);
-        fragment.setArguments(bundle);
-        fragment.getListDatas();
-
-
+        ActionMenuItemView menuItem1 = findViewById(R.id.searchIcon);
+        /*ActionMenuItemView menuItem2 = findViewById(R.id.favoriteIcon);*/
+        ActionMenuItemView menuItem3 = findViewById(R.id.registerIcon);
         if (fragNum == 4) {
             Fragment settingFragment = new SettingFragment();
-            //  fragmentTransaction.replace(R.id.fragment_container, (Fragment)settingFragment).commit();
-
-
             getFragmentManager().beginTransaction().replace(R.id.fragment_container, settingFragment).show(settingFragment).commit();
+            emptyTV.setVisibility(View.GONE);
 
-
-
+            menuItem1.setVisibility(View.INVISIBLE);
+           // menuItem2.setVisibility(View.INVISIBLE);
+            menuItem3.setVisibility(View.INVISIBLE);
         } else {
-//            Bundle bundle1 = new Bundle();
+            //fragment.setToolbarHandler(toolbarHandler);
+            Bundle bundle = new Bundle();
             bundle.putInt("frag", fragNum);
             fragment.setArguments(bundle);
             fragment.getListDatas();
             getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
 
+            menuItem1.setVisibility(View.VISIBLE);
+          //  menuItem2.setVisibility(View.VISIBLE);
+            menuItem3.setVisibility(View.VISIBLE);
         }
 
 
