@@ -42,6 +42,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -104,7 +105,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
         Bundle bundle = new Bundle();
         bundle.putInt("frag", 1);
         fragment.setArguments(bundle);
-        fragment.getListDatas();
+//        fragment.getListDatas();
 
         emptyTV = (TextView) findViewById(R.id.emptyTV);
         getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
@@ -178,7 +179,6 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
         Bundle bundle = new Bundle();
         bundle.putInt("frag", fragNum);
         fragment.setArguments(bundle);
-        Log.d("nasdfasdfsdfnnn","졸라망함............1");
         fragment.getListDatas();
 
 
@@ -192,7 +192,6 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
 //            Bundle bundle1 = new Bundle();
             bundle.putInt("frag", fragNum);
             fragment.setArguments(bundle);
-            Log.d("nasdfasdfsdfnnn","졸라망함............2");
             fragment.getListDatas();
             getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
         }
@@ -242,8 +241,10 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
                                     Log.d("number::::::::::", num + "...................");
                                     Log.d("fragment", fragment + "..");
                                     userCosmeticDAO.deleteItemById(num);
+
                                     fragment = MyItemList.newInstance();
                                     fragment.setToolbarHandler(toolbarHandler);
+
                                     Bundle bundle1 = new Bundle();
                                     bundle1.putInt("frag", fragNum);
                                     fragment.setArguments(bundle1);
@@ -266,7 +267,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
                     alertDialog.show();
                 }
             case R.id.favoriteIcon:
-                getFragmentManager().beginTransaction().remove(fragment).commit();
+            /*    getFragmentManager().beginTransaction().remove(fragment).commit();
                 fragment = MyItemList.newInstance();
                 fragment.setToolbarHandler(toolbarHandler);
                 Bundle bundle3 = new Bundle();
@@ -278,17 +279,17 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
                     Log.d("Dddddddddddddd","들어왓음1");
                     getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 } else if (favorite == 1) {
-                 /*   fragment = MyItemList.newInstance();
+                 *//*   fragment = MyItemList.newInstance();
                     fragment.setToolbarHandler(toolbarHandler);
                     Bundle bundle4 = new Bundle();
                     bundle4.putInt("frag", fragNum);
-                    fragment.setArguments(bundle4);*/
+                    fragment.setArguments(bundle4);*//*
                     fragment.getListDatas();
                     favorite = 0;
                     getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 }
                 //getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
-                Log.d("Dddddddddddddd","들어왓음2");
+                Log.d("Dddddddddddddd","들어왓음2");*/
         }
         return super.onOptionsItemSelected(item);
     }

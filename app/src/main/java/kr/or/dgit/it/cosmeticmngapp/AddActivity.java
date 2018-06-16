@@ -337,12 +337,6 @@ public class AddActivity extends AppCompatActivity {
                 pYear = year;
                 pMonth = monthOfYear + 1;
                 pDate = dayOfMonth;
-/*
-                String mDateFormat = "yyy - MM - dd";
-                simpleDateFormat = new SimpleDateFormat(mDateFormat);
-                simpleDateFormat.format(date);
-                openEditdate.setText(simpleDateFormat.toString());
-                openEditdate.setText(simpleDateFormat.format());*/
                 openEditdate.setText(String.format("%d - %02d - %d", pYear, pMonth, pDate));
             }
         });
@@ -355,7 +349,15 @@ public class AddActivity extends AppCompatActivity {
                 datedialog.dismiss();
             }
         });
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                datedialog.cancel();
+            }
+        });
+
         datedialog.show();
+
     }
 
     private void CalendarValue() {
@@ -374,6 +376,7 @@ public class AddActivity extends AppCompatActivity {
         confirmBtn = datedialog.findViewById(R.id.btn_dialog_confirm);
         cancelBtn = datedialog.findViewById(R.id.btn_dialog_cancel);
         datePicker = datedialog.findViewById(R.id.datepicker_dialog);
+
     }
 
     public void enddateClick(View view) {
@@ -487,6 +490,13 @@ public class AddActivity extends AppCompatActivity {
             public void onClick(View v) {
                 endEditdate.setText(String.format("%d - %02d - %d", pYear, pMonth, pDate));
                 datedialog.dismiss();
+            }
+        });
+
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                datedialog.cancel();
             }
         });
         datedialog.show();
