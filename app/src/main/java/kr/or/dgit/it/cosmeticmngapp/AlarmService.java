@@ -28,22 +28,22 @@ public class AlarmService extends Service {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplication());
 
-        if(sharedPreferences.getBoolean("alarmSound",true)){
-            alarmSound = true;
-        }
-
-        if(sharedPreferences.getBoolean("alarmVib",true)){
-            alarmVib = true;
-        }
-
         if(sharedPreferences.getBoolean("alarm",true)){
+            if(sharedPreferences.getBoolean("alarmSound",true)){
+                alarmSound = true;
+            }
+
+            if(sharedPreferences.getBoolean("alarmVib",true)){
+                alarmVib = true;
+            }
+
             AlarmManager am = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
             PendingIntent sender = PendingIntent.getBroadcast(this, 0, intent, 0);
 
             Calendar calendar = Calendar.getInstance(); //알람시간 calendar에 set해주기
 
             int hour = Integer.parseInt(sharedPreferences.getString("alarmTime","9"));
-            calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), hour,00); //시간 set
+            calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), hour,0); //시간 set
             calendar.set(Calendar.SECOND, 0);
 
             am.set(AlarmManager.RTC, calendar.getTimeInMillis(), sender);

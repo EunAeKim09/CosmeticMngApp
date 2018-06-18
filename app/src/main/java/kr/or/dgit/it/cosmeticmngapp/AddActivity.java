@@ -329,7 +329,7 @@ public class AddActivity extends AppCompatActivity {
 
         return cursor.getString(column_index);
     }
-    
+
     public void opendateClick(View view) {
         CalendarValue();
         datedialogChangeTextView.setText("개봉일을 설정해주세요.");

@@ -53,7 +53,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
     Handler checkedhandler;
 
     public static MainActivity newInstance() {
-        return  new MainActivity();
+        return new MainActivity();
     }
 
     public Handler getCheckedhandler() {
@@ -63,7 +63,6 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
     public void setCheckedhandler(Handler checkedhandler) {
         this.checkedhandler = checkedhandler;
     }
-
 
 
     @Override
@@ -88,10 +87,10 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        android.support.design.widget.NavigationView navigationView = findViewById(R.id.navigation);
+        NavigationView navigationView = findViewById(R.id.navigation);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //fragNum = 1;
+        fragNum = 1;
         MyItemList fragment = MyItemList.newInstance();
         fragment.setToolbarHandler(toolbarHandler);
         Bundle bundle = new Bundle();
@@ -104,8 +103,14 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
         emptyTV = (TextView) findViewById(R.id.emptyTV);
         getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
 
-        Button closeNavi = navigationView.findViewById(R.id.naviCloseBtn);
-        /* closeNavi.setOnClickListener();*/
+/*        Button closeNavi = navigationView.findViewById(R.id.naviCloseBtn);
+        Log.d(TAG, "closeNavi: " + closeNavi.getText());
+        closeNavi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.closeDrawer(android.support.v4.view.GravityCompat.START);
+            }
+        });*/
 
         //permission
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
@@ -179,7 +184,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
             emptyTV.setVisibility(View.GONE);
 
             menuItem1.setVisibility(View.INVISIBLE);
-           // menuItem2.setVisibility(View.INVISIBLE);
+            // menuItem2.setVisibility(View.INVISIBLE);
             menuItem3.setVisibility(View.INVISIBLE);
         } else {
             fragment.setToolbarHandler(toolbarHandler);
@@ -190,7 +195,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
             getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
 
             menuItem1.setVisibility(View.VISIBLE);
-          //  menuItem2.setVisibility(View.VISIBLE);
+            //  menuItem2.setVisibility(View.VISIBLE);
             menuItem3.setVisibility(View.VISIBLE);
         }
 
@@ -234,29 +239,29 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
                             Toast.makeText(getApplicationContext(), "삭제합니다.", Toast.LENGTH_SHORT).show();
                             int num;
                             if (fragNum == 1 || fragNum == 2 || fragNum == 3) {
-                                    for (int a = 0; a < numberlist.size(); a++) {
-                                        num = numberlist.get(a);
-                                        Log.d("number::::::::::", num + "...................");
-                                        Log.d("fragment", fragment + "..");
-                                        if(fragNum == 1) {
-                                            userCosmeticDAO.deleteItemById(num);
-                                        }else  if(fragNum == 2){
-                                            userCosmeticToolsDAO.deleteItemById(num);
-                                        }else if(fragNum == 3){
-                                            userLensDAO.deleteItemById(num);
-                                        }
-
-                                        fragment = MyItemList.newInstance();
-                                        fragment.setToolbarHandler(toolbarHandler);
-
-                                        Bundle bundle1 = new Bundle();
-                                        bundle1.putInt("frag", fragNum);
-                                        fragment.setArguments(bundle1);
-                                        Message message = Message.obtain(toolbarHandler,2, null);
-                                        toolbarHandler.sendMessage(message);
-                                        fragment.getListDatas();
-                                        getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                                for (int a = 0; a < numberlist.size(); a++) {
+                                    num = numberlist.get(a);
+                                    Log.d("number::::::::::", num + "...................");
+                                    Log.d("fragment", fragment + "..");
+                                    if (fragNum == 1) {
+                                        userCosmeticDAO.deleteItemById(num);
+                                    } else if (fragNum == 2) {
+                                        userCosmeticToolsDAO.deleteItemById(num);
+                                    } else if (fragNum == 3) {
+                                        userLensDAO.deleteItemById(num);
                                     }
+
+                                    fragment = MyItemList.newInstance();
+                                    fragment.setToolbarHandler(toolbarHandler);
+
+                                    Bundle bundle1 = new Bundle();
+                                    bundle1.putInt("frag", fragNum);
+                                    fragment.setArguments(bundle1);
+                                    Message message = Message.obtain(toolbarHandler, 2, null);
+                                    toolbarHandler.sendMessage(message);
+                                    fragment.getListDatas();
+                                    getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                                }
 
 
                             }
@@ -272,7 +277,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
                     alertDialog = builder.create();
                     alertDialog.show();
                 }
-            //case R.id.favoriteIcon:
+                //case R.id.favoriteIcon:
             /*    getFragmentManager().beginTransaction().remove(fragment).commit();
                 fragment = MyItemList.newInstance();
                 fragment.setToolbarHandler(toolbarHandler);
@@ -366,7 +371,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
             getSupportActionBar().setDisplayShowCustomEnabled(true);
             getSupportActionBar().setCustomView(R.layout.all_delete_button);
 
-            Button button = findViewById(R.id.deleteAllbtn);
+            // Button button = findViewById(R.id.deleteAllbtn);
           /*  button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -392,10 +397,10 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
             menu.removeItem(android.R.id.home);
             menu.removeItem(R.id.searchIcon);
             menu.removeItem(R.id.registerIcon);
-          //  menu.removeItem(R.id.favoriteIcon);
+            //  menu.removeItem(R.id.favoriteIcon);
             android.view.MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.menu_del, menu);
-        } else if(showcheckbox == false) {
+        } else if (showcheckbox == false) {
 
             getSupportActionBar().setDisplayShowTitleEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -415,4 +420,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
     }
 
 
+    public void btnNaviClose(View view) {
+        drawerLayout.closeDrawer(android.support.v4.view.GravityCompat.START);
+    }
 }

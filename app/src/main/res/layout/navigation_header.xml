@@ -3,24 +3,29 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
-        android:layout_width="match_parent"
+   <ImageView
+        android:layout_width="wrap_content"
         android:layout_height="200dp"
-        android:background="@android:color/holo_orange_dark"
-        android:text="App Name"
-        android:gravity="bottom"
-        android:paddingBottom="16dp"
-        android:paddingLeft="16dp"
-        android:textSize="20dp"
-        android:textColor="@android:color/white"
-        android:textStyle="bold"/>
+        android:src="@drawable/nab"
+        android:scaleType="centerCrop"/>
+    <TextView
+       android:layout_width="match_parent"
+       android:layout_height="200dp"
+       android:text="@string/app_title"
+       android:gravity="bottom"
+       android:paddingBottom="16dp"
+       android:paddingLeft="16dp"
+       android:textSize="25sp"
+       android:textColor="#000000"
+       android:textStyle="bold"/>
     <Button
-        android:layout_marginTop="30dp"
+        android:id="@+id/naviCloseBtn"
+        android:layout_marginTop="20dp"
         android:layout_width="@dimen/ImgBtnWidth"
         android:layout_height="@dimen/ImgBtnheight"
         android:text="x"
-        android:textColor="#ffffff"
+        android:textColor="#000000"
         android:layout_alignParentRight="true"
-        android:background="@drawable/button_style"
-        android:id="@+id/naviCloseBtn"/>
+        android:onClick="btnNaviClose"
+        />
 </RelativeLayout>
