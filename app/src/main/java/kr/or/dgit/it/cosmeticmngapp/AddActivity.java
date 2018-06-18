@@ -328,7 +328,7 @@ public class AddActivity extends AppCompatActivity {
 
         return cursor.getString(column_index);
     }
-    
+
     public void opendateClick(View view) {
         CalendarValue();
         datePicker.init(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(), new DatePicker.OnDateChangedListener() {
