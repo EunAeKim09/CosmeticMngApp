@@ -23,9 +23,8 @@ public class AlarmService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Intent intent1 = new Intent();
-        intent1.setAction("kr.or.dgit.it.cosmeticmngapp.PUSH_ALARM");
-        //sendBroadcast(intent1);
+        Intent intent = new Intent();
+        intent.setAction("kr.or.dgit.it.cosmeticmngapp.PUSH_ALARM");
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplication());
 
@@ -39,7 +38,7 @@ public class AlarmService extends Service {
 
         if(sharedPreferences.getBoolean("alarm",true)){
             AlarmManager am = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-            PendingIntent sender = PendingIntent.getBroadcast(this, 0, intent1, 0);
+            PendingIntent sender = PendingIntent.getBroadcast(this, 0, intent, 0);
 
             Calendar calendar = Calendar.getInstance(); //알람시간 calendar에 set해주기
 

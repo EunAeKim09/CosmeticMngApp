@@ -78,6 +78,7 @@ public class DetailViewActivity extends AppCompatActivity{
     private int pMonth;
     private int pDate;
     AlertDialog alertDialog;
+    private TextView dateChangeTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -400,6 +401,7 @@ public class DetailViewActivity extends AppCompatActivity{
 
     public void opendateClick(View view) {
         CalendarValue();
+        dateChangeTextView.setText("개봉일을 설정해주세요.");
         datePicker.init(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(), new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -416,6 +418,13 @@ public class DetailViewActivity extends AppCompatActivity{
             public void onClick(View v) {
                 openDate.setText(String.format("%d - %02d - %d", pYear, pMonth, pDate));
                 datedialog.dismiss();
+            }
+        });
+
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                datedialog.cancel();
             }
         });
         datedialog.show();
@@ -435,6 +444,7 @@ public class DetailViewActivity extends AppCompatActivity{
         datedialog = new Dialog(this);
         datedialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         datedialog.setContentView(R.layout.calendar_numberpicker_layout);
+        dateChangeTextView = datedialog.findViewById(R.id.dialog_layout_text);
         confirmBtn = datedialog.findViewById(R.id.btn_dialog_confirm);
         cancelBtn = datedialog.findViewById(R.id.btn_dialog_cancel);
         datePicker = datedialog.findViewById(R.id.datepicker_dialog);
@@ -512,6 +522,9 @@ public class DetailViewActivity extends AppCompatActivity{
             Toast.makeText(DetailViewActivity.this,"개봉일을 선택해주세요.",Toast.LENGTH_SHORT).show();
             return;
         }
+
+        Toast.makeText(getApplicationContext(),open,Toast.LENGTH_SHORT).show();
+
         String dateArray[] = open.split(" - ");
         c.set(Calendar.YEAR, Integer.parseInt(dateArray[0]));
         c.set(Calendar.MONTH, Integer.parseInt(dateArray[1]) - 1);
@@ -548,6 +561,13 @@ public class DetailViewActivity extends AppCompatActivity{
             public void onClick(View v) {
                 endDate.setText(String.format("%d - %02d - %d", pYear, pMonth, pDate));
                 datedialog.dismiss();
+            }
+        });
+
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                datedialog.cancel();
             }
         });
         datedialog.show();

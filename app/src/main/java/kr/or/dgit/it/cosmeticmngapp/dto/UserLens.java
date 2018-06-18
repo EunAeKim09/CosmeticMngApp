@@ -1,5 +1,7 @@
 package kr.or.dgit.it.cosmeticmngapp.dto;
 
+import android.view.View;
+
 public class UserLens extends ItemVO{
     private int _id;
     private String name;
@@ -9,7 +11,7 @@ public class UserLens extends ItemVO{
     private String memo;
     private int favorite;
     private int cate_id;
-    private int visible;
+    private int visible = View.GONE;
     private boolean checked;
 
     public UserLens() {
