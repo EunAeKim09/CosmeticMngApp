@@ -555,7 +555,7 @@ public class MyItemList extends Fragment {
         getListDatas();
         Log.d("nasdfasdfsdfnnn","졸라망함...........56465."); //이게 즐겨찾기 안되는 원인.............
         //페이버릿이 눌려졌냐 안눌러졌다
-        
+
         adapter.setList(list);
         adapter.notifyDataSetChanged();
     }
