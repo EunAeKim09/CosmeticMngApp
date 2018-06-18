@@ -366,7 +366,7 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
             getSupportActionBar().setDisplayShowCustomEnabled(true);
             getSupportActionBar().setCustomView(R.layout.all_delete_button);
 
-            Button button = findViewById(R.id.deleteAllbtn);
+           // Button button = findViewById(R.id.deleteAllbtn);
           /*  button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
