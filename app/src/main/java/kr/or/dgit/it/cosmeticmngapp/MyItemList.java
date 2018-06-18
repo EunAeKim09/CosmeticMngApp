@@ -357,6 +357,7 @@ public class MyItemList extends Fragment {
                             checkedList.remove(buttonView.getText().toString());
                             Message message = Message.obtain(myItemList.toolbarHandler,4, buttonView.getText());
                             myItemList.toolbarHandler.sendMessage(message);
+                            
                         }
 
                     }
