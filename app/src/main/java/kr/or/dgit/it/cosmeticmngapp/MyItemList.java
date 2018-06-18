@@ -39,6 +39,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import kr.or.dgit.it.cosmeticmngapp.dao.UserCosmeticDAO;
@@ -70,8 +71,8 @@ public class MyItemList extends Fragment {
     ArrayList<String> proId = new ArrayList<>();
 
     ActionBar actionBar;
-
-    MainActivity mainActivity = MainActivity.newInstance();
+    private int allcheck;
+    private HashMap<String, Integer> checkedList;
 
 
     public static MyItemList newInstance() {
@@ -99,14 +100,15 @@ public class MyItemList extends Fragment {
         lensdao = new UserLensDAO(getActivity());
         lensdao.open();
 
-      //  mainActivity.setCheckedhandler(checkedhandler);
+        checkedList = new HashMap<>();
 
         Bundle extra = getArguments();
         fragNum = extra.getInt("frag");
+        allcheck = extra.getInt("allcheck");
         getListDatas();
     }
 
-   /* Handler checkedhandler = new Handler(){
+   /*Handler checkedhandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             if(msg.what == 1){
@@ -116,11 +118,13 @@ public class MyItemList extends Fragment {
                 allChecked =false;
             }
         }
-    };
-*/
+    };*/
+
     public void getListDatas() {
         list=new ArrayList<>();
         Cursor cursor=null;
+        Log.d("allcheckedYesorNo",allcheck+"//////////");
+
         if (fragNum == 1) {
             /*Cursor cursor = db.rawQuery("select _id, name, img, openDate, endDate, memo, favorite, cate_id  from userCosmetic order by name", null);*/
             cursor = cosmeticdao.selectItemAll(null, null);
@@ -149,6 +153,42 @@ public class MyItemList extends Fragment {
             }
         }
 
+        if(allcheck == 4 || allcheck == 5){
+            for(int i=0; i<list.size(); i++){
+                Log.d("allchecksize","두번실행되나");
+                UserCosmetic itemVO= (UserCosmetic) list.get(i);
+                ArrayList<UserCosmetic> itemVOS = new ArrayList<UserCosmetic>();
+                itemVO.setVisible(View.VISIBLE);
+                if (allcheck == 4) {
+                    Log.d("allchecksize",itemVO.get_id()+">.");
+                    checkedList.put(String.valueOf(itemVO.get_id()),itemVO.get_id());
+                    Message message = Message.obtain(this.toolbarHandler,3, itemVO.get_id());
+                    this.toolbarHandler.sendMessage(message);
+
+                }
+            }
+        }
+
+
+
+       /* if(allcheck == 4 || allcheck == 5){
+            for(int i=0; i<list.size(); i++){
+                UserCosmeticTools itemVO= (UserCosmeticTools) list.get(i);
+                ArrayList<UserCosmeticTools> itemVOS = new ArrayList<UserCosmeticTools>();
+                itemVO.setVisible(View.VISIBLE);
+
+            }
+        }
+
+        if(allcheck == 4 || allcheck == 5){
+            for(int i=0; i<list.size(); i++){
+                UserLens itemVO= (UserLens) list.get(i);
+                ArrayList<UserLens> itemVOS = new ArrayList<UserLens>();
+                itemVO.setVisible(View.VISIBLE);
+
+            }
+        }
+*/
         if(list.size()>0){  //list에 내용이 있을 때
             Log.d("size",list.size()+"..있음");
             MainActivity.emptyTV.setVisibility(View.GONE);
@@ -157,6 +197,8 @@ public class MyItemList extends Fragment {
             MainActivity.emptyTV.setVisibility(View.VISIBLE);
             MainActivity.emptyTV.setText("아이템을 등록해주세요.");
         }
+
+
     }
 
 
@@ -261,6 +303,7 @@ public class MyItemList extends Fragment {
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            Log.d("aaaaaaaaaaaaaa","찍히냐 ............");
             ItemVO itemVO=list.get(position);
             DataViewHolder viewHolder=(DataViewHolder)holder;
 
@@ -277,29 +320,43 @@ public class MyItemList extends Fragment {
                 viewHolder.checkLayout.setVisibility(dataItem.getVisible());
                 viewHolder.checkBox.setText(Integer.toString(dataItem.get_id()));
                 Log.d("checkBoxId", (String) viewHolder.checkBox.getText());
+                if(allcheck == 4 || allcheck == 5){
+                    viewHolder.checkLayout.setVisibility(View.VISIBLE);
+                    Log.d("checkBoxId", "allcheck들어옴*******");
+                    if (allcheck == 4) {
+                        Log.d("allchecksize","설마 여기서도실행..?");
+
+                        if(checkedList.containsValue(dataItem.get_id())){
+                            Log.d("valueOfIndex","값이 있냐");
+                            viewHolder.checkBox.setChecked(true);
+                        }else {
+                            Log.d("valueOfIndex","값이 없냐");
+                        }
+
+
+
+                    }else if (allcheck == 5){
+                        viewHolder.checkBox.setChecked(false);
+                    }
+                }
                 viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         dataItem.setChecked(isChecked);
+
                         //여기서 선택한 체크박스 어떤건지 체크하고 어레이 리스트 만들어서 메인엑티비티로 보내기;
                         if(isChecked == true){
                             Log.d("buttonView", (String) buttonView.getText());
-/*
-                            if(allChecked == true){
-                                    for(int i=0; i<list.size(); i++){
-                                        UserCosmetic itemVO= (UserCosmetic)list.get(i);
-                                        itemVO.setChecked(isChecked);
-                                    }
-                            }else if (allChecked == false){
-                                for(int i=0; i<list.size(); i++){
-                                    UserCosmetic itemVO= (UserCosmetic)list.get(i);
-                                    itemVO.setChecked(false);
-                                }
-                            }*/
+
 
                             Message message = Message.obtain(myItemList.toolbarHandler,3, buttonView.getText());
                             myItemList.toolbarHandler.sendMessage(message);
 
+                        }else {
+                            Log.d("buttonView", Integer.parseInt(buttonView.getText().toString())+"..........");
+                            checkedList.remove(buttonView.getText().toString());
+                            Message message = Message.obtain(myItemList.toolbarHandler,4, buttonView.getText());
+                            myItemList.toolbarHandler.sendMessage(message);
                         }
 
                     }
@@ -319,12 +376,16 @@ public class MyItemList extends Fragment {
                         }
 
 
+
+
                         for(int i=0; i<list.size(); i++){
                             UserCosmetic itemVO= (UserCosmetic)list.get(i);
                             ArrayList<UserCosmetic> itemVOS = new ArrayList<UserCosmetic>();
                             if(isDelMode == true){
                                 itemVO.setVisible(View.VISIBLE);
-                            }else {
+
+                            }else if(isDelMode == false) {
+                                Log.d("checkbox","왜 보이냐;;;;;;;;");
                                 itemVO.setVisible(View.GONE);
                                 itemVO.setChecked(false);
                             }
@@ -344,6 +405,17 @@ public class MyItemList extends Fragment {
 
                 viewHolder.checkLayout.setVisibility(dataItem.getVisible());
                 viewHolder.checkBox.setText(Integer.toString(dataItem.get_id()));
+                if(allcheck == 4 || allcheck == 5){
+                    viewHolder.checkLayout.setVisibility(View.VISIBLE);
+                    Log.d("checkBoxId", "allcheck들어옴*******");
+                    if (allcheck == 4) {
+                        viewHolder.checkBox.setChecked(true);
+                        Message message = Message.obtain(myItemList.toolbarHandler,3, dataItem.get_id());
+                        myItemList.toolbarHandler.sendMessage(message);
+                    }else if (allcheck == 5){
+                        viewHolder.checkBox.setChecked(false);
+                    }
+                }
                 viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -354,6 +426,9 @@ public class MyItemList extends Fragment {
                             Message message = Message.obtain(myItemList.toolbarHandler,3, buttonView.getText());
                             myItemList.toolbarHandler.sendMessage(message);
 
+                        }else {
+                            Message message = Message.obtain(myItemList.toolbarHandler,4, buttonView.getText());
+                            myItemList.toolbarHandler.sendMessage(message);
                         }
                     }
                 });
@@ -395,6 +470,17 @@ public class MyItemList extends Fragment {
 
                 viewHolder.checkLayout.setVisibility(dataItem.getVisible());
                 viewHolder.checkBox.setText(Integer.toString(dataItem.get_id()));
+                if(allcheck == 4 || allcheck == 5){
+                    viewHolder.checkLayout.setVisibility(View.VISIBLE);
+                    Log.d("checkBoxId", "allcheck들어옴*******");
+                    if (allcheck == 4) {
+                        viewHolder.checkBox.setChecked(true);
+                        Message message = Message.obtain(myItemList.toolbarHandler,3, dataItem.get_id());
+                        myItemList.toolbarHandler.sendMessage(message);
+                    }else if (allcheck == 5){
+                        viewHolder.checkBox.setChecked(false);
+                    }
+                }
                 viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -405,6 +491,9 @@ public class MyItemList extends Fragment {
                             Message message = Message.obtain(myItemList.toolbarHandler,3, buttonView.getText());
                             myItemList.toolbarHandler.sendMessage(message);
 
+                        }else {
+                            Message message = Message.obtain(myItemList.toolbarHandler,4, buttonView.getText());
+                            myItemList.toolbarHandler.sendMessage(message);
                         }
                     }
                 });
@@ -601,12 +690,21 @@ public class MyItemList extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        getListDatas();
-       /* Log.d("nasdfasdfsdfnnn","졸라망함...........56465."); //이게 즐겨찾기 안되는 원인.............
-        //페이버릿이 눌려졌냐 안눌러졌다*/
 
-        adapter.setList(list);
-        adapter.notifyDataSetChanged();
+        Log.d("nasdfasdfsdfnnn","졸라망함...........56465."); //이게 즐겨찾기 안되는 원인.............
+        //페이버릿이 눌려졌냐 안눌러졌다
+        Bundle extra = getArguments();
+        fragNum = extra.getInt("frag");
+        allcheck = extra.getInt("allcheck");
+        Log.d("nasdfasdfsdfnnn", allcheck +"//////"+fragNum+"..."); //이게 즐겨찾기 안되는 원인.............
+        if (allcheck == 4 || allcheck == 5){
+            Log.d("nasdfasdfsdfnnn", allcheck +"//////||||||||||"+fragNum+"...");
+        }else {
+            Log.d("nasdfasdfsdfnnn", allcheck +"//////||||||||||asdasdsadsd"+fragNum+"...");
+            getListDatas();
+            adapter.setList(list);
+            adapter.notifyDataSetChanged();
+        }
     }
 
     public void returnList(){

@@ -243,8 +243,10 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
                                     num = numberlist.get(a);
                                     Log.d("number::::::::::", num + "...................");
                                     Log.d("fragment", fragment + "..");
+                                    Log.d("deleteLimit",numberlist.size()+"...");
                                     if (fragNum == 1) {
                                         userCosmeticDAO.deleteItemById(num);
+
                                     } else if (fragNum == 2) {
                                         userCosmeticToolsDAO.deleteItemById(num);
                                     } else if (fragNum == 3) {
@@ -340,23 +342,32 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 1) {
-                Toast.makeText(getApplicationContext(), "1111", Toast.LENGTH_SHORT).show();//툴바 바꾸기 ~~
+                //Toast.makeText(getApplicationContext(), "1111", Toast.LENGTH_SHORT).show();//툴바 바꾸기 ~~
                 Log.d(TAG, "handlerMassea1");
 
                 showcheckbox = true;
 
-
+                invalidateOptionsMenu();
             } else if (msg.what == 2) {
-                Toast.makeText(getApplicationContext(), "2222", Toast.LENGTH_SHORT).show();//툴바 바꾸기 ~~
+                //Toast.makeText(getApplicationContext(), "2222", Toast.LENGTH_SHORT).show();//툴바 바꾸기 ~~
                 showcheckbox = false;
-
+                invalidateOptionsMenu();
             } else if (msg.what == 3) {
-                Toast.makeText(getApplicationContext(), "333333", Toast.LENGTH_SHORT).show();//툴바 바꾸기 ~~
+                //Toast.makeText(getApplicationContext(), "333333", Toast.LENGTH_SHORT).show();//툴바 바꾸기 ~~
                 Log.d(TAG, "handlerMassea13" + msg.obj + "입니다ㅏㅏㅏㅏㅏㅏㅏ");
                 numberlist.add(Integer.parseInt(String.valueOf(msg.obj)));
 
+            }else if (msg.what == 4) {
+                //Toast.makeText(getApplicationContext(), "333333", Toast.LENGTH_SHORT).show();//툴바 바꾸기 ~~
+
+                String error_msg = String.format("%s", numberlist.size());
+                Log.d(TAG,"아이템 갯수"+error_msg);
+                numberlist.remove(Integer.parseInt(String.valueOf(msg.obj))-1);
+                Log.d(TAG,"아이템  해제 갯수"+error_msg);
+
             }
-            invalidateOptionsMenu();
+
+          //  invalidateOptionsMenu();
         }
     };
 
@@ -371,29 +382,40 @@ public class MainActivity extends android.support.v7.app.AppCompatActivity imple
             getSupportActionBar().setDisplayShowCustomEnabled(true);
             getSupportActionBar().setCustomView(R.layout.all_delete_button);
 
-            // Button button = findViewById(R.id.deleteAllbtn);
-          /*  button.setOnClickListener(new View.OnClickListener() {
+            Button button = findViewById(R.id.deleteAllbtn);
+            button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (button.getText().equals("전체 선택")) {
+                        Log.d("dddddddddddddddd", "전체 해제 들어왔음");
+                        fragment = MyItemList.newInstance();
+                        fragment.setToolbarHandler(toolbarHandler);
 
-                    Message message = Message.obtain(checkedhandler,1, null);
-                    checkedhandler.sendMessage(message);
-                    button.setText("전체 해제");
+                        Bundle bundle1 = new Bundle();
+                        bundle1.putInt("frag", fragNum);
+                        bundle1.putInt("allcheck", 4);
+                        fragment.setArguments(bundle1);
+                        getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
 
-                }
-            });
-            if (button.getText().equals("전체 해제")){
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Message message = Message.obtain(checkedhandler,2, null);
-                        checkedhandler.sendMessage(message);
-                        button.setText("전체 선텍");
+                        button.setText("전체 해제");
+                    } else if (button.getText().equals("전체 해제")) {
+                        Log.d("dddddddddddddddd", "전체 선택 들어왔음");
 
+                        fragment = MyItemList.newInstance();
+                        fragment.setToolbarHandler(toolbarHandler);
+
+                        Bundle bundle1 = new Bundle();
+                        bundle1.putInt("frag", fragNum);
+                        bundle1.putInt("allcheck", 5);
+                        fragment.setArguments(bundle1);
+                        getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+
+                        button.setText("전체 선택");
+                    }
                     }
                 });
-            }
-*/
+
+
             menu.removeItem(android.R.id.home);
             menu.removeItem(R.id.searchIcon);
             menu.removeItem(R.id.registerIcon);
