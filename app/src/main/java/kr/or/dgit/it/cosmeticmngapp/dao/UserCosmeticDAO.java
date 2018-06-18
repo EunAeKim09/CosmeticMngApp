@@ -95,6 +95,11 @@ public class UserCosmeticDAO {
         return mCursor;
     }
 
+    public Cursor selectItemByFavorite(){
+        Cursor cursor = db.rawQuery("select  _id, name, img, openDate, endDate, memo, favorite, cate_id  from userCosmetic where favorite = 1", null);
+        return cursor;
+    }
+
     public List<UserCosmetic> selectAllUserCosmetic(){
         List<UserCosmetic> list = new ArrayList<>();
         Cursor cursor = db.rawQuery("select _id, name, img, openDate, endDate, memo, favorite, cate_id from userCosmetic", null);

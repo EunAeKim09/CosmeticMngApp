@@ -368,9 +368,9 @@ public class SelectActivity extends AppCompatActivity {
                 openDateView=itemView.findViewById(R.id.item_opendate);
                 endDateView=itemView.findViewById(R.id.item_deaddate);
                 imgView=itemView.findViewById(R.id.item_product);
-                bookmarkView=itemView.findViewById(R.id.item_bookmark);
+               // bookmarkView=itemView.findViewById(R.id.item_bookmark);
 
-                bookmarkView.setOnClickListener(this);
+              //  bookmarkView.setOnClickListener(this);
             }
 
             @Override
